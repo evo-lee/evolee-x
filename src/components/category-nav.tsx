@@ -32,7 +32,7 @@ export function CategoryNav({ currentCategory }: CategoryNavProps) {
                 return (
                   <Link
                     key={category.text}
-                    href={`/?category=${category.text}&page=1`}
+                    href={`/category/${encodeURIComponent(category.text)}`}
                     className={`home-nav-title ml-0 mr-0 inline-block rounded-xl px-3 py-1 text-center text-sm hover:text-rose-400 md:ml-1 md:mr-2 md:px-3 md:text-base ${
                       active
                         ? "!text-rose-400 !font-semibold dark:!text-rose-400"

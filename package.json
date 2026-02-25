@@ -7,8 +7,12 @@
     "dev": "pnpm search:index && node scripts/dev-port.mjs",
     "build": "pnpm search:index && vinext build",
     "start": "vinext start",
-    "dev:vinext": "pnpm search:index && vinext dev",
+    "dev:vinext": "pnpm search:index && node scripts/dev-port.mjs",
+    "dev:vinext:raw": "pnpm search:index && vinext dev",
     "build:vinext": "pnpm search:index && vinext build",
+    "deploy:vinext": "pnpm exec vinext deploy",
+    "deploy:vinext:dry": "pnpm exec vinext deploy --dry-run",
+    "deploy:vinext:preview": "pnpm exec vinext deploy --preview",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "sync:content": "node scripts/sync-content.mjs",
@@ -42,6 +46,7 @@
     "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.25.5",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -53,6 +58,7 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vinext": "^0.0.5",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "wrangler": "^4.68.1"
   }
 }

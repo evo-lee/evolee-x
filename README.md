@@ -60,14 +60,19 @@ pnpm dev
 pnpm lint
 pnpm typecheck
 pnpm build
+pnpm deploy:vinext:dry
 ```
 
 ## Vinext Migration Status
 
 - 当前默认开发/构建/启动命令已切换到 vinext：
   - `pnpm dev` → `vinext dev`（含端口探测脚本）
+  - `pnpm dev:vinext` → `vinext dev`（含端口探测脚本）
+  - `pnpm dev:vinext:raw` → 直接执行 `vinext dev`（不做端口预探测）
   - `pnpm build` → `vinext build`
   - `pnpm start` → `vinext start`
+  - `pnpm deploy:vinext` → `vinext deploy`
+  - `pnpm deploy:vinext:dry` → `vinext deploy --dry-run`
 - 兼容性检查：`pnpm dlx vinext check` 当前为 `97% compatible`，无阻断项。
 - 项目保留 `next/*` 语义导入（`next/link`、`next/image`、`next/navigation` 等），由 vinext shim 兼容。
 
@@ -93,3 +98,11 @@ pnpm build
   - 首选 Pagefind 分片检索（避免全量 JSON 下发）
   - API 路由兜底（`/api/search/docs`，带缓存与限流）
   - 搜索结果支持封面缩略图（来自 frontmatter `cover`）
+
+## SEO URL Strategy
+
+- 文章详情页保持语义化短链接：`/{slug}`。
+- 分类页采用路径语义化路由：`/category/{category}`。
+- 分类分页采用稳定路径：`/category/{category}/page/{n}`（`n >= 2`）。
+- 兼容旧版查询参数：`/?category=xxx&page=n` 会重定向到对应新路径。
+- 首页分页保留查询参数：`/?page={n}`，并规范 `/?page=1` 到 `/`。

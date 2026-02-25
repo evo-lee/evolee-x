@@ -18,18 +18,19 @@ interface ArticleCardProps {
   post: PostItem;
   hits?: number;
   hitsLoading?: boolean;
+  priority?: boolean;
 }
 
 export function ArticleCard({
   post,
   hits = 0,
   hitsLoading = false,
+  priority = false,
 }: ArticleCardProps) {
   const imageUrl = getPreviewImage(post.cover);
-  const isRemoteImage = /^https?:\/\//.test(imageUrl);
   const isVideo = post.categories.includes("zuoluotv");
   const isHot = hits > hotArticleViews;
-  const [imageLoaded, setImageLoaded] = useState(isRemoteImage || !imageUrl);
+  const [imageLoaded, setImageLoaded] = useState(() => !imageUrl);
   const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
@@ -39,28 +40,49 @@ export function ArticleCard({
       return;
     }
 
-    if (isRemoteImage) {
-      setImageLoaded(true);
-      setImageError(false);
-      return;
-    }
-
     setImageLoaded(false);
     setImageError(false);
-  }, [imageUrl, isRemoteImage]);
 
-  useEffect(() => {
-    if (!imageUrl || imageLoaded || isRemoteImage) return;
+    let active = true;
+    const preloader = new window.Image();
 
-    const timer = window.setTimeout(() => {
+    const markLoaded = () => {
+      if (!active) return;
+      setImageError(false);
+      setImageLoaded(true);
+    };
+
+    const markError = () => {
+      if (!active) return;
       setImageError(true);
       setImageLoaded(true);
-    }, 15000);
+    };
+
+    preloader.onload = markLoaded;
+    preloader.onerror = markError;
+    preloader.src = imageUrl;
+
+    if (preloader.complete) {
+      if (preloader.naturalWidth > 0) {
+        markLoaded();
+      } else {
+        markError();
+      }
+    }
+
+    const fallbackTimer = window.setTimeout(() => {
+      if (!active) return;
+      setImageError(true);
+      setImageLoaded(true);
+    }, 8000);
 
     return () => {
-      window.clearTimeout(timer);
+      active = false;
+      window.clearTimeout(fallbackTimer);
+      preloader.onload = null;
+      preloader.onerror = null;
     };
-  }, [imageLoaded, imageUrl, isRemoteImage]);
+  }, [imageUrl]);
 
   return (
     <article className="group flex h-full flex-col">
@@ -76,6 +98,8 @@ export function ArticleCard({
                 alt={post.title}
                 fill
                 unoptimized
+                priority={priority}
+                loading={priority ? undefined : "lazy"}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                 className={`absolute top-0 left-0 h-full w-full object-cover duration-300 ease-in hover:scale-105 ${
                   imageLoaded && !imageError ? "opacity-100" : "opacity-0"

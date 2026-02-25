@@ -1,4 +1,4 @@
-import { createServer } from "node:net";
+import { createConnection, createServer } from "node:net";
 import { spawn } from "node:child_process";
 
 const DEFAULT_START_PORT = 3000;
@@ -12,7 +12,7 @@ function parsePort(rawValue, fallback) {
   return value;
 }
 
-function isPortFree(port) {
+function canBindPort(port) {
   return new Promise((resolve) => {
     const server = createServer();
 
@@ -26,6 +26,37 @@ function isPortFree(port) {
 
     server.listen(port, "0.0.0.0");
   });
+}
+
+function canConnect(port, host) {
+  return new Promise((resolve) => {
+    const socket = createConnection({ host, port });
+    let settled = false;
+
+    const done = (value) => {
+      if (settled) return;
+      settled = true;
+      socket.destroy();
+      resolve(value);
+    };
+
+    socket.setTimeout(180);
+    socket.once("connect", () => done(true));
+    socket.once("timeout", () => done(false));
+    socket.once("error", () => done(false));
+  });
+}
+
+async function isPortFree(port) {
+  const [v4InUse, v6InUse] = await Promise.all([
+    canConnect(port, "127.0.0.1"),
+    canConnect(port, "::1"),
+  ]);
+  if (v4InUse || v6InUse) {
+    return false;
+  }
+
+  return canBindPort(port);
 }
 
 async function pickPort(startPort) {

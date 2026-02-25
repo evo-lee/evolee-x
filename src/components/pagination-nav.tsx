@@ -7,10 +7,19 @@ interface PaginationNavProps {
 }
 
 function makeLink(page: number, category?: string) {
-  const params = new URLSearchParams();
-  if (category) params.set("category", category);
-  params.set("page", String(page));
-  return `/?${params.toString()}`;
+  if (category) {
+    const encodedCategory = encodeURIComponent(category);
+    if (page <= 1) {
+      return `/category/${encodedCategory}`;
+    }
+    return `/category/${encodedCategory}/page/${page}`;
+  }
+
+  if (page <= 1) {
+    return "/";
+  }
+
+  return `/?page=${page}`;
 }
 
 export function PaginationNav({
