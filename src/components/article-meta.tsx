@@ -35,7 +35,7 @@ export function ArticleMeta({ post }: ArticleMetaProps) {
                 {loading ? (
                   <IconLoading className="h-2.5 w-2.5 animate-spin text-neutral-300" />
                 ) : (
-                  <>{hits.toLocaleString()} 阅读</>
+                  <>{hits.toLocaleString()} 浏览</>
                 )}
               </span>
               <span className="text-neutral-400/60 hidden sm:inline">·</span>

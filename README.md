@@ -99,8 +99,8 @@ pnpm deploy:vinext
 
 ## 🔗 Related
 
-- **线上地址**: [https://luolei.org](https://luolei.org)
-- **测试地址**: [https://x.luolei.org](https://x.luolei.org)
+- **新版线上地址**: [https://luolei.org](https://luolei.org)
+- **旧版线上地址**: [https://v.luolei.org](https://v.luolei.org)
 - **旧版（VitePress）**: [foru17/luoleiorg](https://github.com/foru17/luoleiorg)
 - **Vinext**: [cloudflare/vinext](https://github.com/cloudflare/vinext)
 
