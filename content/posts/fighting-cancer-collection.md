@@ -10,16 +10,7 @@ cover: https://c2.is26.com/blog/2024/03/health/f-1.jpg
 
 在上一篇博客[《我的老婆确诊肺癌,希望能得到你的帮助》](https://luolei.org/fighting-cancer)中，我公开求助，寻求与肺癌相关的资讯、经验，首先向提供帮助的各位朋友说声**谢谢你**。
 
-<TweetCard
-    tweetId="1771546549589295451"
-    twitterId="luoleiorg"
-    author="luolei"
-    time="下午11:38 · 2024年3月19日"
-    content="这几天家中遇到的事，很多线上、线下，或相识或陌生的朋友，都给予不同形式的帮助。推特、博客、V站和朋友圈上千条善意的留言和评论，为我和妻子提供了很大的参考价值。在此感谢诸位。生活严肃和欢乐继续，继续当一个充满正能量的中年男人！😁"
-    avatar="https://pbs.twimg.com/profile_images/1550157622300786688/672YmCpB_400x400.jpg"
-    comment=44
-    like=524
-  />
+<TweetCard tweetId="1771546549589295451" />
 
 除了博客，我也在推特、 V2EX 和微信公众号发布了同篇内容，V 站和推特都有大量评论，大家也可以去下面的链接查看。
 

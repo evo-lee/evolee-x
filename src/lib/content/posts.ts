@@ -63,25 +63,16 @@ function parseTagAttributes(raw: string): Record<string, string> {
   return attrs;
 }
 
-function renderTweetCard(attrs: Record<string, string>): string {
-  const twitterId = attrs.twitterId ?? "";
-  const author = attrs.author ?? twitterId;
-  const content = attrs.content ?? "";
-  const time = attrs.time ?? "";
-  const avatar = attrs.avatar ?? "";
-  const image = attrs.image ?? "";
+// 新的占位符渲染函数
+function renderTweetCardPlaceholder(attrs: Record<string, string>): string {
   const tweetId = attrs.tweetId ?? "";
-
-  const avatarImg = avatar
-    ? `<img class="rounded-full border border-transparent" src="${avatar}" alt="${author}" width="48" height="48" />`
-    : "";
-  const imageHtml = image
-    ? `<img class="pt-2 w-full h-auto rounded-xl border-0" src="${image}" alt="tweet image" />`
-    : "";
-
-  return `<div class="tweet-card px-2 mb-12 rounded-xl"><div class="relative m-auto flex h-full w-full max-w-[32rem] flex-col gap-2 overflow-hidden rounded-xl border p-4 backdrop-blur-md shadow-xl dark:border-zinc-600"><div class="flex flex-row justify-between tracking-tight"><div class="flex items-center space-x-2"><a href="https://x.com/${twitterId}" target="_blank" rel="noreferrer">${avatarImg}</a><div><a href="https://x.com/${twitterId}" target="_blank" rel="noreferrer" class="flex items-center font-semibold whitespace-nowrap text-black dark:text-slate-200">${author}</a><div class="text-sm text-gray-500">@${twitterId}</div></div></div><a href="https://x.com/${twitterId}/status/${tweetId}" target="_blank" rel="noreferrer" class="text-current dark:text-slate-200">𝕏</a></div><div class="text-base tracking-wider leading-normal whitespace-pre-wrap break-words">${content}</div>${imageHtml}<p class="py-0 text-sm leading-none my-4 text-gray-500 dark:text-slate-400">${time}</p></div></div>`;
+  if (!tweetId) return "";
+  
+  // 返回占位符，客户端组件会替换为真实内容
+  return `<div data-tweet-id="${tweetId}" class="tweet-card-placeholder"></div>`;
 }
 
+// 保留 GearCard 的原始渲染
 function renderGearCard(attrs: Record<string, string>): string {
   const product = attrs.product ?? "";
   const image = attrs.image ?? attrs.cover ?? "";
@@ -99,7 +90,7 @@ function transformCustomCards(content: string): string {
     tweetPattern,
     (_match, attrsRaw: string) => {
       const attrs = parseTagAttributes(attrsRaw);
-      return renderTweetCard(attrs);
+      return renderTweetCardPlaceholder(attrs);
     },
   );
 

@@ -10,17 +10,7 @@ cover: https://c2.is26.com/blog/2024/03/investing/i-19.jpg
 
 在我写下这篇文章的`2024年3月2日`，`美国标普500指数  $SPX500`创下了自 1971 年以来的历史新高。
 
-<TweetCard
-tweetId="1763723396838523179"
-twitterId="Reuters"
-author="Reuters"
-time="上午8:30 · 2024年3月2日"
-avatar="https://pbs.twimg.com/profile_images/1194751949821939712/3VBu4_Sa_400x400.jpg"
-content="US stocks rose with the S&P 500 and Nasdaq notching closing highs, as another AI-led rally boosted markets, while a fall in Treasury yields provided further support https://reut.rs/3IkO5Zf"
-cover="https://c2.is26.com/blog/2024/03/investing/rt-1.jpg"
-comment=9
-like=19
-/>
+<TweetCard tweetId="1763723396838523179" />
 
 在牛市的行情，越来越多人开始在朋友圈和各种平台上，晒出的自己的股票收益，很多人都成了这波股市的「赢家」，~~人人都是巴菲特的美好时光又回来了~~。
 
@@ -173,17 +163,7 @@ like=19
 
 具体的背景信息建议可以看看这条推文的讨论:
 
-<TweetCard
-tweetId="1764226121661665347"
-twitterId="panlyuzhi"
-author="Dup4"
-time="下午5:47 · 2024年3月3日"
-avatar="https://pbs.twimg.com/profile_images/1293888351490076675/yk334cNU_400x400.jpg"
-content="(1/n) 最近探索了一下兴业银行的无界卡的跨境汇款，前 30 笔能免手续费和电报费，但是转美金到 HSBC HK，走了 HSBC USA，被中转行收了费用，一笔 750 美元的汇款，只到账了 738，被收取了 12 美金的中转费用"
-cover="https://c2.llyz.xyz/blog/2024/03/investing/rt-1.jpg"
-comment=35
-like=520
-/>
+<TweetCard tweetId="1764226121661665347" />
 
 - 转`港币`到汇丰香港，不会产生任何费用
 - 在下午 15:00 之前，转`美元`到汇丰香港，这个时候是汇丰香港处理收款，也不会产生任何费用

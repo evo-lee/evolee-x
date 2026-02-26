@@ -2,9 +2,30 @@
 
 import { useEffect } from "react";
 import mediumZoom from "medium-zoom";
+import { createRoot } from "react-dom/client";
+import { TweetCard } from "./tweet-card";
 
 function getFaviconUrl(domain: string) {
   return `https://img.is26.com/https://static.is26.com/favicon/${domain}/w=32`;
+}
+
+// 渲染 TweetCard 到占位符
+function hydrateTweetCards() {
+  const placeholders = document.querySelectorAll(".tweet-card-placeholder");
+  
+  placeholders.forEach((placeholder) => {
+    const tweetId = placeholder.getAttribute("data-tweet-id");
+    if (!tweetId) return;
+    
+    // 检查是否已经 hydrate
+    if (placeholder.hasAttribute("data-hydrated")) return;
+    
+    // 创建 React root 并渲染 TweetCard
+    const root = createRoot(placeholder);
+    root.render(<TweetCard tweetId={tweetId} />);
+    
+    placeholder.setAttribute("data-hydrated", "true");
+  });
 }
 
 export function ContentEnhancer() {
@@ -47,6 +68,9 @@ export function ContentEnhancer() {
 
       link.prepend(img);
     });
+
+    // Hydrate TweetCards
+    hydrateTweetCards();
 
     return () => {
       zoom.detach();

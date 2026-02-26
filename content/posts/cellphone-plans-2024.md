@@ -48,17 +48,7 @@ cover: https://c2.is26.com/blog/2024/12/network/n-0.jpg
 
 除此之外，联通对于跨省和跨运营商进行限速，到了晚上高峰期，上行速度被限制到 5Mbps，对于我这种需要跨运营商访问家里 NAS 的用户来说，实在是太痛苦了。有关这个问题，我之前也发了一条[推](https://x.com/luoleiorg/status/1849472909787672962):
 
-<TweetCard
-tweetId="1849472909787672962"
-twitterId="luoleiorg"
-author="luolei"
-time="下午11:27 · 2024年10月24日"
-:content="'今年，各大运营商在家庭用户宽带、公网IP、NAT以及跨省和跨运营商通信等方面，频繁采取限制或劣化网络质量的小动作。\n昨天，我用电信连回深圳联通家宽，联通的上行带宽被限制到 5Mbps( IPv6/tcp 直连)，但当我切换使用联通网络重联时，联通家宽上行则恢复正常(跑满上行 50Mbps)。\n问题说大不大，说小不小，万一你有个文件互传之类的需求，就很蛋疼了。\nV站近几个月也陆续出现了相关帖子，涉及全国范围，具体的原因也有讨论涉及:\n🔗 每晚八点开始，跨运营商限速 https://v2ex.com/t/1082680\n🔗 [讨论] 最近种种迹象表明三大都开始偷偷限制骨干节点跨网互联\nhttps://v2ex.com/t/1082839\n🔗 广东联通和广东电信宽带互通已被限速\nhttps://v2ex.com/t/1073989'"
-avatar="https://pbs.twimg.com/profile_images/1550157622300786688/672YmCpB_400x400.jpg"
-comment=44
-like=524
-image="https://c2.is26.com/blog/2024/12/network/n-1.jpg"
-/>
+<TweetCard tweetId="1849472909787672962" />
 
 其中提到的几个讨论帖子，建议大家可以看看:
 

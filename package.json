@@ -18,7 +18,8 @@
     "sync:content": "node scripts/sync-content.mjs",
     "search:index": "node scripts/generate-search-index.mjs && node scripts/generate-pagefind-index.mjs",
     "search:json": "node scripts/generate-search-index.mjs",
-    "search:pagefind": "node scripts/generate-pagefind-index.mjs"
+    "search:pagefind": "node scripts/generate-pagefind-index.mjs",
+    "fetch:tweets": "node scripts/fetch-tweets.mjs"
   },
   "dependencies": {
     "@luoleiorg/search-core": "workspace:*",

@@ -10,17 +10,7 @@ tags:
 
 最近花了一点时间，开发了一个 Raycast 插件，当时还发了一条[推](https://x.com/luoleiorg/status/1846465874389356916)，今天这个插件通过官方审核，已经上架 Raycast 的官方插件商店。写篇文章分享一下。
 
-<TweetCard
-tweetId="1846465874389356916"
-twitterId="luoleiorg"
-author="luolei"
-time="下午4:09 · 2024年9月8日"
-:content="'转码萌新，用 Cursor 花了2小时 , 给效率神器 Raycast 开发了个短链插件。🐶\n基于目前市面上最佳，由@ccbikai\n打造的使用 Cloudflare 技术栈的开源短链系统 Sink 。直接通过 Raycast 便捷管理和使用 Sink 短链。\n🔗 仓库地址: https://github.com/foru17/raycast-sink\n🛍️ 商店地址: https://zuoluo.tv/sink\n0️⃣ 开源 ✅\n1️⃣ 一键配置 🔧\n2️⃣ 离线优化 🚀\n3️⃣ 快捷操作(查询/创建/编辑/跳转/剪贴板) 🎯\n\n目前我用这个当网站书签，把一些常用的网站落地页记录，懒得打开浏览器时可以直接快捷跳转 🤓'"
-avatar="https://pbs.twimg.com/profile_images/1550157622300786688/672YmCpB_400x400.jpg"
-comment=1
-like=79
-image="https://c2.is26.com/blog/2024/11/sink/raycast-sink-intro.jpg"
-/>
+<TweetCard tweetId="1846465874389356916" />
 
 ## 背景
 
@@ -30,16 +20,7 @@ image="https://c2.is26.com/blog/2024/11/sink/raycast-sink-intro.jpg"
 
 上个月，花了一天时间，将自己的短链服务从 YOURLS 迁移到了朋友面条 [@ccbikai](https://x.com/ccbikai) 开发的开源短链服务 [Sink](https://sink.cool/)
 
-<TweetCard
-    tweetId="1794162548776079701"
-    twitterId="ccbikai"
-    author="面条"
-    time="上午8:24 · 2024年5月25日"
-    :content="'【开源】 Sink - 基于 Cloudflare 带访问统计的短链系统\n\n特性：\n1. 访问统计\n2. 自定义 Slug\n3. 🪄 AI 生成 Slug\n4. 链接有效期\n5. Cloudflare 部署, 支持 3,000,000 次访问/月'"
-    avatar="https://pbs.twimg.com/profile_images/1648180024464539648/L6Na78It_400x400.jpg"
-    :comment="21"
-    :like="287"
-/>
+<TweetCard tweetId="1794162548776079701" />
 
 基于 Cloudflare 的短链服务，符合我们前端技术栈的使用习惯。具体的部署和使用，可以直接看官方文档，对于有技术背景的人来说，还是比较容养上手的。
 

@@ -30,17 +30,7 @@ tags:
 
 有关航旅这个部分，有一个推友留言，供参考:
 
-<TweetCard
-    tweetId="1910665635325260082"
-    twitterId="nexa_li"
-    author="Nexa"
-    time="下午8:06 · 2025年4月11日"
-    content="之前打算做相关产品，用OpenAI Deep research做了非常详细的产品调研，想要功能齐全费用不低的"
-    avatar="https://pbs.twimg.com/profile_images/1910673688044986373/QW6bL1qv_400x400.jpg"
-    comment=0
-    like=3
-    image="https://c2.is26.com/blog/2025/04/flight/e-3.jpg"
-  />
+<TweetCard tweetId="1910665635325260082" />
 
 ## 相关资料
 

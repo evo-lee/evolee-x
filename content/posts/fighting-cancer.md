@@ -23,7 +23,7 @@ cover: https://c2.is26.com/blog/2024/03/health/h-1.jpg
 
 这篇文章我也分享到了推特，截至 3 月 21 日下午，已经有 100 多万的浏览量，超过 1 千条评论，在留言中也收获了许多有价值的信息:
 
-<TweetCard
+<TweetCard tweetId="1770112626657247620" />
     tweetId="1770112626657247620"
     twitterId="luoleiorg"
     author="luolei"

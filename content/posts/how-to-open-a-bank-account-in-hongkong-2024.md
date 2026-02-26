@@ -21,16 +21,7 @@ tags:
 
 这篇文章在推特上发布后成了热门，有不少的留言和讨论，建议大家也可以去看看:
 
-<TweetCard
-    tweetId="1741747965838954869"
-    twitterId="luoleiorg"
-    author="luolei"
-    time="下午12:47 · 2023年5月9日"
-    content="香港银行开户: 2024 年更新  | 中银、汇丰、众安开户经验分享 https://luolei.org/how-to-open-a-bank-account-in-hongkong-2024 跨入新一年，有关香港开户， 一些新鲜的微小经验分享。😀"
-    avatar="https://pbs.twimg.com/profile_images/1550157622300786688/672YmCpB_400x400.jpg"
-    comment=102
-    like=2181
-  />
+<TweetCard tweetId="1741747965838954869" />
 
 ## 香港银行开户难吗？
 

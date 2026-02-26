@@ -9,7 +9,7 @@ export function CategoryNav({ currentCategory }: CategoryNavProps) {
   const homeCategories = categoryMap.filter((category) => category.isHome);
   
   return (
-    <div className="mx-auto max-w-7xl px-1 md:px-4 md:px-0">
+    <div className="category-nav mx-auto max-w-7xl px-1 md:px-4 md:px-0">
       <div className="mt-3 h-16 w-full px-4">
         <div className="flex w-full items-center justify-between">
           <div className="m-auto flex items-center text-black dark:text-slate-300">

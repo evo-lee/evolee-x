@@ -3,21 +3,21 @@
     var(--vp-font-family-base);
 }
 
-/* Category nav separator using pseudo-element */
-.home-nav-title:not(:last-child)::after {
+/* Category nav separator using pseudo-element - only within category-nav */
+.category-nav .home-nav-title:not(:last-child)::after {
   content: "/";
   margin-left: 0.75rem;
   color: rgb(156, 163, 175); /* gray-400 */
 }
 
 @media (min-width: 768px) {
-  .home-nav-title:not(:last-child)::after {
+  .category-nav .home-nav-title:not(:last-child)::after {
     display: inline-block;
   }
 }
 
 @media (max-width: 767px) {
-  .home-nav-title:not(:last-child)::after {
+  .category-nav .home-nav-title:not(:last-child)::after {
     display: none;
   }
 }
