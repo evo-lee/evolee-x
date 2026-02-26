@@ -21,7 +21,9 @@
       "Bash(AI_BASE_URL=https://test.example.com/v1 AI_API_KEY=test AI_MODEL=test-model node:*)",
       "Bash(grep error TS:*)",
       "Bash(AI_BASE_URL=https://test.example.com/v1 AI_API_KEY=test AI_MODEL=test node:*)",
-      "Bash(npx tsc --noEmit 2>&1 | grep -v KVNamespace | grep -v \"command not found\" | grep -v \"npm warn\" || echo \"Clean\")"
+      "Bash(npx tsc --noEmit 2>&1 | grep -v KVNamespace | grep -v \"command not found\" | grep -v \"npm warn\" || echo \"Clean\")",
+      "WebFetch(domain:stat.luolei.org)",
+      "WebFetch(domain:st.luolei.org)"
     ]
   }
 }

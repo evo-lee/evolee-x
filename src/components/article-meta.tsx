@@ -24,12 +24,12 @@ export function ArticleMeta({ post }: ArticleMetaProps) {
             <h1 className="line-clamp-3 max-w-xl break-normal text-xl font-bold leading-10 text-white md:line-clamp-2 md:text-2xl">
               {post.title}
             </h1>
-            <div className="mt-3 flex items-center gap-3 text-xs text-neutral-200 md:text-sm">
+            <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-neutral-200 md:text-sm">
               <span className="inline-flex items-center gap-1">
                 <IconCalendar className="h-3.5 w-3.5" />
                 {post.date}
               </span>
-              <span className="text-neutral-400/60">·</span>
+              <span className="text-neutral-400/60 hidden sm:inline">·</span>
               <span className="inline-flex items-center gap-1">
                 <IconEye className="h-3.5 w-3.5" />
                 {loading ? (
@@ -38,7 +38,7 @@ export function ArticleMeta({ post }: ArticleMetaProps) {
                   <>{hits.toLocaleString()} 阅读</>
                 )}
               </span>
-              <span className="text-neutral-400/60">·</span>
+              <span className="text-neutral-400/60 hidden sm:inline">·</span>
               <span className="inline-flex items-center gap-1">
                 <IconClock className="h-3.5 w-3.5" />
                 {post.readingTime}

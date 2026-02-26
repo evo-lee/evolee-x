@@ -14,6 +14,18 @@ export function ThemeToggle() {
     const dark = stored ? stored === "dark" : prefersDark;
     setIsDark(dark);
     document.documentElement.classList.toggle("dark", dark);
+
+    // Listen for system theme changes (iOS auto dark mode, etc.)
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (e: MediaQueryListEvent) => {
+      // Only auto-follow system if user hasn't manually chosen
+      if (!localStorage.getItem("theme")) {
+        setIsDark(e.matches);
+        document.documentElement.classList.toggle("dark", e.matches);
+      }
+    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
   useEffect(() => {

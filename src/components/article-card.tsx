@@ -7,7 +7,6 @@ import {
   IconEye,
   IconFire,
   IconLoading,
-  IconYouTube,
 } from "@/components/icons";
 import type { PostItem } from "@/lib/content/types";
 import { getPreviewImage } from "@/lib/content/utils";
@@ -39,14 +38,10 @@ export function ArticleCard({
       return;
     }
 
-    // Check if image is already loaded (from cache)
     if (imgRef.current?.complete) {
       setIsLoaded(true);
     }
   }, [imageUrl]);
-
-  const showSkeleton = !isLoaded && !hasError && !!imageUrl;
-  const showFallback = !isLoaded && hasError;
 
   return (
     <article className="group flex h-full flex-col">
@@ -81,32 +76,11 @@ export function ArticleCard({
             )}
 
             {isVideo && (
-              <IconYouTube className="absolute bottom-2 left-6 h-7 w-7 md:h-5 md:w-5 z-10" />
-            )}
-
-            {showSkeleton && (
-              <div className="pointer-events-none absolute top-0 left-0 flex h-full w-full animate-pulse space-x-4 p-2 pt-6">
-                <span className="relative flex h-10 w-10">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-100 opacity-75" />
-                  <span className="relative inline-flex h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-600" />
-                </span>
-                <div className="flex-1 space-y-6 py-1">
-                  <div className="h-8 rounded bg-slate-200 dark:bg-slate-600 md:h-4" />
-                  <div className="space-y-3">
-                    <div className="grid grid-cols-3 gap-4">
-                      <div className="col-span-2 h-8 rounded bg-slate-200 dark:bg-slate-600 md:h-4" />
-                      <div className="col-span-1 h-8 rounded bg-slate-200 dark:bg-slate-600 md:h-4" />
-                    </div>
-                    <div className="h-8 rounded bg-slate-200 dark:bg-slate-600 md:h-4" />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {showFallback && (
-              <div className="pointer-events-none absolute top-0 left-0 flex h-full w-full items-start justify-start p-2 pt-6">
-                <div className="h-0 w-0 border-l-[20px] border-r-[20px] border-t-[30px] border-l-transparent border-r-transparent border-t-slate-200 dark:border-t-slate-600" />
-              </div>
+              <img
+                src="/icons/youtube.svg"
+                alt="YouTube"
+                className="absolute bottom-2 left-6 h-7 w-7 md:h-5 md:w-5 z-10"
+              />
             )}
           </Link>
 

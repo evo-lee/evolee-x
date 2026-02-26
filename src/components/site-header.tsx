@@ -49,7 +49,7 @@ export function SiteHeader() {
             height={28}
             className="h-7 w-7"
           />
-          <span className="hidden sm:inline">罗磊的独立博客</span>
+          <span>罗磊的独立博客</span>
         </Link>
         <nav className="flex items-center text-sm text-zinc-600 dark:text-zinc-300">
           <div className="hidden items-center md:flex">

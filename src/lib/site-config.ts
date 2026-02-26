@@ -24,7 +24,7 @@ export const siteConfig = {
   
   // 统计和分析
   analyticsId: "G-TG5VK8GPSG",
-  analyticsApiUrl: "https://st.luolei.org/ga",
+  analyticsApiUrl: "https://stat.luolei.org/ga",
   
   // 评论系统 (Artalk)
   comments: {

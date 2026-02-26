@@ -309,6 +309,20 @@ export async function getPostBySlug(slug: string): Promise<PostDetail | null> {
   };
 }
 
+/**
+ * Get raw markdown content for a post by slug (used by RSS feed)
+ */
+export function getPostRawContent(slug: string): string | null {
+  for (const [filePath, content] of Object.entries(markdownFiles)) {
+    const fileSlug = filePath.replace("/content/posts/", "").replace(/\.md$/, "").replace(/\//g, "-");
+    if (fileSlug === slug) {
+      const { content: markdownContent } = matter(content as string);
+      return markdownContent;
+    }
+  }
+  return null;
+}
+
 export function getPostSiblings(slug: string) {
   const posts = getAllPosts();
   const index = posts.findIndex((post) => post.slug === slug);

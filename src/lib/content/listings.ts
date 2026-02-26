@@ -1,5 +1,4 @@
-import { fetchGA4PageViews, isGA4Configured } from "@/lib/ga4";
-import { articlePageSize, categoryMap } from "@/lib/site-config";
+import { articlePageSize, categoryMap, siteConfig } from "@/lib/site-config";
 import { extractSlug, parsePositivePage } from "@/lib/utils";
 import { getAllPosts } from "./posts";
 import type { PostItem } from "./types";
@@ -8,7 +7,7 @@ const categoryNameMap = new Map<string, string>(
   categoryMap.map((item) => [item.text, item.name]),
 );
 
-// 服务端缓存（6小时，因为 GA4 数据有 24-48 小时延迟）
+// 服务端缓存（6小时）
 interface HitsCache {
   data: Map<string, number>;
   timestamp: number;
@@ -16,7 +15,7 @@ interface HitsCache {
 }
 
 let hitsCache: HitsCache | null = null;
-const CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6小时
+const CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 
 export interface PostListingResult {
   category?: string;
@@ -34,45 +33,35 @@ async function getHitsMap(): Promise<{
   hitsMap: Map<string, number>;
   hitsLoading: boolean;
 }> {
-  // 检查缓存
   if (hitsCache && Date.now() - hitsCache.timestamp < CACHE_TTL_MS) {
-    console.log("[Server] Using cached hits data");
     return { hitsMap: hitsCache.data, hitsLoading: hitsCache.loading };
   }
 
   const staleCache = hitsCache;
 
-  // 启动获取
   const fetchPromise = (async () => {
     const hitsMap = new Map<string, number>();
     let loading = true;
 
     try {
-      if (!isGA4Configured()) {
-        console.warn("[Server] GA4 not configured");
-        loading = false;
-      } else {
-        console.log("[Server] Fetching hits from GA4...");
-        const results = await fetchGA4PageViews();
-        
-        for (const item of results) {
-          const slug = extractSlug(item.page);
-          const existingHit = hitsMap.get(slug) ?? 0;
-          hitsMap.set(slug, existingHit + item.hit);
-        }
-        loading = false;
-        console.log("[Server] Hits loaded:", hitsMap.size, "unique slugs");
+      const apiUrl = siteConfig.analyticsApiUrl;
+      if (!apiUrl) throw new Error("analyticsApiUrl not configured");
+
+      const res = await fetch(apiUrl, { signal: AbortSignal.timeout(10000) });
+      if (!res.ok) throw new Error(`stat API error: ${res.status}`);
+
+      const json = (await res.json()) as { data: Array<{ page: string; hit: number }> };
+      for (const item of json.data) {
+        const slug = extractSlug(item.page);
+        const existing = hitsMap.get(slug) ?? 0;
+        hitsMap.set(slug, existing + item.hit);
       }
+      loading = false;
     } catch (error) {
       console.error("[Server] Failed to fetch hits:", error);
     }
 
-    hitsCache = {
-      data: hitsMap,
-      timestamp: Date.now(),
-      loading,
-    };
-
+    hitsCache = { data: hitsMap, timestamp: Date.now(), loading };
     return { hitsMap, hitsLoading: loading };
   })();
 
