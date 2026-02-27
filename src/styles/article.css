@@ -65,65 +65,93 @@
   font-family: var(--vp-font-family-mono);
 }
 
-/* 文章内链接样式 - 外链增强版 */
+/* 文章内链接样式 - 精致外链版 */
 .article-content a {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   vertical-align: baseline;
-  font-weight: 500;
-  color: var(--vp-c-brand);
+  font-weight: 450;
+  color: var(--vp-c-brand-light);
   text-decoration: none;
   text-overflow: ellipsis;
-  padding: 0 2px;
-  border-radius: 3px;
-  transition: all 0.2s ease;
+  padding: 0 1px;
+  border-radius: 2px;
+  transition: all 0.15s ease;
 }
 
-/* 悬停效果 - 背景高亮 + 下划线动画 */
+/* 悬停效果 - 微妙下划线 */
 .article-content a:hover {
   color: var(--vp-c-brand);
-  background-color: var(--vp-c-brand-soft);
-  text-decoration: none;
+  background-color: transparent;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--vp-c-brand-soft);
 }
 
-/* 外链标识 - 添加外部链接图标 */
+/* 外链标识 - 更 subtle 的外部链接图标 */
 .article-content a[href^="http"]::after {
   content: "";
   display: inline-block;
-  width: 12px;
-  height: 12px;
-  margin-left: 2px;
+  width: 10px;
+  height: 10px;
+  margin-left: 1px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234f46e5' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'/%3E%3C/svg%3E");
   background-size: contain;
   background-repeat: no-repeat;
-  opacity: 0.6;
-  transition: all 0.2s ease;
+  opacity: 0.4;
+  transition: all 0.15s ease;
 }
 
 .article-content a[href^="http"]:hover::after {
-  opacity: 1;
-  transform: translate(1px, -1px);
+  opacity: 0.7;
 }
 
-/* 暗色模式下的外链图标 */
+/* 暗色模式下的外链样式 */
+.dark .article-content a {
+  color: var(--vp-c-brand-lighter);
+}
+
 .dark .article-content a[href^="http"]::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23818cf8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'/%3E%3C/svg%3E");
 }
 
 /* 点击反馈效果 */
 .article-content a:active {
-  transform: scale(0.98);
+  opacity: 0.8;
 }
 
-/* 带 favicon 的链接样式 */
+/* 带 favicon 的链接样式 - 隐藏外链箭头 */
 .article-content a.has-favicon {
-  padding-left: 2px;
+  padding-left: 0;
+  gap: 1px;
 }
 
 .article-content a.has-favicon::after {
-  display: none;
+  display: none !important;
+}
+
+/* li 中的链接对齐优化 */
+.article-content li a {
+  vertical-align: middle;
+}
+
+.article-content li a.has-favicon {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.article-content li a.has-favicon .favicon-wrapper {
+  margin-top: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+
+.article-content li a.has-favicon .favicon {
+  vertical-align: middle;
 }
 
 
@@ -160,35 +188,31 @@
   line-height: 28px;
 }
 
-/* Favicon 样式优化 */
-.article-content a .favicon {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  margin-right: 4px;
-  margin-top: -2px;
-  border-radius: 2px;
-  vertical-align: middle;
-  transition: all 0.2s ease;
-  opacity: 0.8;
+/* Favicon 样式优化 - 精致对齐版 */
+.article-content a .favicon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-right: 1px;
+  flex-shrink: 0;
 }
 
-/* 加载中的 favicon */
-.article-content a.pending-favicon .favicon {
-  width: 12px;
-  height: 12px;
-  margin-right: 6px;
-  border-radius: 50%;
-  background: linear-gradient(90deg, var(--vp-c-brand) 25%, transparent 25%);
-  animation: spin 0.8s linear infinite;
-  opacity: 0.5;
+.article-content a .favicon {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  object-fit: contain;
+  opacity: 0.8;
+  transition: opacity 0.15s ease;
 }
+
 
 /* 悬停时 favicon 效果 */
 .article-content a:hover .favicon {
-  transform: scale(1.1);
   opacity: 1;
-  border-radius: 3px;
 }
 
 /* 已加载的 favicon */
@@ -196,11 +220,47 @@
   opacity: 0.85;
 }
 
-/* 加载失败的 favicon */
-.article-content a.err-favicon .favicon {
-  opacity: 0.3;
-  filter: grayscale(100%);
+/* 加载失败的 favicon - 显示兜底图标 */
+.article-content a.err-favicon .favicon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.article-content a.err-favicon .favicon {
+  /* 使用 CSS 背景图显示兜底地球图标 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%239ca3af'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.5;
+}
+
+.article-content a.err-favicon {
+  gap: 1px;
+}
+
+.article-content a.err-favicon::after {
+  display: none !important;
+}
+
+/* 段落中的链接对齐优化 */
+.article-content p a.has-favicon {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.article-content p a.has-favicon .favicon-wrapper {
+  margin-top: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+
+.article-content p a.has-favicon .favicon {
+  vertical-align: middle;
+}
+
 
 .article-content summary {
   color: var(--vp-c-brand);
@@ -457,14 +517,7 @@
   }
 }
 
-/* Favicon 容器 */
-.article-content a .favicon-wrapper {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 4px;
-  vertical-align: middle;
-}
+
 
 /* GearCard 样式 */
 .gear-card {

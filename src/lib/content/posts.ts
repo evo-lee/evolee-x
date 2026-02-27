@@ -101,6 +101,11 @@ function transformCustomCards(content: string): string {
   });
 }
 
+// 获取外部网站 favicon
+function getFaviconUrl(domain: string): string {
+  return `https://img.is26.com/https://static.is26.com/favicon/${domain}/w=32`;
+}
+
 function imageTransformPlugin() {
   return function transformer(tree: Root) {
     visit(tree, "element", (node) => {
@@ -119,6 +124,65 @@ function imageTransformPlugin() {
     });
   };
 }
+
+// Rehype 插件：在构建时为外部链接添加 favicon
+function externalLinkFaviconPlugin() {
+  return function transformer(tree: Root) {
+    visit(tree, "element", (node) => {
+      const element = node as Element;
+      if (element.tagName !== "a") return;
+
+      const href = String(element.properties?.href ?? "");
+      // 只处理外部链接
+      if (!href || !href.startsWith("http")) return;
+
+      const domain = href.split("/")[2];
+      if (!domain) return;
+
+      // 获取链接的子元素
+      const children = element.children || [];
+      // 检查是否已经有 favicon（避免重复）
+      const hasFavicon = children.some((child) => {
+        if (child.type !== "element") return false;
+        const childEl = child as Element;
+        return childEl.tagName === "span" && String(childEl.properties?.className ?? "").includes("favicon-wrapper");
+      });
+      if (hasFavicon) return;
+
+      // 创建 favicon 图片元素
+      const faviconImg: Element = {
+        type: "element",
+        tagName: "img",
+        properties: {
+          className: ["favicon"],
+          src: getFaviconUrl(domain),
+          alt: "",
+          loading: "lazy",
+        },
+        children: [],
+      };
+
+      // 创建 wrapper
+      const wrapper: Element = {
+        type: "element",
+        tagName: "span",
+        properties: {
+          className: ["favicon-wrapper"],
+        },
+        children: [faviconImg],
+      };
+
+      // 给链接添加 has-favicon 类，并在开头插入 favicon
+      const existingClass = String(element.properties?.className ?? "");
+      element.properties = {
+        ...element.properties,
+        className: existingClass ? `${existingClass} has-favicon` : "has-favicon",
+      };
+      element.children = [wrapper, ...children];
+    });
+  };
+}
+
 
 function extractHeadingsFromHtml(html: string): PostDetail["headings"] {
   const headings: PostDetail["headings"] = [];
@@ -243,23 +307,20 @@ export async function getPostBySlug(slug: string): Promise<PostDetail | null> {
   ];
   
   let raw: string | undefined;
-  let matchedPath: string | undefined;
-  
+
   for (const path of possiblePaths) {
     if (markdownFiles[path]) {
       raw = markdownFiles[path] as string;
-      matchedPath = path;
       break;
     }
   }
-  
+
   // If not found directly, search through all files
   if (!raw) {
     for (const [filePath, content] of Object.entries(markdownFiles)) {
       const fileSlug = filePath.replace("/content/posts/", "").replace(/\.md$/, "").replace(/\//g, "-");
       if (fileSlug === slug) {
         raw = content as string;
-        matchedPath = filePath;
         break;
       }
     }
@@ -286,6 +347,7 @@ export async function getPostBySlug(slug: string): Promise<PostDetail | null> {
       },
     })
     .use(imageTransformPlugin)
+    .use(externalLinkFaviconPlugin)
     .use(rehypeStringify, { allowDangerousHtml: true })
     .process(transformedContent);
   const html = String(rendered);

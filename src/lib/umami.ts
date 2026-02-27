@@ -25,20 +25,15 @@ export interface UmamiStatsResult {
 export async function fetchUmamiPageViews(): Promise<UmamiStatsResult> {
   try {
     const { apiUrl, websiteId, apiToken } = getUmamiConfig();
-    
-    // 调试日志（生产环境临时启用）
-    console.log("[Umami Debug] apiUrl:", apiUrl);
-    console.log("[Umami Debug] websiteId:", websiteId);
-    console.log("[Umami Debug] hasToken:", !!apiToken);
 
     if (!apiUrl || !websiteId) {
       console.warn("[Umami] API URL or Website ID not configured");
       return { total: 0, data: [] };
     }
 
-    // 计算时间范围：从 2015-01-01 到 2030-01-01（确保包含所有历史数据）
+    // 计算时间范围：从 2015-01-01 到当前时间
     const startAt = new Date("2015-01-01").getTime();
-    const endAt = new Date("2030-01-01").getTime();
+    const endAt = Date.now();
 
     // 构建请求头
     const headers: Record<string, string> = {
@@ -56,7 +51,7 @@ export async function fetchUmamiPageViews(): Promise<UmamiStatsResult> {
     metricsUrl.searchParams.set("endAt", endAt.toString());
     metricsUrl.searchParams.set("type", "path");
 
-    console.log("[Umami] Fetching metrics from:", metricsUrl.toString());
+    console.log("[Umami] Fetching page metrics...");
 
     // 使用 AbortController 替代 AbortSignal.timeout（兼容性更好）
     const controller = new AbortController();
@@ -207,25 +202,25 @@ export async function fetchUmamiStats(): Promise<{
       return null;
     }
     
-    // 计算时间范围：从 2015-01-01 到 2030-01-01（确保包含所有历史数据）
+    // 计算时间范围：从 2015-01-01 到当前时间
     const startAt = new Date("2015-01-01").getTime();
-    const endAt = new Date("2030-01-01").getTime();
-    
+    const endAt = Date.now();
+
     // 构建请求头
     const headers: Record<string, string> = {
       Accept: "application/json",
     };
-    
+
     if (apiToken) {
       headers["Authorization"] = `Bearer ${apiToken}`;
     }
-    
+
     // 使用 /stats 端点获取总统计
     const statsUrl = new URL(`${apiUrl}/websites/${websiteId}/stats`);
     statsUrl.searchParams.set("startAt", startAt.toString());
     statsUrl.searchParams.set("endAt", endAt.toString());
     
-    console.log("[Umami] Fetching stats from:", statsUrl.toString());
+    console.log("[Umami] Fetching stats...");
     
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
@@ -262,8 +257,8 @@ export async function fetchUmamiStats(): Promise<{
  * 优先使用实时数据，如果没有则查询最近7天的会话
  */
 export async function fetchRecentVisitor(): Promise<RecentVisitor | null> {
-  const MAX_RETRIES = 2;
-  const TIMEOUT_MS = 15000; // 15秒超时
+  const MAX_RETRIES = 1;
+  const TIMEOUT_MS = 8000; // 8秒超时
   
   const { apiUrl, websiteId, apiToken } = getUmamiConfig();
   
@@ -302,7 +297,7 @@ export async function fetchRecentVisitor(): Promise<RecentVisitor | null> {
           createdAt?: string;
         }>;
       };
-      console.log("[Umami] Realtime API raw response:", JSON.stringify(rawData, null, 2));
+      console.log("[Umami] Realtime API: got", rawData.events?.length ?? 0, "events");
       
       // realtime 返回的 events 数组包含最近的访问事件
       if (rawData.events && rawData.events.length > 0) {
@@ -359,7 +354,7 @@ export async function fetchRecentVisitor(): Promise<RecentVisitor | null> {
       
       if (response.ok) {
         const rawData = await response.json();
-        console.log("[Umami] Sessions API raw response:", JSON.stringify(rawData, null, 2));
+        console.log("[Umami] Sessions API: got", (rawData as { data?: unknown[] }).data?.length ?? 0, "sessions");
         
         const data = rawData as {
           data: Array<{

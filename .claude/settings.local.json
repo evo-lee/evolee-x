@@ -24,7 +24,10 @@
       "Bash(npx tsc --noEmit 2>&1 | grep -v KVNamespace | grep -v \"command not found\" | grep -v \"npm warn\" || echo \"Clean\")",
       "WebFetch(domain:st.luolei.org)",
       "Bash(find:*)",
-      "WebFetch(domain:docs.umami.is)"
+      "WebFetch(domain:docs.umami.is)",
+      "Bash(npx tsc:*)",
+      "Bash(pnpm tsc:*)",
+      "Bash(pnpm remove:*)"
     ]
   }
 }

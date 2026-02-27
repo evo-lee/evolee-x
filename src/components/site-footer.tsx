@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { IconGitHub } from "@/components/icons";
 import { siteConfig } from "@/lib/site-config";
-import * as Flags from "country-flag-icons/react/3x2";
-
 interface AnalyticsSummary {
   totalPageViews: number;
   totalVisitors: number;
@@ -170,23 +168,22 @@ function formatRelativeTime(lastAt: string): string {
 
 
 
+// 国家代码转 emoji flag（零 bundle 成本）
+function countryCodeToEmoji(code: string): string {
+  const upperCode = code.toUpperCase();
+  if (upperCode.length !== 2) return "🏳️";
+  const codePoints = [...upperCode].map(
+    (c) => 0x1f1e6 + c.charCodeAt(0) - 65
+  );
+  return String.fromCodePoint(...codePoints);
+}
+
 function CountryFlag({ countryCode }: { countryCode: string }) {
-  const upperCode = countryCode.toUpperCase();
-  const Flag = Flags[upperCode as keyof typeof Flags] as React.ComponentType<{
-    className?: string;
-    title?: string;
-  }>;
-
-  if (!Flag) {
-    return (
-      <span className="inline-block h-2 w-4 text-center text-[10px]" title={upperCode}>
-        🏳️
-      </span>
-    );
-  }
-
+  const emoji = countryCodeToEmoji(countryCode);
   return (
-    <Flag className="inline-block h-2 w-auto rounded-[1px]" title={getCountryName(upperCode)} />
+    <span className="inline-block text-sm" title={getCountryName(countryCode.toUpperCase())}>
+      {emoji}
+    </span>
   );
 }
 // 客户端缓存配置

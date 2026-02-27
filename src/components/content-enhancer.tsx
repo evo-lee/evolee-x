@@ -5,9 +5,8 @@ import mediumZoom from "medium-zoom";
 import { createRoot, type Root } from "react-dom/client";
 import { TweetCard } from "./tweet-card";
 
-function getFaviconUrl(domain: string) {
-  return `https://img.is26.com/https://static.is26.com/favicon/${domain}/w=32`;
-}
+// 注意：favicon 现在由服务端在构建时处理，见 src/lib/content/posts.ts
+// 这里只处理 favicon 加载错误的情况
 
 // 渲染 TweetCard 到占位符
 function hydrateTweetCards(roots: Root[]) {
@@ -33,54 +32,34 @@ export function ContentEnhancer() {
   useEffect(() => {
     const roots: Root[] = [];
 
-    const zoom = mediumZoom(".article-body img", {
+    // 图片放大功能（排除 favicon）
+    const zoom = mediumZoom(".article-body img:not(.favicon)", {
       background: "var(--vp-c-bg)",
       margin: 24,
     });
 
-    // 处理文章内链接
-    const links =
-      document.querySelectorAll<HTMLAnchorElement>(".article-body a");
-    
+    // 处理 favicon 加载错误的情况
+    // 服务端构建时已插入 favicon，但可能加载失败
+    const links = document.querySelectorAll<HTMLAnchorElement>(
+      ".article-body a.has-favicon"
+    );
+
     links.forEach((link) => {
-      const href = link.getAttribute("href");
-      if (
-        !href ||
-        !href.startsWith("http") ||
-        link.querySelector("img.favicon")
-      ) {
+      const img = link.querySelector("img.favicon") as HTMLImageElement | null;
+      if (!img) return;
+
+      // 如果图片已经加载完成但失败了
+      if (img.complete && img.naturalHeight === 0) {
+        link.classList.remove("has-favicon");
+        link.classList.add("err-favicon");
         return;
       }
 
-      const domain = href.split("/")[2];
-      if (!domain) return;
-
-      // 创建 favicon 容器
-      const faviconWrapper = document.createElement("span");
-      faviconWrapper.className = "favicon-wrapper";
-      
-      link.classList.add("pending-favicon");
-      
-      const img = document.createElement("img");
-      img.className = "favicon";
-      img.src = getFaviconUrl(domain);
-      img.alt = "";
-      img.loading = "lazy";
-
-      img.onload = () => {
-        link.classList.remove("pending-favicon");
-        link.classList.add("has-favicon");
-      };
-
+      // 监听错误事件
       img.onerror = () => {
-        link.classList.remove("pending-favicon");
+        link.classList.remove("has-favicon");
         link.classList.add("err-favicon");
-        // 失败后移除 favicon
-        faviconWrapper.remove();
       };
-
-      faviconWrapper.appendChild(img);
-      link.insertBefore(faviconWrapper, link.firstChild);
     });
 
     // Hydrate TweetCards

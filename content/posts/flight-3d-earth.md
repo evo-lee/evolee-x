@@ -8,7 +8,7 @@ tags:
 
 上周花了两天时间，用 Next.js 练手做项目，顺便做了一个科普网站。
 
-- 🌍 [Flight Track in 3D Earth](https://flight.is26.com)
+- [Flight Track in 3D Earth](https://flight.is26.com)
 
 经常坐飞机的朋友，尤其是坐过长距离国际航班的朋友，一定留意过飞机在地图上的轨迹。但是由于[墨卡托投影](https://zh.wikipedia.org/zh-hans/%E9%BA%A5%E5%8D%A1%E6%89%98%E6%8A%95%E5%BD%B1%E6%B3%95)的原因，航班在平面地图上的轨迹往往与我们心理上的感知不一致。
 
