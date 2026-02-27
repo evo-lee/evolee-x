@@ -243,7 +243,7 @@ export function SearchCommand() {
         aria-label="Open search"
       >
         <Search className="h-3.5 w-3.5" />
-        <span className="hidden sm:inline">Search</span>
+        <span className="hidden sm:inline">搜索</span>
         <span className="hidden rounded border border-zinc-300 px-1 text-[10px] text-zinc-400 lg:inline dark:border-zinc-600">
           ⌘K
         </span>

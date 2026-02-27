@@ -170,3 +170,267 @@ export function getUmamiScriptConfig():
     websiteId,
   };
 }
+
+/**
+ * 最近访客信息
+ */
+export interface RecentVisitor {
+  country: string;
+  region: string;
+  city: string;
+  lastAt: string;
+}
+
+/**
+ * 网站统计摘要
+ */
+export interface WebsiteSummary {
+  totalPageViews: number;
+  totalVisitors: number;
+  totalVisits: number;
+  recentVisitor: RecentVisitor | null;
+}
+
+/**
+ * 从 Umami API 获取网站总统计
+ */
+export async function fetchUmamiStats(): Promise<{
+  pageviews: number;
+  visitors: number;
+  visits: number;
+} | null> {
+  try {
+    const { apiUrl, websiteId, apiToken } = getUmamiConfig();
+    
+    if (!apiUrl || !websiteId) {
+      console.warn("[Umami] API URL or Website ID not configured");
+      return null;
+    }
+    
+    // 计算时间范围：从 2015-01-01 到 2030-01-01（确保包含所有历史数据）
+    const startAt = new Date("2015-01-01").getTime();
+    const endAt = new Date("2030-01-01").getTime();
+    
+    // 构建请求头
+    const headers: Record<string, string> = {
+      Accept: "application/json",
+    };
+    
+    if (apiToken) {
+      headers["Authorization"] = `Bearer ${apiToken}`;
+    }
+    
+    // 使用 /stats 端点获取总统计
+    const statsUrl = new URL(`${apiUrl}/websites/${websiteId}/stats`);
+    statsUrl.searchParams.set("startAt", startAt.toString());
+    statsUrl.searchParams.set("endAt", endAt.toString());
+    
+    console.log("[Umami] Fetching stats from:", statsUrl.toString());
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    
+    const response = await fetch(statsUrl.toString(), {
+      headers,
+      signal: controller.signal,
+    });
+    
+    clearTimeout(timeoutId);
+    
+    if (response.ok) {
+      const data = (await response.json()) as {
+        pageviews: number;
+        visitors: number;
+        visits: number;
+      };
+      
+      console.log("[Umami] Stats fetched:", data);
+      return data;
+    } else {
+      const errorText = await response.text().catch(() => "Unknown error");
+      console.error("[Umami] Stats API error:", response.status, errorText);
+      return null;
+    }
+  } catch (error) {
+    console.error("[Umami] Failed to fetch stats:", error);
+    return null;
+  }
+}
+
+/**
+ * 从 Umami API 获取最近访客信息（带重试机制）
+ * 优先使用实时数据，如果没有则查询最近7天的会话
+ */
+export async function fetchRecentVisitor(): Promise<RecentVisitor | null> {
+  const MAX_RETRIES = 2;
+  const TIMEOUT_MS = 15000; // 15秒超时
+  
+  const { apiUrl, websiteId, apiToken } = getUmamiConfig();
+  
+  if (!apiUrl || !websiteId) {
+    console.warn("[Umami] API URL or Website ID not configured");
+    return null;
+  }
+  
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+  };
+  
+  if (apiToken) {
+    headers["Authorization"] = `Bearer ${apiToken}`;
+  }
+  
+  // 首先尝试获取实时数据（最近30分钟）
+  try {
+    const realtimeUrl = new URL(`${apiUrl}/realtime/${websiteId}`);
+    console.log("[Umami] Fetching realtime data from:", realtimeUrl.toString());
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+    
+    const response = await fetch(realtimeUrl.toString(), {
+      headers,
+      signal: controller.signal,
+    });
+    
+    clearTimeout(timeoutId);
+    
+    if (response.ok) {
+      const rawData = await response.json() as {
+        events?: Array<{
+          country?: string;
+          createdAt?: string;
+        }>;
+      };
+      console.log("[Umami] Realtime API raw response:", JSON.stringify(rawData, null, 2));
+      
+      // realtime 返回的 events 数组包含最近的访问事件
+      if (rawData.events && rawData.events.length > 0) {
+        // 获取第一个事件（最新的）
+        const event = rawData.events[0];
+        const visitor: RecentVisitor = {
+          country: event.country || "Unknown",
+          region: "", // realtime 不返回 region
+          city: "",   // realtime 不返回 city
+          lastAt: event.createdAt || new Date().toISOString(),
+        };
+        console.log("[Umami] Recent visitor from realtime:", visitor);
+        return visitor;
+      }
+    } else {
+      const errorText = await response.text().catch(() => "Unknown error");
+      console.warn("[Umami] Realtime API error:", response.status, errorText);
+    }
+  } catch (error) {
+    console.warn("[Umami] Failed to fetch realtime data:", error);
+  }
+  
+  // 如果 realtime 失败或没有数据，回退到 sessions 查询（最近7天）
+  console.log("[Umami] Falling back to sessions API...");
+  
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      // 计算时间范围：最近7天（之前是24小时，可能太短了）
+      const endAt = Date.now();
+      const startAt = endAt - 7 * 24 * 60 * 60 * 1000; // 7天前
+      
+      // 使用 /sessions 端点获取最近访客
+      const sessionsUrl = new URL(`${apiUrl}/websites/${websiteId}/sessions`);
+      sessionsUrl.searchParams.set("startAt", startAt.toString());
+      sessionsUrl.searchParams.set("endAt", endAt.toString());
+      sessionsUrl.searchParams.set("page", "1");
+      sessionsUrl.searchParams.set("pageSize", "1"); // 只获取最近的一条
+      
+      if (attempt === 0) {
+        console.log("[Umami] Fetching recent visitor from:", sessionsUrl.toString());
+      } else {
+        console.log(`[Umami] Retry ${attempt}/${MAX_RETRIES} fetching recent visitor...`);
+      }
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+      
+      const response = await fetch(sessionsUrl.toString(), {
+        headers,
+        signal: controller.signal,
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (response.ok) {
+        const rawData = await response.json();
+        console.log("[Umami] Sessions API raw response:", JSON.stringify(rawData, null, 2));
+        
+        const data = rawData as {
+          data: Array<{
+            country: string;
+            region: string;
+            city: string;
+            lastAt: string;
+          }>;
+        };
+        
+        if (data.data && data.data.length > 0) {
+          const visitor = data.data[0];
+          console.log("[Umami] Recent visitor fetched:", visitor);
+          return {
+            country: visitor.country || "Unknown",
+            region: visitor.region || "",
+            city: visitor.city || "",
+            lastAt: visitor.lastAt,
+          };
+        }
+        
+        console.log("[Umami] No sessions found in the last 7 days");
+        return null;
+      } else {
+        const errorText = await response.text().catch(() => "Unknown error");
+        console.error(`[Umami] Sessions API error (attempt ${attempt + 1}):`, response.status, errorText);
+        
+        // 如果不是最后一次尝试，继续重试
+        if (attempt < MAX_RETRIES) {
+          await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1))); // 递增延迟
+          continue;
+        }
+        
+        return null;
+      }
+    } catch (error) {
+      const isAbortError = error instanceof Error && error.name === 'AbortError';
+      
+      if (isAbortError) {
+        console.error(`[Umami] Fetch recent visitor timeout (attempt ${attempt + 1}/${MAX_RETRIES + 1})`);
+      } else {
+        console.error(`[Umami] Failed to fetch recent visitor (attempt ${attempt + 1}/${MAX_RETRIES + 1}):`, error);
+      }
+      
+      // 如果不是最后一次尝试，继续重试
+      if (attempt < MAX_RETRIES) {
+        await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1))); // 递增延迟
+        continue;
+      }
+      
+      return null;
+    }
+  }
+  
+  return null;
+}
+
+/**
+ * 获取网站统计摘要（总浏览量 + 最近访客）
+ */
+export async function fetchWebsiteSummary(): Promise<WebsiteSummary> {
+  const [stats, recentVisitor] = await Promise.all([
+    fetchUmamiStats(),
+    fetchRecentVisitor(),
+  ]);
+  
+  return {
+    totalPageViews: stats?.pageviews || 0,
+    totalVisitors: stats?.visitors || 0,
+    totalVisits: stats?.visits || 0,
+    recentVisitor,
+  };
+}
+
