@@ -1,5 +1,24 @@
 {
   "tweets": {
+    "2019066585529602048": {
+      "id": "2019066585529602048",
+      "text": "https://t.co/Ik3xItwco9\n过去这两年， AI 日新月异，但现实是，依旧有很多朋友，由于信息差、单向或者双向的门槛，被挡在世界上最先进的 AI 门外。拍了一个视频，分享 4 个让我无障碍使用全球 AI 的数字通行证，希望大家都能在 2026 年实现 AI 自由。🚀",
+      "created_at": "2026-02-04T15:12:41.000Z",
+      "author": {
+        "name": "luolei",
+        "username": "luoleiorg",
+        "profile_image_url": "https://pbs.twimg.com/profile_images/1550157622300786688/672YmCpB_normal.jpg"
+      },
+      "public_metrics": {
+        "retweet_count": 9,
+        "reply_count": 5,
+        "like_count": 95,
+        "quote_count": 0,
+        "bookmark_count": 121,
+        "impression_count": 46498
+      },
+      "media": []
+    },
     "1832692685238571015": {
       "id": "1832692685238571015",
       "text": "花费巨资，买了几个小物件，把老婆电脑桌台面上的线，尽量都收纳到了桌下。🤓 https://t.co/OjJUlCNX2v",
@@ -15,7 +34,7 @@
         "like_count": 393,
         "quote_count": 1,
         "bookmark_count": 207,
-        "impression_count": 114834
+        "impression_count": 114835
       },
       "media": [
         {
@@ -51,7 +70,7 @@
         "like_count": 138,
         "quote_count": 6,
         "bookmark_count": 89,
-        "impression_count": 44108
+        "impression_count": 44112
       },
       "media": [
         {
@@ -75,7 +94,7 @@
         "like_count": 510,
         "quote_count": 0,
         "bookmark_count": 21,
-        "impression_count": 130690
+        "impression_count": 130691
       },
       "media": [
         {
@@ -99,7 +118,7 @@
         "like_count": 1569,
         "quote_count": 101,
         "bookmark_count": 690,
-        "impression_count": 1396523
+        "impression_count": 1396525
       },
       "media": [
         {
@@ -142,12 +161,12 @@
         "profile_image_url": "https://pbs.twimg.com/profile_images/1550157622300786688/672YmCpB_normal.jpg"
       },
       "public_metrics": {
-        "retweet_count": 569,
+        "retweet_count": 570,
         "reply_count": 98,
         "like_count": 2320,
         "quote_count": 20,
         "bookmark_count": 2436,
-        "impression_count": 501427
+        "impression_count": 501434
       },
       "media": [
         {
@@ -195,7 +214,7 @@
         "like_count": 294,
         "quote_count": 8,
         "bookmark_count": 317,
-        "impression_count": 129530
+        "impression_count": 129531
       },
       "media": []
     },
@@ -284,5 +303,5 @@
       ]
     }
   },
-  "lastUpdated": "2026-02-26T04:11:06.027Z"
+  "lastUpdated": "2026-02-26T20:12:59.013Z"
 }

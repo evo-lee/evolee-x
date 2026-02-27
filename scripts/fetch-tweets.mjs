@@ -15,9 +15,32 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT_DIR = path.join(__dirname, "..");
 
-// 从环境变量读取 Bearer Token
-const BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN;
+// 加载 .env 文件
+async function loadEnv() {
+  const envPath = path.join(ROOT_DIR, ".env");
+  try {
+    const content = await fs.readFile(envPath, "utf-8");
+    for (const line of content.split("\n")) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const eqIndex = trimmed.indexOf("=");
+      if (eqIndex === -1) continue;
+      const key = trimmed.slice(0, eqIndex).trim();
+      let value = trimmed.slice(eqIndex + 1).trim();
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1);
+      }
+      if (!process.env[key]) {
+        process.env[key] = value;
+      }
+    }
+  } catch {}
+}
 
 // 推文 ID 列表 - 自动从 content/posts 目录提取
 async function extractTweetIds() {
@@ -50,7 +73,8 @@ async function extractTweetIds() {
 
 // 批量获取推文数据（每批 100 个）
 async function fetchTweetsBatch(ids) {
-  if (!BEARER_TOKEN) {
+  const token = process.env.TWITTER_BEARER_TOKEN;
+  if (!token) {
     throw new Error("请设置 TWITTER_BEARER_TOKEN 环境变量");
   }
 
@@ -64,7 +88,7 @@ async function fetchTweetsBatch(ids) {
 
   const response = await fetch(url.toString(), {
     headers: {
-      Authorization: `Bearer ${BEARER_TOKEN}`,
+      Authorization: `Bearer ${token}`,
     },
   });
 
@@ -130,6 +154,9 @@ function processTweetData(apiResponse) {
 
 async function main() {
   try {
+    await loadEnv();
+    const BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN;
+
     console.log("🔍 扫描文章中的推文 ID...");
     const tweetIds = await extractTweetIds();
     console.log(`✅ 找到 ${tweetIds.length} 条推文`);

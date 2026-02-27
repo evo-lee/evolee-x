@@ -11,6 +11,8 @@
  *   pnpm ai:process --new-only         只处理没有缓存的文章
  *   pnpm ai:process --dry-run          只显示会处理哪些文章
  *   pnpm ai:process --concurrency=10   设置并发数（默认 10）
+ *   pnpm ai:process --no-skip          忽略跳过列表，重试所有文章
+ *   pnpm ai:process --clear-skip       清空跳过列表后再处理
  */
 
 import fs from "fs/promises";
@@ -35,12 +37,16 @@ function parseArgs() {
     newOnly: false,
     dryRun: false,
     concurrency: 10,
+    noSkip: false,
+    clearSkip: false,
   };
 
   for (const arg of args) {
     if (arg === "--force") flags.force = true;
     else if (arg === "--new-only") flags.newOnly = true;
     else if (arg === "--dry-run") flags.dryRun = true;
+    else if (arg === "--no-skip") flags.noSkip = true;
+    else if (arg === "--clear-skip") flags.clearSkip = true;
     else if (arg.startsWith("--slug=")) flags.slug = arg.split("=")[1];
     else if (arg.startsWith("--task=")) flags.task = arg.split("=")[1];
     else if (arg.startsWith("--recent="))
@@ -244,6 +250,44 @@ function createCacheManager(cacheFile) {
 }
 
 // ─── AI API 调用 ─────────────────────────────────────────────
+
+// ─── 跳过列表管理 ────────────────────────────────────────────
+
+const SKIP_LIST_FILE = path.join(DATA_DIR, "ai-skip-list.json");
+
+async function loadSkipList() {
+  try {
+    const raw = await fs.readFile(SKIP_LIST_FILE, "utf-8");
+    return JSON.parse(raw);
+  } catch {
+    return {};
+  }
+}
+
+async function saveSkipList(skipList) {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  await fs.writeFile(SKIP_LIST_FILE, JSON.stringify(skipList, null, 2), "utf-8");
+}
+
+/**
+ * 将失败的文章添加到跳过列表
+ * key 格式: "taskName:slug"，确保不同任务独立跟踪
+ */
+async function addToSkipList(skipList, taskName, slug, errorMsg) {
+  const key = `${taskName}:${slug}`;
+  const existing = skipList[key];
+  skipList[key] = {
+    slug,
+    task: taskName,
+    reason: errorMsg,
+    failCount: (existing?.failCount ?? 0) + 1,
+    lastFailedAt: new Date().toISOString(),
+    firstFailedAt: existing?.firstFailedAt ?? new Date().toISOString(),
+  };
+  await saveSkipList(skipList);
+}
+
+// ─── AI API 调用（原位置） ──────────────────────────────────────
 
 const RATE_LIMIT_MAX_RETRIES = 8; // 429 最多重试 8 次
 
@@ -501,9 +545,10 @@ function cleanStringArray(arr) {
  * @param {Object} cacheManager - 缓存管理器（带写入锁）
  * @param {Object} config - AI API 配置
  * @param {number} concurrency - 最大并发数
- * @returns {{ success: number, failed: number, failures: Array }}
+ * @param {Object} skipList - 跳过列表（会就地修改并持久化）
+ * @returns {{ success: number, failed: number, failures: Array, skippedByError: number }}
  */
-async function processQueue(queue, task, cacheManager, config, concurrency) {
+async function processQueue(queue, task, cacheManager, config, concurrency, skipList) {
   let success = 0;
   let failed = 0;
   let completed = 0;
@@ -557,20 +602,34 @@ async function processQueue(queue, task, cacheManager, config, concurrency) {
           config.model,
         );
 
+        // 处理成功，从跳过列表中移除（如果之前失败过）
+        const skipKey = `${task.name}:${article.slug}`;
+        if (skipList[skipKey]) {
+          delete skipList[skipKey];
+          await saveSkipList(skipList);
+        }
+
         success++;
         consecutiveFailures = 0;
       } catch (err) {
         failed++;
         failures.push({ slug: article.slug, error: err.message });
 
+        // 将失败的文章加入跳过列表，下次运行时自动跳过
+        await addToSkipList(skipList, task.name, article.slug, err.message);
+
         // 429 是限速，callAI 内部已充分重试后仍失败，不计入连续失败
         const is429 = err.message?.includes("429");
         if (!is429) {
           consecutiveFailures++;
-          if (consecutiveFailures >= 5) {
+          // 连续失败 10 次可能是 API 级别的问题（key 失效、服务宕机等），暂停处理
+          if (consecutiveFailures >= 10) {
             stopped = true;
             console.error(
-              `\n\n   ❌ 连续失败 5 次（非限速错误），暂停处理。最后错误: ${err.message}`,
+              `\n\n   ❌ 连续失败 10 次（非限速错误），暂停处理。最后错误: ${err.message}`,
+            );
+            console.error(
+              `   💡 失败的文章已记录到跳过列表，下次运行将自动跳过`,
             );
           }
         }
@@ -604,11 +663,21 @@ async function main() {
   await loadEnv();
   const config = getConfig();
 
+  // 加载跳过列表
+  let skipList = await loadSkipList();
+
+  if (flags.clearSkip) {
+    skipList = {};
+    await saveSkipList(skipList);
+    console.log("🗑️  已清空跳过列表\n");
+  }
+
   console.log("🤖 AI 文章处理器");
   console.log("━".repeat(50));
   console.log(`   模型: ${config.model}`);
   console.log(`   API:  ${config.baseUrl}`);
   console.log(`   并发: ${flags.concurrency}`);
+  if (flags.noSkip) console.log(`   跳过列表: 已忽略 (--no-skip)`);
   console.log("");
 
   // 1. 扫描文章
@@ -654,9 +723,19 @@ async function main() {
     // 确定需要处理的文章
     const queue = [];
     let skipped = 0;
+    let skippedBySkipList = 0;
+    const skippedSlugs = []; // 被跳过列表排除的文章 slug
 
     for (const article of articles) {
       const cached = cache.articles[article.slug];
+      const skipKey = `${taskName}:${article.slug}`;
+
+      // 检查跳过列表（--slug 指定的文章不受跳过列表影响）
+      if (!flags.noSkip && !flags.slug && skipList[skipKey]) {
+        skippedBySkipList++;
+        skippedSlugs.push(article.slug);
+        continue;
+      }
 
       if (flags.force) {
         queue.push(article);
@@ -672,6 +751,16 @@ async function main() {
     }
 
     console.log(`   跳过: ${skipped} 篇（缓存有效）`);
+    if (skippedBySkipList > 0) {
+      console.log(`   跳过: ${skippedBySkipList} 篇（之前处理失败，已标记跳过）`);
+      console.log(`         使用 --no-skip 可重试这些文章，--clear-skip 可清空跳过列表`);
+      if (skippedBySkipList <= 20) {
+        for (const slug of skippedSlugs) {
+          const info = skipList[`${taskName}:${slug}`];
+          console.log(`         - ${slug} (失败 ${info.failCount} 次, ${info.reason.slice(0, 60)})`);
+        }
+      }
+    }
     console.log(`   待处理: ${queue.length} 篇`);
 
     if (flags.dryRun) {
@@ -699,11 +788,12 @@ async function main() {
       cacheManager,
       config,
       flags.concurrency,
+      skipList,
     );
 
     console.log(`   ✅ 成功: ${result.success}  ❌ 失败: ${result.failed}  ⏱️  ${result.elapsed}s`);
     if (result.failures.length > 0) {
-      console.log("   失败文章:");
+      console.log(`   失败文章（已加入跳过列表，下次运行将自动跳过）:`);
       for (const f of result.failures) {
         console.log(`      - ${f.slug}: ${f.error}`);
       }

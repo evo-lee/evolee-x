@@ -1,0 +1,618 @@
+{
+  "summary:fujifilme-xf10-review": {
+    "slug": "fujifilme-xf10-review",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 314 (line 3 column 217)",
+    "failCount": 2,
+    "lastFailedAt": "2026-02-27T01:47:26.323Z",
+    "firstFailedAt": "2026-02-27T01:43:26.857Z"
+  },
+  "summary:sony-a7m3-unboxing": {
+    "slug": "sony-a7m3-unboxing",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 121 (line 2 column 120)",
+    "failCount": 2,
+    "lastFailedAt": "2026-02-27T01:47:26.671Z",
+    "firstFailedAt": "2026-02-27T01:43:26.884Z"
+  },
+  "summary:terramaster-d2-310-review": {
+    "slug": "terramaster-d2-310-review",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 467 (line 5 column 28)",
+    "failCount": 2,
+    "lastFailedAt": "2026-02-27T01:47:37.541Z",
+    "firstFailedAt": "2026-02-27T01:43:28.956Z"
+  },
+  "summary:nitecore-ec20-ec4s-unboxing": {
+    "slug": "nitecore-ec20-ec4s-unboxing",
+    "task": "summary",
+    "reason": "Unexpected end of JSON input",
+    "failCount": 2,
+    "lastFailedAt": "2026-02-27T01:47:53.607Z",
+    "firstFailedAt": "2026-02-27T01:43:39.035Z"
+  },
+  "summary:usa-road-travel-feb": {
+    "slug": "usa-road-travel-feb",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 128 (line 3 column 31)",
+    "failCount": 2,
+    "lastFailedAt": "2026-02-27T01:47:50.559Z",
+    "firstFailedAt": "2026-02-27T01:43:39.076Z"
+  },
+  "summary:mac-setapp": {
+    "slug": "mac-setapp",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 829 (line 15 column 8)",
+    "failCount": 2,
+    "lastFailedAt": "2026-02-27T01:48:00.747Z",
+    "firstFailedAt": "2026-02-27T01:43:41.263Z"
+  },
+  "summary:qqread-elink-reader-yi-2018-review": {
+    "slug": "qqread-elink-reader-yi-2018-review",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 621 (line 12 column 4)",
+    "failCount": 2,
+    "lastFailedAt": "2026-02-27T01:48:03.521Z",
+    "firstFailedAt": "2026-02-27T01:43:41.280Z"
+  },
+  "summary:how-much-i-spend-on-cloud-monthly-2017": {
+    "slug": "how-much-i-spend-on-cloud-monthly-2017",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 142 (line 1 column 143)",
+    "failCount": 2,
+    "lastFailedAt": "2026-02-27T01:48:04.773Z",
+    "firstFailedAt": "2026-02-27T01:43:41.284Z"
+  },
+  "summary:zeiss-terra-8x25-binocular": {
+    "slug": "zeiss-terra-8x25-binocular",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 128 (line 1 column 129)",
+    "failCount": 2,
+    "lastFailedAt": "2026-02-27T01:48:14.282Z",
+    "firstFailedAt": "2026-02-27T01:43:43.463Z"
+  },
+  "summary:hisense-a2-pro-unboxing": {
+    "slug": "hisense-a2-pro-unboxing",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 137 (line 3 column 40)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:48:17.964Z",
+    "firstFailedAt": "2026-02-27T01:48:17.964Z"
+  },
+  "summary:century-thunderbolt2-5bay-raid-storage": {
+    "slug": "century-thunderbolt2-5bay-raid-storage",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 387 (line 3 column 282)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:48:25.173Z",
+    "firstFailedAt": "2026-02-27T01:48:25.173Z"
+  },
+  "summary:mobile-phone-i-used-in-the-past-10-years": {
+    "slug": "mobile-phone-i-used-in-the-past-10-years",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 429 (line 3 column 315)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:48:44.048Z",
+    "firstFailedAt": "2026-02-27T01:48:44.048Z"
+  },
+  "summary:shenzhen-marathon-2016": {
+    "slug": "shenzhen-marathon-2016",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 309 (line 3 column 215)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:48:49.311Z",
+    "firstFailedAt": "2026-02-27T01:48:49.311Z"
+  },
+  "summary:bangkok-shooting": {
+    "slug": "bangkok-shooting",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 567 (line 9 column 23)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:48:49.935Z",
+    "firstFailedAt": "2026-02-27T01:48:49.935Z"
+  },
+  "summary:travel-to-boracay-2016": {
+    "slug": "travel-to-boracay-2016",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 238 (line 1 column 239)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:49:07.483Z",
+    "firstFailedAt": "2026-02-27T01:49:07.483Z"
+  },
+  "summary:pilipinas-travel-day-4": {
+    "slug": "pilipinas-travel-day-4",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 130 (line 3 column 37)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:49:12.217Z",
+    "firstFailedAt": "2026-02-27T01:49:12.217Z"
+  },
+  "summary:pilipinas-travel-day-3": {
+    "slug": "pilipinas-travel-day-3",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 140 (line 1 column 141)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:49:13.969Z",
+    "firstFailedAt": "2026-02-27T01:49:13.969Z"
+  },
+  "summary:pilipinas-travel-day-1": {
+    "slug": "pilipinas-travel-day-1",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 613 (line 14 column 9)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:49:16.846Z",
+    "firstFailedAt": "2026-02-27T01:49:16.846Z"
+  },
+  "summary:dji-phantom-4-unboxing": {
+    "slug": "dji-phantom-4-unboxing",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 336 (line 1 column 337)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:49:25.387Z",
+    "firstFailedAt": "2026-02-27T01:49:25.387Z"
+  },
+  "summary:to-the-east-end-of-china-dongji-island-journey-log": {
+    "slug": "to-the-east-end-of-china-dongji-island-journey-log",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 585 (line 10 column 31)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:49:36.017Z",
+    "firstFailedAt": "2026-02-27T01:49:36.017Z"
+  },
+  "summary:to-the-east-end-of-china-dongji-island": {
+    "slug": "to-the-east-end-of-china-dongji-island",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 455 (line 6 column 23)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:49:38.481Z",
+    "firstFailedAt": "2026-02-27T01:49:38.481Z"
+  },
+  "summary:meet-in-japan-day-3": {
+    "slug": "meet-in-japan-day-3",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 456 (line 1 column 457)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:49:45.346Z",
+    "firstFailedAt": "2026-02-27T01:49:45.346Z"
+  },
+  "summary:zhiyun-z1-smooth-review": {
+    "slug": "zhiyun-z1-smooth-review",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 335 (line 3 column 237)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:50:08.967Z",
+    "firstFailedAt": "2026-02-27T01:50:08.967Z"
+  },
+  "summary:meet-in-seoul-day-2": {
+    "slug": "meet-in-seoul-day-2",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 137 (line 3 column 49)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:50:15.913Z",
+    "firstFailedAt": "2026-02-27T01:50:15.913Z"
+  },
+  "summary:meet-in-seoul-day-1": {
+    "slug": "meet-in-seoul-day-1",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 133 (line 1 column 134)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:50:17.996Z",
+    "firstFailedAt": "2026-02-27T01:50:17.996Z"
+  },
+  "summary:review-or-2015-gadget": {
+    "slug": "review-or-2015-gadget",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 139 (line 3 column 31)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:50:31.539Z",
+    "firstFailedAt": "2026-02-27T01:50:31.539Z"
+  },
+  "summary:review-of-2015": {
+    "slug": "review-of-2015",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 129 (line 1 column 130)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:50:32.029Z",
+    "firstFailedAt": "2026-02-27T01:50:32.029Z"
+  },
+  "summary:review-orf-netflix-2016": {
+    "slug": "review-orf-netflix-2016",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 433 (line 1 column 434)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:50:36.609Z",
+    "firstFailedAt": "2026-02-27T01:50:36.609Z"
+  },
+  "summary:a-ghost-theme-yasuko-with-story": {
+    "slug": "a-ghost-theme-yasuko-with-story",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 553 (line 8 column 6)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:50:45.602Z",
+    "firstFailedAt": "2026-02-27T01:50:45.602Z"
+  },
+  "summary:citizenfour-review": {
+    "slug": "citizenfour-review",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 221 (line 1 column 222)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:51:00.151Z",
+    "firstFailedAt": "2026-02-27T01:51:00.151Z"
+  },
+  "summary:desk-setup-2015": {
+    "slug": "desk-setup-2015",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 411 (line 6 column 11)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:51:01.668Z",
+    "firstFailedAt": "2026-02-27T01:51:01.668Z"
+  },
+  "summary:yunmai-smart-weighing-health-gear": {
+    "slug": "yunmai-smart-weighing-health-gear",
+    "task": "summary",
+    "reason": "Unexpected end of JSON input",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:51:31.446Z",
+    "firstFailedAt": "2026-02-27T01:51:31.446Z"
+  },
+  "summary:clarks-originals-desert-boot": {
+    "slug": "clarks-originals-desert-boot",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 143 (line 1 column 144)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:51:31.734Z",
+    "firstFailedAt": "2026-02-27T01:51:31.734Z"
+  },
+  "summary:everything-behind-the-road-i-runned": {
+    "slug": "everything-behind-the-road-i-runned",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 568 (line 9 column 33)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:51:34.145Z",
+    "firstFailedAt": "2026-02-27T01:51:34.145Z"
+  },
+  "summary:yi-camera-time-lapse": {
+    "slug": "yi-camera-time-lapse",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 138 (line 3 column 49)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:52:04.853Z",
+    "firstFailedAt": "2026-02-27T01:52:04.853Z"
+  },
+  "summary:code-like-a-geek": {
+    "slug": "code-like-a-geek",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 356 (line 3 column 253)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:52:05.936Z",
+    "firstFailedAt": "2026-02-27T01:52:05.936Z"
+  },
+  "summary:shanghai-marathon-2014": {
+    "slug": "shanghai-marathon-2014",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 128 (line 3 column 34)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:52:30.087Z",
+    "firstFailedAt": "2026-02-27T01:52:30.087Z"
+  },
+  "summary:what-is-in-my-bag-2014": {
+    "slug": "what-is-in-my-bag-2014",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 155 (line 1 column 156)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:52:30.834Z",
+    "firstFailedAt": "2026-02-27T01:52:30.834Z"
+  },
+  "summary:what-i-read-in-2014": {
+    "slug": "what-i-read-in-2014",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 359 (line 3 column 242)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:52:31.861Z",
+    "firstFailedAt": "2026-02-27T01:52:31.861Z"
+  },
+  "summary:work-reflection": {
+    "slug": "work-reflection",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 135 (line 3 column 4)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:52:51.852Z",
+    "firstFailedAt": "2026-02-27T01:52:51.852Z"
+  },
+  "summary:zhuangbility": {
+    "slug": "zhuangbility",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 144 (line 3 column 51)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:52:57.444Z",
+    "firstFailedAt": "2026-02-27T01:52:57.444Z"
+  },
+  "summary:story-behind-my-id": {
+    "slug": "story-behind-my-id",
+    "task": "summary",
+    "reason": "Unexpected end of JSON input",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:52:58.221Z",
+    "firstFailedAt": "2026-02-27T01:52:58.221Z"
+  },
+  "summary:classic-music-mozart": {
+    "slug": "classic-music-mozart",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 123 (line 3 column 26)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:53:09.664Z",
+    "firstFailedAt": "2026-02-27T01:53:09.664Z"
+  },
+  "summary:whatever-is-best-for-the-people-that-is-what-we-do-chinese-facebook-redesign-2014": {
+    "slug": "whatever-is-best-for-the-people-that-is-what-we-do-chinese-facebook-redesign-2014",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 161 (line 3 column 36)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:53:24.526Z",
+    "firstFailedAt": "2026-02-27T01:53:24.526Z"
+  },
+  "summary:gravity-review-about-technology-future": {
+    "slug": "gravity-review-about-technology-future",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 579 (line 1 column 580)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:53:35.047Z",
+    "firstFailedAt": "2026-02-27T01:53:35.047Z"
+  },
+  "summary:duoshuo-just-flat-theme": {
+    "slug": "duoshuo-just-flat-theme",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 245 (line 3 column 137)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:53:52.743Z",
+    "firstFailedAt": "2026-02-27T01:53:52.743Z"
+  },
+  "summary:node-js-nginx-proxy": {
+    "slug": "node-js-nginx-proxy",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 313 (line 3 column 194)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:54:06.154Z",
+    "firstFailedAt": "2026-02-27T01:54:06.154Z"
+  },
+  "summary:about-fxck-fang-and-great-fire-wall": {
+    "slug": "about-fxck-fang-and-great-fire-wall",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 658 (line 15 column 8)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:54:16.848Z",
+    "firstFailedAt": "2026-02-27T01:54:16.848Z"
+  },
+  "summary:will-box-one-theme": {
+    "slug": "will-box-one-theme",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 233 (line 1 column 234)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:54:43.477Z",
+    "firstFailedAt": "2026-02-27T01:54:43.477Z"
+  },
+  "summary:profile-me": {
+    "slug": "profile-me",
+    "task": "summary",
+    "reason": "Expected ',' or ']' after array element in JSON at position 664 (line 16 column 11)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:54:47.420Z",
+    "firstFailedAt": "2026-02-27T01:54:47.420Z"
+  },
+  "summary:review-of-2012-english": {
+    "slug": "review-of-2012-english",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 163 (line 1 column 164)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:54:57.915Z",
+    "firstFailedAt": "2026-02-27T01:54:57.915Z"
+  },
+  "summary:what-i-use-chrome-extension": {
+    "slug": "what-i-use-chrome-extension",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 733 (line 17 column 10)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:54:58.930Z",
+    "firstFailedAt": "2026-02-27T01:54:58.930Z"
+  },
+  "summary:like-circle-sns": {
+    "slug": "like-circle-sns",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 141 (line 3 column 37)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:55:12.589Z",
+    "firstFailedAt": "2026-02-27T01:55:12.589Z"
+  },
+  "summary:gestures-for-chrome-tips": {
+    "slug": "gestures-for-chrome-tips",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 132 (line 3 column 32)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:55:25.593Z",
+    "firstFailedAt": "2026-02-27T01:55:25.593Z"
+  },
+  "summary:dream-list": {
+    "slug": "dream-list",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 130 (line 1 column 131)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:55:33.805Z",
+    "firstFailedAt": "2026-02-27T01:55:33.805Z"
+  },
+  "summary:tibet-dream-road": {
+    "slug": "tibet-dream-road",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 337 (line 3 column 234)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:55:45.900Z",
+    "firstFailedAt": "2026-02-27T01:55:45.900Z"
+  },
+  "summary:biket2tibet2": {
+    "slug": "biket2tibet2",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 643 (line 13 column 6)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:55:48.607Z",
+    "firstFailedAt": "2026-02-27T01:55:48.608Z"
+  },
+  "summary:gz2sz": {
+    "slug": "gz2sz",
+    "task": "summary",
+    "reason": "Expected double-quoted property name in JSON at position 523 (line 10 column 5)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:56:01.209Z",
+    "firstFailedAt": "2026-02-27T01:56:01.209Z"
+  },
+  "summary:card-design": {
+    "slug": "card-design",
+    "task": "summary",
+    "reason": "API 返回空内容",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:56:22.988Z",
+    "firstFailedAt": "2026-02-27T01:56:22.988Z"
+  },
+  "summary:weibo-kaifang": {
+    "slug": "weibo-kaifang",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 436 (line 6 column 20)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:56:33.003Z",
+    "firstFailedAt": "2026-02-27T01:56:33.003Z"
+  },
+  "summary:volunteer-zhouxiaozheng": {
+    "slug": "volunteer-zhouxiaozheng",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 129 (line 3 column 29)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:56:36.045Z",
+    "firstFailedAt": "2026-02-27T01:56:36.045Z"
+  },
+  "summary:june-book": {
+    "slug": "june-book",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 138 (line 1 column 139)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:56:36.842Z",
+    "firstFailedAt": "2026-02-27T01:56:36.842Z"
+  },
+  "summary:weibo-tiger": {
+    "slug": "weibo-tiger",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 266 (line 3 column 162)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:56:45.067Z",
+    "firstFailedAt": "2026-02-27T01:56:45.067Z"
+  },
+  "summary:may-35": {
+    "slug": "may-35",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 270 (line 1 column 271)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:56:46.316Z",
+    "firstFailedAt": "2026-02-27T01:56:46.316Z"
+  },
+  "summary:june-plan": {
+    "slug": "june-plan",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 148 (line 3 column 50)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T01:56:50.792Z",
+    "firstFailedAt": "2026-02-27T01:56:50.792Z"
+  },
+  "summary:ai-2026": {
+    "slug": "ai-2026",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 156 (line 3 column 47)",
+    "failCount": 2,
+    "lastFailedAt": "2026-02-27T02:05:43.621Z",
+    "firstFailedAt": "2026-02-27T02:05:15.790Z"
+  },
+  "summary:pc-2025": {
+    "slug": "pc-2025",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 210 (line 3 column 100)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T02:05:44.252Z",
+    "firstFailedAt": "2026-02-27T02:05:44.252Z"
+  },
+  "summary:flight-3d-earth": {
+    "slug": "flight-3d-earth",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 506 (line 5 column 31)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T02:05:44.469Z",
+    "firstFailedAt": "2026-02-27T02:05:44.469Z"
+  },
+  "summary:kyoto-marathon-2025": {
+    "slug": "kyoto-marathon-2025",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 379 (line 3 column 273)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T02:05:45.327Z",
+    "firstFailedAt": "2026-02-27T02:05:45.327Z"
+  },
+  "summary:cellphone-plans-2024": {
+    "slug": "cellphone-plans-2024",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 607 (line 10 column 11)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T02:05:58.175Z",
+    "firstFailedAt": "2026-02-27T02:05:58.175Z"
+  },
+  "summary:raycast-sink": {
+    "slug": "raycast-sink",
+    "task": "summary",
+    "reason": "Unexpected end of JSON input",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T02:05:58.539Z",
+    "firstFailedAt": "2026-02-27T02:05:58.539Z"
+  },
+  "summary:maclehose-trail": {
+    "slug": "maclehose-trail",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 131 (line 3 column 36)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T02:06:08.930Z",
+    "firstFailedAt": "2026-02-27T02:06:08.930Z"
+  },
+  "summary:changsha-marathon-2024": {
+    "slug": "changsha-marathon-2024",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 129 (line 1 column 130)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T02:06:09.999Z",
+    "firstFailedAt": "2026-02-27T02:06:09.999Z"
+  },
+  "summary:setapp": {
+    "slug": "setapp",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 166 (line 3 column 37)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T02:06:13.504Z",
+    "firstFailedAt": "2026-02-27T02:06:13.504Z"
+  },
+  "summary:start-investing": {
+    "slug": "start-investing",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 445 (line 6 column 13)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T02:06:24.061Z",
+    "firstFailedAt": "2026-02-27T02:06:24.061Z"
+  },
+  "summary:zhuhai-marathon-2023": {
+    "slug": "zhuhai-marathon-2023",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 342 (line 3 column 240)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T02:06:33.886Z",
+    "firstFailedAt": "2026-02-27T02:06:33.886Z"
+  },
+  "summary:what-i-use-chrome-extension-2023": {
+    "slug": "what-i-use-chrome-extension-2023",
+    "task": "summary",
+    "reason": "Unterminated string in JSON at position 654 (line 10 column 32)",
+    "failCount": 1,
+    "lastFailedAt": "2026-02-27T02:06:35.808Z",
+    "firstFailedAt": "2026-02-27T02:06:35.808Z"
+  }
+}

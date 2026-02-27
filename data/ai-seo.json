@@ -1,8 +1,8 @@
 {
   "meta": {
-    "lastUpdated": "2026-02-26T17:30:54.337Z",
+    "lastUpdated": "2026-02-26T20:01:41.164Z",
     "model": "kimi-k2.5",
-    "totalProcessed": 328
+    "totalProcessed": 329
   },
   "articles": {
     "pc-2025": {
@@ -5787,6 +5787,23 @@
       },
       "contentHash": "3b65c1f7",
       "processedAt": "2026-02-26T17:28:21.510Z"
+    },
+    "ai-2026": {
+      "data": {
+        "metaDescription": "在 AI 时代，访问全球优秀 AI 产品和服务常面临数字门槛限制。作为通过 Vibe Coding 发布商业应用的开发者，分享我实现 AI 自由的实战经验：4 个必备数字通行证帮你突破地域限制，构建面向未来的个人数字基建，无缝使用海外前沿大模型工具。",
+        "keywords": [
+          "AI 自由",
+          "数字通行证",
+          "Vibe Coding",
+          "海外 AI 服务访问",
+          "数字基建配置",
+          "AI 工具使用门槛",
+          "开发者数字身份"
+        ],
+        "ogDescription": "想无障碍使用全球顶尖 AI 产品？作为靠 Vibe Coding 赚到钱的开发者，我整理了 4 个关键数字通行证，帮你突破访问限制，建立 AI 时代的个人数字基建，真正实现 AI 自由。"
+      },
+      "contentHash": "e0ed48b0",
+      "processedAt": "2026-02-26T20:01:41.164Z"
     }
   }
 }
