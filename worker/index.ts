@@ -21,9 +21,17 @@ interface Env {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    // Inject Cloudflare secrets into process.env so server-side code can access them.
+    // Inject Cloudflare secrets into process.env and globalThis so server-side code can access them.
     // In Workers, secrets are only available via the env parameter, not process.env.
-    if (env.UMAMI_API_TOKEN) process.env.UMAMI_API_TOKEN = env.UMAMI_API_TOKEN;
+    if (env.UMAMI_API_TOKEN) {
+      process.env.UMAMI_API_TOKEN = env.UMAMI_API_TOKEN;
+      // 同时设置到 globalThis，确保 Server Component 可以访问
+      (globalThis as unknown as { UMAMI_API_TOKEN: string }).UMAMI_API_TOKEN = env.UMAMI_API_TOKEN;
+    }
+
+    if (env.CACHE_KV) {
+      (globalThis as unknown as { CACHE_KV: KVNamespace }).CACHE_KV = env.CACHE_KV;
+    }
 
     const url = new URL(request.url);
 

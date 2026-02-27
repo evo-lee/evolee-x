@@ -80,7 +80,7 @@ export function ContentEnhancer() {
       };
 
       faviconWrapper.appendChild(img);
-      link.prepend(faviconWrapper);
+      link.insertBefore(faviconWrapper, link.firstChild);
     });
 
     // Hydrate TweetCards

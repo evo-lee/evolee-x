@@ -1,4 +1,4 @@
-# luoleiorg-x
+# luoleiorg-x (罗磊的独立博客)
 
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare%20Workers-Deployed-F38020?style=flat-square&logo=cloudflare&logoColor=white)](https://luolei.org)
 [![Vinext](https://img.shields.io/badge/Vinext-Vite%20+%20Next.js%20API-orange?style=flat-square)](https://github.com/cloudflare/vinext)
@@ -6,125 +6,116 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.0-06B6D4?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-> 🚀 基于 **React 19 + vinext**（Vite 上的 Next.js API 兼容层）的 [luolei.org](https://luolei.org) 博客项目。
+> 🚀 运行在 Cloudflare 边缘节点，基于 **React 19 + Vinext** 构建的极速前沿独立博客。
 
-这是 [罗磊的独立博客](https://luolei.org) 的 vinext 版本源码。
+[English](./README_EN.md) | 简体中文
 
-**迁移路径**: VitePress → Next.js 16 → **Vinext**，部署于 Cloudflare Workers Edge。
+这是 **[罗磊的独立博客](https://luolei.org)** 的 Vinext 重构版本源码。从传统的静态站点（VitePress）全面拥抱前沿的 Serverless Edge 架构，它不仅是一个博客，更是一个现代边缘计算框架的实践范例。
 
-**背景**: 这是 Cloudflare 发布 Vinext 后的早期实践项目。框架太新，部署踩了一些坑但整体顺利。全程 AI 辅助完成。
+## 🌟 项目介绍 (Introduction)
 
-## ✨ Features
+本项目基于 Cloudflare 全新发布的 [Vinext](https://github.com/cloudflare/vinext)（运行在 Vite 构建体系下的 Next.js App Router 兼容层）开发。
 
-- ⚡ **Edge 部署** - 基于 Cloudflare Workers，全球边缘节点加速
-- 🎨 **深色模式** - 原生支持亮色/暗色主题切换
-- 📱 **PWA 支持** - 可安装为桌面/移动应用
-- 🔍 **智能搜索** - Pagefind 本地检索 + API 搜索兜底
-- 📊 **浏览量统计** - 基于 Google Analytics 的实时访问统计
-- 🗂️ **分类导航** - 多维度文章分类与标签
-- 📰 **RSS/Sitemap** - 完整的 SEO 与订阅支持
-- 🤖 **AI 预留** - 预留 AI 总结、AI 搜索 API 扩展位
+在这个项目中，我们践行了「让计算离用户尽可能的近」的原则，核心的 SSR 渲染、API 请求调度、图片压缩优化全部托管在 **Cloudflare Workers** 全球边缘网络，实现了极致的首屏加载与动态交互体验。
 
-## 🛠 Tech Stack
+## ✨ 核心特性 (Features)
 
-- **[vinext](https://github.com/cloudflare/vinext)** - Cloudflare 官方，Vite + Next.js API，部署到 Workers
-- **React 19** - 最新 React 特性
-- **TypeScript** - 类型安全
-- **Tailwind CSS 4** - 原子化 CSS
-- **gray-matter + unified/remark/rehype** - Markdown 处理流水线
+*   ⚡️ **极致的边缘部署 (Edge Native)**: 完全抛弃传统的 Node.js 容器。基于 Cloudflare Workers 部署，真正的 Global Serverless。
+*   🖥️ **服务端组件直出 (RSC)**: 完美融合 Next.js 的 React Server Components。通过构建期的 Markdown 预编译（`import.meta.glob`），免去了对传统文件系统 IO 的依赖。
+*   🚄 **全站边缘缓存 (KV Caching)**: 利用 Cloudflare KV Namespace 构建分布式一致性缓存。Umami 统计接口等高频 API 请求完全由缓存拦截，抗并发压力的同时保障了底层数据库的安全。
+*   🖼️ **动态图片优化 (CF Images)**: 内置一套无缝整合 Cloudflare Images API 的管道。利用 Worker 绑定原生下发自适应的 WebP 并在边缘裁剪。
+*   🎨 **现代美学设计**: 结合 Tailwind CSS 4 提供极致丝滑的深浅色切换、全局响应式 PWA，以及定制化的原子设计 Tokens。
+*   🔍 **原生智能搜索**: Pagefind 全文本地聚合搜索，辅以 API 在线引擎兜底。
 
-## 📁 Directory Structure
+## 🏗 架构与数据流向 (Architecture)
 
-```
-├── content/posts/          # Markdown 文章源
-├── packages/search-core/   # Monorepo 共享搜索核心
-├── src/
-│   ├── app/               # 路由、页面、metadata
-│   ├── components/        # 主题组件
-│   ├── lib/content/       # 内容加载、解析、渲染
-│   └── styles/            # 样式分层（tokens/layout/article）
-├── scripts/               # 内容同步、索引生成
-└── public/                # 静态资源、搜索索引
-```
+> 详细的节点交互、Worker 分发示意图以及边缘隔离区的介绍，请阅读我们专门补充的：
+> � **[架构设计大纲与 Mermaid 集成图](./docs/architecture.md)**
 
-## 🚀 Quick Start
+简略来说，全应用划分为以下核心体系：
+*   **路由解析器 (CF Worker Entry)**: 承接并分发给静态 Asset、Image Optimizer 或是 SSR 渲染引擎。
+*   **数据结构同秘钥管理 (Edge Secrets)**: 利用 `wrangler secret` 进行注入。并在本地借助 `.dev.vars` 无感开发。
+*   **同构的解析器**: Markdown 与 AST (rehype/remark) 的无侵入动态渲染。
+
+## 🛠 技术栈 (Tech Stack)
+
+*   **框架**: [vinext](https://github.com/cloudflare/vinext) (CF 官方出品), React 19 App Router
+*   **语言和样式**: TypeScript 5, Tailwind CSS 4.0
+*   **内容流水线**: `gray-matter`, `unified`, `remark`, `rehype` (完全剥离 Node API 依赖)
+*   **数据中心**: Umami Analytics (独立私有化部署), Cloudflare KV Namespace
+
+## 🚀 部署与运行 (Deploy & Run)
+
+推荐使用现代包管理器 `pnpm`。
+
+### 1. 本地环境准备
 
 ```bash
-# 安装依赖
-pnpm i
+# 安装项目依赖
+pnpm install
 
-# 同步文章内容（从旧仓库）
+# (可选) 复制常规环境变量，并填入开发环境专属变量
+cp .env.example .env
+
+# (重要) 对于 Cloudflare 本地调试使用的机密 Token，需另建 .dev.vars (已被 gitignore 排除)
+# .dev.vars 文件中写入：
+# UMAMI_API_TOKEN=your_token_here
+```
+
+### 2. 构建与运行
+
+```bash
+# 同步文章并建立搜索索引
 pnpm sync:content
-
-# 生成搜索索引
 pnpm search:index
 
-# 启动开发服务器
+# 启动包括 Edge 模拟和端口扫描的开发服务器
 pnpm dev
 
-# 构建
+# 生产环境预构建
 pnpm build
+```
 
-# 部署到 Cloudflare Workers
+### 3. 上线至 Cloudflare
+
+你可以直接在一台有完整环境与 `wrangler` 认证的本地机器上统一部署：
+
+```bash
+# 一次性强制写入关键部署秘钥至 Cloudflare
+npx wrangler secret put UMAMI_API_TOKEN
+
+# Cloudflare 发布流程
 pnpm deploy:vinext
 ```
 
-## 📋 Available Commands
+我们极度推荐配置 CI / CD。相关 GitHub Action 配置说明请参考常规的 Wrangler Action。
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | 启动开发服务器（含端口探测） |
-| `pnpm build` | 生产构建 |
-| `pnpm sync:content` | 从旧仓库同步 markdown |
-| `pnpm search:index` | 生成所有搜索索引 |
-| `pnpm search:json` | 生成 JSON 搜索索引 |
-| `pnpm search:pagefind` | 生成 Pagefind 索引 |
-| `pnpm lint` | ESLint 检查 |
-| `pnpm typecheck` | TypeScript 类型检查 |
-| `pnpm deploy:vinext` | 部署到 Cloudflare Workers |
-| `pnpm deploy:vinext:dry` | 部署预览（不实际部署） |
+## 📁 目录结构摘要 (Directory Structure)
 
-## 🏗 Architecture
+我们遵循了现代 Next.js / React 结合 Cloudflare 生态的极佳工程化布局，兼顾业务与边缘兼容极具拓展性：
 
-### Style Architecture
+```
+├── .dev.vars               # 🔒 本地 Worker 机密数据 (不需提交至 Git 库)
+├── wrangler.jsonc          # ☁️ Cloudflare Edge 线上全局无感配置
+├── content/posts/          # 📝 Markdown 博客数据源
+├── docs/                   # 📚 项目说明文档与架构图
+├── src/                    
+│   ├── app/                # 🚦 路由、服务端页面与 Metadata
+│   ├── components/         # 🧱 通用 UI 组件与插槽
+│   ├── lib/                # 🔧 业务抽象：Umami 分析、KV 缓存重构
+│   └── styles/             # 🎨 设计系统：Tokens, 布局, 版式样式
+├── worker/index.ts         # ⚡️ CF Worker 原生拦截与分发网关
+└── packages/search-core/   # 🔎 Monorepo 体系下的搜索支撑
+```
 
-- `src/styles/tokens.css` - 设计变量、字体、主题色
-- `src/styles/layout.css` - 站点布局（header/footer/nav）
-- `src/styles/article.css` - 文章排版、markdown 样式
+## 🔗 相关链接
 
-### Naming Conventions
-
-- 使用语义化前缀：`site-*`、`article-*`
-- Markdown 样式统一在 `article-content` 作用域内
-
-## 🔗 Related
-
-- **新版线上地址**: [https://luolei.org](https://luolei.org)
-- **旧版线上地址**: [https://v.luolei.org](https://v.luolei.org)
+- **线上演示站点**: [https://luolei.org](https://luolei.org)
 - **旧版（VitePress）**: [foru17/luoleiorg](https://github.com/foru17/luoleiorg)
-- **Vinext**: [cloudflare/vinext](https://github.com/cloudflare/vinext)
+- **Vinext 官方支持**: [cloudflare/vinext](https://github.com/cloudflare/vinext)
 
-## 📝 License
+## 📝 许可协议 (License)
 
-MIT © [罗磊](https://luolei.org)
-
----
+本项目采用 [MIT License](LICENSE)。
 
 > 📧 关于本项目的问题或建议，欢迎通过 [GitHub Issues](https://github.com/foru17/luoleiorg-x/issues) 交流。
-
-## Migration from VitePress
-
-本项目从 [VitePress 版本](https://github.com/foru17/luoleiorg) 迁移而来：
-
-| 维度 | VitePress 旧版 | Vinext 新版 |
-|------|----------------|-------------|
-| 构建工具 | VitePress | vinext (Vite + Next.js API) |
-| 部署平台 | GitHub Pages | Cloudflare Workers |
-| 路由 | 文件路由 | App Router |
-| 搜索 | Algolia DocSearch | Pagefind + 自建 API |
-| 图片 | 静态引用 | 远程优化 |
-| 浏览统计 | 自行开发 | Google Analytics API |
-
-**Vinext 是什么？**
-
-Vinext 是 Cloudflare 推出的实验性框架，让你在 Vite 上写 Next.js 代码，然后部署到 Cloudflare Workers Edge。它提供了 Next.js App Router 的 API 兼容性，但运行在 Vite 构建系统上。

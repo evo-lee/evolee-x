@@ -1,6 +1,9 @@
 // Umami Analytics 集成
 // 用于文章阅读量统计展示
 
+import { fetchUmamiPageViews } from "./umami";
+import type { UmamiPageView } from "./umami";
+
 // Local API route (used by client components)
 export const API_PAGE_HITS = "/api/analytics/hits";
 
@@ -19,45 +22,82 @@ interface HitsCache {
   timestamp: number;
 }
 
-let serverHitsCache: HitsCache | null = null;
+// 强制重置缓存（部署后清除旧缓存）
+const CACHE_VERSION = 2;
+let serverHitsCache: (HitsCache & { version?: number }) | null = null;
 const SERVER_CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours
+
+export const KV_CACHE_KEY = "umami_pageviews_cache";
 
 /**
  * 服务端获取单篇文章的浏览量（用于 Server Components）
- * 优化：内部使用缓存，避免重复请求 Umami
+ * 优先使用注入到 globalThis 的 CACHE_KV，若没有再走 Umami API
  */
 export async function getPageHits(slug: string): Promise<number> {
-  // 检查缓存
-  if (serverHitsCache && Date.now() - serverHitsCache.timestamp < SERVER_CACHE_TTL) {
+  const KV = (globalThis as unknown as { CACHE_KV?: KVNamespace }).CACHE_KV;
+
+  // 1. 优先尝试从全局 CF KV 读取最新数据
+  if (KV) {
+    try {
+      const cached = await KV.get<{ total: number; data: PageHitItem[]; timestamp: number }>(KV_CACHE_KEY, "json");
+      if (cached && Date.now() - cached.timestamp < SERVER_CACHE_TTL) {
+        console.log("[getPageHits] KV Cache hit for:", slug);
+        return calculateHitsForSlug(cached.data, slug);
+      }
+    } catch (err) {
+      console.warn("[getPageHits] KV read failed", err);
+    }
+  }
+
+  // 2. 本地内存版本回退校验 (主要做开发环境没有绑定KV的兼容)
+  if (serverHitsCache && 
+      serverHitsCache.version === CACHE_VERSION &&
+      Date.now() - serverHitsCache.timestamp < SERVER_CACHE_TTL) {
+    console.log("[getPageHits] Memory Cache hit for:", slug);
     return calculateHitsForSlug(serverHitsCache.data, slug);
   }
 
+  console.log("[getPageHits] Fetching for:", slug);
+
   try {
-    // 服务端渲染需要使用完整 URL
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-    const apiUrl = `${baseUrl}/api/analytics/hits`;
+    const result = await fetchUmamiPageViews();
+    console.log("[getPageHits] Got result:", result.total, "total,", result.data.length, "items");
+    const data = result.data || [];
 
-    const res = await fetch(apiUrl, { 
-      signal: AbortSignal.timeout(10000),
-      cache: "no-store", // 避免 Next.js 自动缓存，我们自己控制
-    });
+    // 更新内存缓存
+    serverHitsCache = { data, timestamp: Date.now(), version: CACHE_VERSION };
 
-    if (!res.ok) throw new Error(`Hits API error: ${res.status}`);
+    // 如果绑定了 KV，同步更新到 KV
+    if (KV) {
+      try {
+        await KV.put(
+          KV_CACHE_KEY,
+          JSON.stringify({ total: result.total, data, timestamp: Date.now() }),
+          { expirationTtl: SERVER_CACHE_TTL / 1000 }
+        );
+      } catch (err) {
+        console.warn("[getPageHits] KV put failed", err);
+      }
+    }
 
-    const json = await res.json() as { data: PageHitItem[] };
-    const data = json.data || [];
-
-    // 更新缓存
-    serverHitsCache = { data, timestamp: Date.now() };
-
-    return calculateHitsForSlug(data, slug);
+    const hits = calculateHitsForSlug(data, slug);
+    console.log("[getPageHits] Calculated hits for", slug, ":", hits);
+    return hits;
   } catch (error) {
-    console.error("[Server] Failed to fetch hits:", error);
-    // 有缓存时返回过期缓存
+    console.error("[getPageHits] Error:", error);
+    
+    // 如果失败且有 KV，尝试拿 stale KV 数据
+    if (KV) {
+      try {
+        const stale = await KV.get<{ data: PageHitItem[] }>(KV_CACHE_KEY, "json");
+        if (stale?.data) return calculateHitsForSlug(stale.data, slug);
+      } catch (e) {}
+    }
+
     if (serverHitsCache) {
       return calculateHitsForSlug(serverHitsCache.data, slug);
     }
-    return 0;
+    return -1;
   }
 }
 

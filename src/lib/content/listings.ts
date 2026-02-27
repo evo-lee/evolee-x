@@ -1,4 +1,5 @@
-import { articlePageSize, categoryMap, siteConfig } from "@/lib/site-config";
+import { articlePageSize, categoryMap } from "@/lib/site-config";
+import { fetchUmamiPageViews } from "@/lib/umami";
 import { extractSlug, parsePositivePage } from "@/lib/utils";
 import { getAllPosts } from "./posts";
 import type { PostItem } from "./types";
@@ -8,10 +9,12 @@ const categoryNameMap = new Map<string, string>(
 );
 
 // 服务端缓存（6小时）
+const CACHE_VERSION = 2;
 interface HitsCache {
   data: Map<string, number>;
   timestamp: number;
   loading: boolean;
+  version?: number;
 }
 
 let hitsCache: HitsCache | null = null;
@@ -33,7 +36,9 @@ async function getHitsMap(): Promise<{
   hitsMap: Map<string, number>;
   hitsLoading: boolean;
 }> {
-  if (hitsCache && Date.now() - hitsCache.timestamp < CACHE_TTL_MS) {
+  if (hitsCache && 
+      hitsCache.version === CACHE_VERSION &&
+      Date.now() - hitsCache.timestamp < CACHE_TTL_MS) {
     return { hitsMap: hitsCache.data, hitsLoading: hitsCache.loading };
   }
 
@@ -44,26 +49,11 @@ async function getHitsMap(): Promise<{
     let loading = true;
 
     try {
-      const apiPath = siteConfig.analyticsApiUrl;
-      if (!apiPath) throw new Error("analyticsApiUrl not configured");
-
-      // 服务端渲染需要使用完整 URL
-      // 本地开发使用 localhost，生产使用 siteUrl
-      const isServer = typeof window === "undefined";
-      // 在 vinext 中，开发环境可以通过检查 process.env 或其他方式判断
-      const baseUrl = isServer ? "http://localhost:3000" : "";
-      const apiUrl = `${baseUrl}${apiPath}`;
-
-      console.log("[Server] Fetching hits from:", apiUrl);
-
-      const res = await fetch(apiUrl, { signal: AbortSignal.timeout(10000) });
+      // 直接使用 Umami API 获取数据
+      const result = await fetchUmamiPageViews();
       
-      console.log("[Server] Hits API response:", res.status);
-      if (!res.ok) throw new Error(`stat API error: ${res.status}`);
-
-      const json = (await res.json()) as { total?: number; data: Array<{ page: string; hit: number }> };
-      console.log("[Server] Hits data count:", json.data?.length, "Total:", json.total);
-      for (const item of json.data) {
+      console.log("[Server] Hits data count:", result.data?.length, "Total:", result.total);
+      for (const item of result.data) {
         const slug = extractSlug(item.page);
         const existing = hitsMap.get(slug) ?? 0;
         hitsMap.set(slug, existing + item.hit);
@@ -74,7 +64,7 @@ async function getHitsMap(): Promise<{
       console.error("[Server] Failed to fetch hits:", error);
     }
 
-    hitsCache = { data: hitsMap, timestamp: Date.now(), loading };
+    hitsCache = { data: hitsMap, timestamp: Date.now(), loading, version: CACHE_VERSION };
     return { hitsMap, hitsLoading: loading };
   })();
 

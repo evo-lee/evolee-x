@@ -12,35 +12,34 @@ import { ThemeToggle } from "./theme-toggle";
 
 export function SiteHeader() {
   const pathname = usePathname();
-  // 使用 mounted 状态避免 hydration mismatch
-  const [mounted, setMounted] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
   // 文章页：单段路径且非首页/分页/分类
   const isArticlePage =
     pathname !== "/" &&
     !pathname.startsWith("/page/") &&
     !pathname.startsWith("/category/");
 
-  // 只有在 mounted 后才使用 scrolled 状态，避免 SSR/客户端不一致
-  const showBorder = (mounted && scrolled) || isArticlePage;
+  // SSR 和客户端首次渲染都使用相同逻辑，避免 hydration mismatch
+  // 滚动效果通过 CSS 和 data 属性实现
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    
     const onScroll = () => setScrolled(window.scrollY > 10);
     onScroll(); // 初始检查
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // 基础样式（SSR 和客户端一致）
+  const baseClasses = "fixed left-0 right-0 top-0 z-50 bg-[color:var(--vp-c-bg)]/95 backdrop-blur-sm transition-[border-color,box-shadow] duration-300 ease-out dark:bg-[color:var(--vp-c-bg)]/90";
+  // 文章页总是有边框
+  const articleClasses = "border-b border-zinc-200/80 shadow-sm dark:border-zinc-800/80";
+  // 非文章页默认无边框，滚动后通过 CSS 处理
+  const homeClasses = "border-b border-transparent";
+
   return (
     <header
-      className={`fixed left-0 right-0 top-0 z-50 bg-[color:var(--vp-c-bg)]/95 backdrop-blur-sm transition-[border-color,box-shadow] duration-300 ease-out dark:bg-[color:var(--vp-c-bg)]/90 ${
-        showBorder
-          ? "border-b border-zinc-200/80 shadow-sm dark:border-zinc-800/80"
-          : "border-b border-transparent"
-      }`}
+      data-scrolled={scrolled}
+      className={`${baseClasses} ${isArticlePage ? articleClasses : homeClasses}`}
     >
       <div className="mx-auto flex h-[60px] w-full max-w-[1280px] items-center justify-between px-4 md:px-8">
         <Link

@@ -25,18 +25,20 @@ export interface UmamiStatsResult {
 export async function fetchUmamiPageViews(): Promise<UmamiStatsResult> {
   try {
     const { apiUrl, websiteId, apiToken } = getUmamiConfig();
+    
+    // 调试日志（生产环境临时启用）
+    console.log("[Umami Debug] apiUrl:", apiUrl);
+    console.log("[Umami Debug] websiteId:", websiteId);
+    console.log("[Umami Debug] hasToken:", !!apiToken);
 
     if (!apiUrl || !websiteId) {
       console.warn("[Umami] API URL or Website ID not configured");
       return { total: 0, data: [] };
     }
 
-    // 计算时间范围：从 2015-01-01 到昨天
-    const endDate = new Date();
-    endDate.setDate(endDate.getDate() - 1);
-
+    // 计算时间范围：从 2015-01-01 到 2030-01-01（确保包含所有历史数据）
     const startAt = new Date("2015-01-01").getTime();
-    const endAt = endDate.getTime();
+    const endAt = new Date("2030-01-01").getTime();
 
     // 构建请求头
     const headers: Record<string, string> = {
@@ -56,10 +58,16 @@ export async function fetchUmamiPageViews(): Promise<UmamiStatsResult> {
 
     console.log("[Umami] Fetching metrics from:", metricsUrl.toString());
 
+    // 使用 AbortController 替代 AbortSignal.timeout（兼容性更好）
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    
     const metricsResponse = await fetch(metricsUrl.toString(), {
       headers,
-      signal: AbortSignal.timeout(10000),
+      signal: controller.signal,
     });
+    
+    clearTimeout(timeoutId);
 
     let pageData: UmamiPageView[] = [];
 
@@ -88,10 +96,15 @@ export async function fetchUmamiPageViews(): Promise<UmamiStatsResult> {
 
       console.log("[Umami] Trying pageviews endpoint:", pageviewsUrl.toString());
 
+      const pvController = new AbortController();
+      const pvTimeoutId = setTimeout(() => pvController.abort(), 10000);
+      
       const pageviewsResponse = await fetch(pageviewsUrl.toString(), {
         headers,
-        signal: AbortSignal.timeout(10000),
+        signal: pvController.signal,
       });
+      
+      clearTimeout(pvTimeoutId);
 
       if (pageviewsResponse.ok) {
         const pageviewsData = (await pageviewsResponse.json()) as {
