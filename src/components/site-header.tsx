@@ -21,25 +21,49 @@ export function SiteHeader() {
   // SSR 和客户端首次渲染都使用相同逻辑，避免 hydration mismatch
   // 滚动效果通过 CSS 和 data 属性实现
   const [scrolled, setScrolled] = useState(false);
+  const [mobileHidden, setMobileHidden] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
+    const mobileMedia = window.matchMedia("(max-width: 767px)");
+
+    const onScroll = () => {
+      const currentY = window.scrollY;
+      setScrolled(currentY > 10);
+
+      // 移动端文章阅读模式：离开顶部后固定隐藏顶栏，回到顶部再显示
+      if (!mobileMedia.matches || !isArticlePage) {
+        setMobileHidden(false);
+        return;
+      }
+
+      setMobileHidden(currentY > 20);
+    };
+
     onScroll(); // 初始检查
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [isArticlePage]);
 
   // 基础样式（SSR 和客户端一致）
-  const baseClasses = "fixed left-0 right-0 top-0 z-50 bg-[color:var(--vp-c-bg)]/95 backdrop-blur-sm transition-[border-color,box-shadow] duration-300 ease-out dark:bg-[color:var(--vp-c-bg)]/90";
+  const baseClasses = "fixed left-0 right-0 top-0 z-50 bg-[color:var(--vp-c-bg)]/95 backdrop-blur-sm transition-[border-color,box-shadow,transform] duration-300 ease-out dark:bg-[color:var(--vp-c-bg)]/90";
   // 文章页总是有边框
   const articleClasses = "border-b border-zinc-200/80 shadow-sm dark:border-zinc-800/80";
   // 非文章页默认无边框，滚动后通过 CSS 处理
   const homeClasses = "border-b border-transparent";
+  const hiddenClasses =
+    mobileHidden && isArticlePage
+      ? "-translate-y-full pointer-events-none md:pointer-events-auto"
+      : "translate-y-0";
 
   return (
     <header
       data-scrolled={scrolled}
-      className={`${baseClasses} ${isArticlePage ? articleClasses : homeClasses}`}
+      data-mobile-hidden={mobileHidden}
+      className={`${baseClasses} ${isArticlePage ? articleClasses : homeClasses} ${hiddenClasses}`}
     >
       <div className="mx-auto flex h-[60px] w-full max-w-[1280px] items-center justify-between px-4 md:px-8">
         <Link
