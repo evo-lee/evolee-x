@@ -1,4 +1,5 @@
 import tweetsCache from "@/../data/tweets-cache.json";
+import { getPreviewImage } from "@/lib/content/utils";
 import { siteConfig } from "@/lib/site-config";
 
 interface TweetData {
@@ -152,7 +153,9 @@ export function TweetCard({ tweetId }: TweetCardProps) {
   const images = media
     ?.filter((m) => m.type === "photo")
     .map((m) => m.preview_image_url || m.url)
+    .map((url) => getPreviewImage(url))
     .filter(Boolean) ?? [];
+  const authorAvatar = getPreviewImage(author.profile_image_url);
 
   return (
     <div className="my-8 px-2">
@@ -167,7 +170,7 @@ export function TweetCard({ tweetId }: TweetCardProps) {
               className="shrink-0"
             >
               <img
-                src={author.profile_image_url}
+                src={authorAvatar}
                 alt={author.name}
                 width={48}
                 height={48}

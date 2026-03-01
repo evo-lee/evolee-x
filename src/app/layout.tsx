@@ -96,7 +96,7 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');var d=t?t==='dark':window.matchMedia('(prefers-color-scheme:dark)').matches;if(d)document.documentElement.classList.add('dark')}catch(e){}})()`,
+            __html: `(function(){try{var t=localStorage.getItem('theme');var m=localStorage.getItem('theme_manual_override')==='1';var p=window.matchMedia('(prefers-color-scheme:dark)').matches;var d=(m&&(t==='dark'||t==='light'))?t==='dark':p;document.documentElement.classList.toggle('dark',d)}catch(e){}})()`,
           }}
         />
         <link rel="manifest" href="/manifest.json" />

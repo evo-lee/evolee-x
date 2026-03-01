@@ -14,15 +14,22 @@ interface ArticleMetaProps {
 export function ArticleMeta({ post, hits: serverHits }: ArticleMetaProps) {
   const banner = getBannerImage(post.cover);
   
-  // 只有未提供服务端数据时才使用客户端 hook
+  // 总是启用客户端校准，避免服务端缓存导致详情页长期显示旧值
   const { loading: clientLoading, hits: clientHits } = usePageHits(
     post.slug, 
-    /* enabled */ serverHits === undefined
+    /* enabled */ true
   );
   
-  // 优先使用服务端数据
-  const hits = serverHits ?? clientHits;
-  const loading = serverHits === undefined && clientLoading;
+  const normalizedServerHits =
+    typeof serverHits === "number" ? Math.max(0, serverHits) : undefined;
+
+  // 客户端命中值优先用于纠正服务端旧值；服务端值用于首屏兜底
+  const hits =
+    normalizedServerHits === undefined
+      ? clientHits
+      : Math.max(normalizedServerHits, clientHits);
+
+  const loading = normalizedServerHits === undefined && clientLoading;
 
   return (
     <header

@@ -25,8 +25,7 @@ interface HitsCache {
 // 强制重置缓存（部署后清除旧缓存）
 const CACHE_VERSION = 2;
 let serverHitsCache: (HitsCache & { version?: number }) | null = null;
-const SERVER_CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours
-const ZERO_HITS_REFRESH_AGE_MS = 10 * 60 * 1000; // 10 minutes
+const SERVER_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 export const KV_CACHE_KEY = "umami_pageviews_cache";
 
@@ -42,13 +41,8 @@ export async function getPageHits(slug: string): Promise<number> {
     try {
       const cached = await KV.get<{ total: number; data: PageHitItem[]; timestamp: number }>(KV_CACHE_KEY, "json");
       if (cached && Date.now() - cached.timestamp < SERVER_CACHE_TTL) {
-        const hits = calculateHitsForSlug(cached.data, slug);
-        // 新文章在缓存窗口内可能仍是 0，超过阈值时回源刷新一次，避免与卡片统计不一致
-        if (hits > 0 || Date.now() - cached.timestamp < ZERO_HITS_REFRESH_AGE_MS) {
-          console.log("[getPageHits] KV Cache hit for:", slug, "hits:", hits);
-          return hits;
-        }
-        console.log("[getPageHits] KV cache zero-hit stale, refreshing for:", slug);
+        console.log("[getPageHits] KV Cache hit for:", slug);
+        return calculateHitsForSlug(cached.data, slug);
       }
     } catch (err) {
       console.warn("[getPageHits] KV read failed", err);
@@ -59,12 +53,8 @@ export async function getPageHits(slug: string): Promise<number> {
   if (serverHitsCache && 
       serverHitsCache.version === CACHE_VERSION &&
       Date.now() - serverHitsCache.timestamp < SERVER_CACHE_TTL) {
-    const hits = calculateHitsForSlug(serverHitsCache.data, slug);
-    if (hits > 0 || Date.now() - serverHitsCache.timestamp < ZERO_HITS_REFRESH_AGE_MS) {
-      console.log("[getPageHits] Memory Cache hit for:", slug, "hits:", hits);
-      return hits;
-    }
-    console.log("[getPageHits] Memory cache zero-hit stale, refreshing for:", slug);
+    console.log("[getPageHits] Memory Cache hit for:", slug);
+    return calculateHitsForSlug(serverHitsCache.data, slug);
   }
 
   console.log("[getPageHits] Fetching for:", slug);
@@ -107,7 +97,7 @@ export async function getPageHits(slug: string): Promise<number> {
     if (serverHitsCache) {
       return calculateHitsForSlug(serverHitsCache.data, slug);
     }
-    return -1;
+    return 0;
   }
 }
 

@@ -3,9 +3,9 @@ import { fetchPageViews, KV_CACHE_KEY } from "@/lib/analytics";
 import type { PageHitItem } from "@/lib/analytics";
 
 export const runtime = "edge";
-export const revalidate = 21600; // 6 小时
+export const revalidate = 300; // 5 分钟
 
-const CACHE_TTL_SECONDS = 6 * 60 * 60; // 6 hours
+const CACHE_TTL_SECONDS = 5 * 60; // 5 minutes
 const CACHE_TTL_MS = CACHE_TTL_SECONDS * 1000;
 
 export async function GET() {
@@ -20,7 +20,7 @@ export async function GET() {
           console.log("[Analytics API] KV Cache hit");
           return NextResponse.json(
             { total: cachedData.total, data: cachedData.data },
-            { headers: { "Cache-Control": "public, max-age=21600", "X-Cache": "HIT" } }
+            { headers: { "Cache-Control": "public, max-age=300", "X-Cache": "HIT" } }
           );
         }
       } catch (err) {
@@ -51,7 +51,7 @@ export async function GET() {
     }
 
     return NextResponse.json(data, {
-      headers: { "Cache-Control": "public, max-age=21600", "X-Cache": "MISS" },
+      headers: { "Cache-Control": "public, max-age=300", "X-Cache": "MISS" },
     });
   } catch (error) {
     console.error("[Analytics API] Error:", error);
@@ -67,7 +67,7 @@ export async function GET() {
             { headers: { "Cache-Control": "public, max-age=3600", "X-Cache": "STALE" } }
           );
         }
-      } catch (err) {}
+      } catch {}
     }
 
     // 无缓存时返回空数据
