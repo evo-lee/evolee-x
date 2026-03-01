@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { FileText, LoaderCircle, Search } from "lucide-react";
+import { FileText, Search } from "lucide-react";
 import {
   Command,
   CommandDialog,
@@ -56,6 +56,13 @@ interface PagefindApi {
   ) => Promise<PagefindSearchResponse>;
   options?: (options: { bundlePath?: string; baseUrl?: string }) => void;
 }
+
+function getCacheKey(rawQuery: string, relatedSlug: string): string {
+  const normalized = rawQuery.trim().toLowerCase();
+  return !normalized && relatedSlug ? `related:${relatedSlug}` : normalized;
+}
+
+const SKELETON_ROWS = 5;
 
 function stripHtml(input: string): string {
   return input
@@ -134,6 +141,7 @@ export function SearchCommand() {
   const pathname = usePathname();
   const cacheRef = useRef(new Map<string, SearchItem[]>());
   const pagefindRef = useRef<PagefindApi | null>(null);
+  const requestIdRef = useRef(0);
 
   // 检测当前是否在文章详情页（排除首页和 category 等路径）
   const currentSlug =
@@ -141,10 +149,27 @@ export function SearchCommand() {
       ? pathname.replace(/^\//, "")
       : "";
 
+  const handleOpenChange = useCallback(
+    (nextOpen: boolean) => {
+      setOpen(nextOpen);
+
+      if (!nextOpen) {
+        setLoading(false);
+        return;
+      }
+
+      setQuery("");
+      const cacheKey = getCacheKey("", currentSlug);
+      const cached = cacheRef.current.get(cacheKey);
+      setResults(cached ?? []);
+      setLoading(!cached);
+    },
+    [currentSlug],
+  );
+
   const handleQueryChange = (value: string) => {
     setQuery(value);
-    const normalized = value.trim().toLowerCase();
-    const cacheKey = !normalized && currentSlug ? `related:${currentSlug}` : normalized;
+    const cacheKey = getCacheKey(value, currentSlug);
     const cached = cacheRef.current.get(cacheKey);
     if (cached) {
       setResults(cached);
@@ -155,13 +180,13 @@ export function SearchCommand() {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key.toLowerCase() === "k" && (event.metaKey || event.ctrlKey)) {
         event.preventDefault();
-        setOpen((value) => !value);
+        handleOpenChange(!open);
       }
     };
 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [open, handleOpenChange]);
 
   useEffect(() => {
     if (!open) return;
@@ -169,21 +194,28 @@ export function SearchCommand() {
     const normalized = query.trim().toLowerCase();
     const controller = new AbortController();
     // 缓存 key 区分相关推荐和普通搜索
-    const cacheKey = !normalized && currentSlug ? `related:${currentSlug}` : normalized;
+    const cacheKey = getCacheKey(query, currentSlug);
+    const requestId = ++requestIdRef.current;
+    const shouldDelay = normalized ? 120 : 0;
 
     const timer = setTimeout(() => {
       const run = async () => {
         const cached = cacheRef.current.get(cacheKey);
         if (cached) {
+          if (requestId !== requestIdRef.current) return;
           setResults(cached);
+          setLoading(false);
           return;
         }
 
-        setLoading(true);
+        if (requestId === requestIdRef.current) {
+          setLoading(true);
+        }
 
         try {
           if (!normalized) {
             const latest = await fetchFromApi("", controller.signal, currentSlug || undefined);
+            if (requestId !== requestIdRef.current) return;
             cacheRef.current.set(cacheKey, latest);
             setResults(latest);
             return;
@@ -216,12 +248,14 @@ export function SearchCommand() {
               }),
             );
 
+            if (requestId !== requestIdRef.current) return;
             cacheRef.current.set(cacheKey, mapped);
             setResults(mapped);
             return;
           }
 
           const fallback = await fetchFromApi(normalized, controller.signal);
+          if (requestId !== requestIdRef.current) return;
           cacheRef.current.set(cacheKey, fallback);
           setResults(fallback);
         } catch (error: unknown) {
@@ -230,15 +264,18 @@ export function SearchCommand() {
             normalized,
             controller.signal,
           ).catch(() => []);
+          if (requestId !== requestIdRef.current) return;
           cacheRef.current.set(cacheKey, fallback);
           setResults(fallback);
         } finally {
-          setLoading(false);
+          if (requestId === requestIdRef.current) {
+            setLoading(false);
+          }
         }
       };
 
       void run();
-    }, 120);
+    }, shouldDelay);
 
     return () => {
       clearTimeout(timer);
@@ -250,7 +287,7 @@ export function SearchCommand() {
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => handleOpenChange(true)}
         className="inline-flex h-8 w-8 items-center justify-center gap-2 rounded-md border border-transparent bg-transparent text-xs text-zinc-500 transition-colors hover:bg-zinc-100 dark:border-transparent dark:text-zinc-300 dark:hover:bg-zinc-800 sm:w-auto sm:justify-start sm:border-zinc-200 sm:bg-transparent sm:px-2 sm:py-1 sm:dark:border-zinc-700"
         aria-label="Open search"
       >
@@ -261,7 +298,7 @@ export function SearchCommand() {
         </span>
       </button>
 
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog open={open} onOpenChange={handleOpenChange}>
         <Command shouldFilter={false}>
           <CommandInput
             value={query}
@@ -270,10 +307,23 @@ export function SearchCommand() {
           />
           <CommandList>
             {loading ? (
-              <div className="flex items-center justify-center py-8 text-sm text-zinc-500">
-                <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                正在搜索...
-              </div>
+              <CommandGroup
+                heading={!query.trim() && currentSlug ? "相关推荐" : "文章"}
+              >
+                {Array.from({ length: SKELETON_ROWS }).map((_, index) => (
+                  <div
+                    key={`skeleton-${index}`}
+                    aria-hidden="true"
+                    className="flex items-center gap-2 rounded-md px-2 py-2"
+                  >
+                    <div className="h-12 w-16 shrink-0 rounded bg-zinc-200/80 animate-pulse dark:bg-zinc-700/80" />
+                    <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                      <div className="h-3 w-4/5 rounded bg-zinc-200/85 animate-pulse dark:bg-zinc-700/85" />
+                      <div className="h-3 w-full rounded bg-zinc-200/60 animate-pulse dark:bg-zinc-700/60" />
+                    </div>
+                  </div>
+                ))}
+              </CommandGroup>
             ) : null}
 
             {!loading ? (
@@ -285,7 +335,7 @@ export function SearchCommand() {
                       key={`${item.id}-${item.url}`}
                       value={`${item.title} ${item.excerpt} ${item.content}`}
                       onSelect={() => {
-                        setOpen(false);
+                        handleOpenChange(false);
                         setQuery("");
                         router.push(item.url);
                       }}
