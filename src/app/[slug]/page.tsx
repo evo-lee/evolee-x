@@ -193,7 +193,7 @@ export default async function PostPage({ params }: PostPageProps) {
           {aiSummary && <ArticleAISummary summary={aiSummary} />}
           <ContentEnhancer />
 
-          <article className="article-body article-content mt-6">
+          <article className="article-body article-content mt-6 pb-6 lg:pb-12 ">
             <div dangerouslySetInnerHTML={{ __html: post.html }} />
           </article>
 

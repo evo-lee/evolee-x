@@ -35,10 +35,10 @@ export function ArticleCopyright({ title, date, slug }: ArticleCopyrightProps) {
               href={markdownLink}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
+              className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
             >
               <span>{title}</span>
-              <IconMarkdown className="h-4 w-4 flex-shrink-0" />
+              <IconMarkdown className="h-4 w-4 flex-shrink-0 " />
             </a>
           </div>
 
@@ -55,7 +55,7 @@ export function ArticleCopyright({ title, date, slug }: ArticleCopyrightProps) {
               href={articleLink}
               target="_blank"
               rel="noreferrer"
-              className="text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors truncate"
+              className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 transition-colors truncate"
             >
               {articleLink}
             </a>
@@ -76,7 +76,7 @@ export function ArticleCopyright({ title, date, slug }: ArticleCopyrightProps) {
           </div>
         </div>
 
-        <IconCopyright className="h-5 w-5 text-gray-500 dark:text-gray-400 flex-shrink-0 mt-0.5" />
+        <IconCopyright className="h-5 w-5 text-gray-900 dark:text-gray-400 flex-shrink-0 mt-0.5" />
       </div>
     </aside>
   );

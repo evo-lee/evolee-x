@@ -1,5 +1,5 @@
 ---
-title: 视频 | 长滩岛:亚洲最美白沙滩
+title: 长滩岛:亚洲最美白沙滩
 date: "2016-10-13"
 cover: https://c2.is26.com/blog/2016/09/pilipinas/boracay-cover.jpg
 categories:

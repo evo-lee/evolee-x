@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FileText, LoaderCircle, Search } from "lucide-react";
 import {
   Command,
@@ -110,9 +110,11 @@ async function loadPagefind(): Promise<PagefindApi | null> {
 async function fetchFromApi(
   query: string,
   signal: AbortSignal,
+  relatedSlug?: string,
 ): Promise<SearchItem[]> {
   const params = new URLSearchParams();
   if (query) params.set("q", query);
+  if (!query && relatedSlug) params.set("related", relatedSlug);
   params.set("limit", "24");
 
   const res = await fetch(`/api/search/docs?${params.toString()}`, {
@@ -129,13 +131,21 @@ export function SearchCommand() {
   const [results, setResults] = useState<SearchItem[]>([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
   const cacheRef = useRef(new Map<string, SearchItem[]>());
   const pagefindRef = useRef<PagefindApi | null>(null);
+
+  // 检测当前是否在文章详情页（排除首页和 category 等路径）
+  const currentSlug =
+    pathname !== "/" && !pathname.startsWith("/category") && !pathname.startsWith("/page")
+      ? pathname.replace(/^\//, "")
+      : "";
 
   const handleQueryChange = (value: string) => {
     setQuery(value);
     const normalized = value.trim().toLowerCase();
-    const cached = cacheRef.current.get(normalized);
+    const cacheKey = !normalized && currentSlug ? `related:${currentSlug}` : normalized;
+    const cached = cacheRef.current.get(cacheKey);
     if (cached) {
       setResults(cached);
     }
@@ -158,10 +168,12 @@ export function SearchCommand() {
 
     const normalized = query.trim().toLowerCase();
     const controller = new AbortController();
+    // 缓存 key 区分相关推荐和普通搜索
+    const cacheKey = !normalized && currentSlug ? `related:${currentSlug}` : normalized;
 
     const timer = setTimeout(() => {
       const run = async () => {
-        const cached = cacheRef.current.get(normalized);
+        const cached = cacheRef.current.get(cacheKey);
         if (cached) {
           setResults(cached);
           return;
@@ -171,8 +183,8 @@ export function SearchCommand() {
 
         try {
           if (!normalized) {
-            const latest = await fetchFromApi("", controller.signal);
-            cacheRef.current.set(normalized, latest);
+            const latest = await fetchFromApi("", controller.signal, currentSlug || undefined);
+            cacheRef.current.set(cacheKey, latest);
             setResults(latest);
             return;
           }
@@ -204,13 +216,13 @@ export function SearchCommand() {
               }),
             );
 
-            cacheRef.current.set(normalized, mapped);
+            cacheRef.current.set(cacheKey, mapped);
             setResults(mapped);
             return;
           }
 
           const fallback = await fetchFromApi(normalized, controller.signal);
-          cacheRef.current.set(normalized, fallback);
+          cacheRef.current.set(cacheKey, fallback);
           setResults(fallback);
         } catch (error: unknown) {
           if (error instanceof Error && error.name === "AbortError") return;
@@ -218,7 +230,7 @@ export function SearchCommand() {
             normalized,
             controller.signal,
           ).catch(() => []);
-          cacheRef.current.set(normalized, fallback);
+          cacheRef.current.set(cacheKey, fallback);
           setResults(fallback);
         } finally {
           setLoading(false);
@@ -232,7 +244,7 @@ export function SearchCommand() {
       clearTimeout(timer);
       controller.abort();
     };
-  }, [open, query]);
+  }, [open, query, currentSlug]);
 
   return (
     <>
@@ -254,7 +266,7 @@ export function SearchCommand() {
           <CommandInput
             value={query}
             onValueChange={handleQueryChange}
-            placeholder="搜索文章标题或正文内容..."
+            placeholder={currentSlug ? "搜索更多文章..." : "搜索文章标题或正文内容..."}
           />
           <CommandList>
             {loading ? (
@@ -267,7 +279,7 @@ export function SearchCommand() {
             {!loading ? (
               <>
                 <CommandEmpty>没有找到相关内容</CommandEmpty>
-                <CommandGroup heading="Articles">
+                <CommandGroup heading={!query.trim() && currentSlug ? "相关推荐" : "文章"}>
                   {results.map((item) => (
                     <CommandItem
                       key={`${item.id}-${item.url}`}
@@ -278,20 +290,19 @@ export function SearchCommand() {
                         router.push(item.url);
                       }}
                     >
-                      {item.cover ? (
-                        <Image
-                          src={item.cover}
-                          alt=""
-                          width={64}
-                          height={48}
-                          className="h-12 w-16 shrink-0 rounded object-cover"
-                          unoptimized
-                        />
-                      ) : (
-                        <div className="flex h-12 w-16 shrink-0 items-center justify-center rounded bg-zinc-100 dark:bg-zinc-800">
-                          <FileText className="h-4 w-4 text-zinc-400" />
-                        </div>
-                      )}
+                      <div className="relative flex h-12 w-16 shrink-0 items-center justify-center rounded bg-zinc-100 dark:bg-zinc-800">
+                        <FileText className="h-4 w-4 text-zinc-400" />
+                        {item.cover && (
+                          <Image
+                            src={item.cover}
+                            alt=""
+                            width={64}
+                            height={48}
+                            className="absolute inset-0 h-full w-full rounded object-cover"
+                            unoptimized
+                          />
+                        )}
+                      </div>
                       <div className="flex min-w-0 flex-col">
                         <span className="truncate text-sm text-zinc-800 dark:text-zinc-100">
                           {item.title}
