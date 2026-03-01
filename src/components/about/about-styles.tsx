@@ -10,7 +10,7 @@ export function AboutStyles({ styles }: AboutStylesProps) {
   return (
     <div className="rounded-2xl border border-zinc-200/80 bg-white/70 p-5 dark:border-zinc-800/80 dark:bg-zinc-900/60">
       <h2 className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-        性格与行事风格
+        读者会注意到的习惯
       </h2>
       <ul className="mt-4 space-y-3">
         {styles.map((style) => (

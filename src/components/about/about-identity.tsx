@@ -1,13 +1,22 @@
 import type { IdentityCard } from "@/lib/content/author-profile";
 
 const IDENTITY_EMOJIS: Record<string, string> = {
-  全栈开发者: "💻",
-  内容创作者: "✏️",
-  数字生活方式实践者: "🌍",
-  数字游民: "✈️",
-  开源实践者: "🔓",
-  "AI 实践者": "🤖",
-  独立开发者: "🚀",
+  工具: "🔧",
+  效率: "⚡",
+  旅行: "✈️",
+  城市: "🏙️",
+  前端: "💻",
+  工程: "🛠️",
+  开源: "🔓",
+  网络: "🌐",
+  生活: "🌍",
+  AI: "🤖",
+  写作: "✏️",
+  教程: "📝",
+  摄影: "📷",
+  消费: "💰",
+  健康: "❤️",
+  部署: "🚀",
 };
 
 function getEmoji(name: string): string {
@@ -27,7 +36,7 @@ export function AboutIdentity({ identities }: AboutIdentityProps) {
   return (
     <section className="rounded-2xl border border-zinc-200/80 bg-white/70 p-5 dark:border-zinc-800/80 dark:bg-zinc-900/60">
       <h2 className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-        核心身份与背景
+        创作方向
       </h2>
       <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
         {identities.map((identity) => (
@@ -47,7 +56,7 @@ export function AboutIdentity({ identities }: AboutIdentityProps) {
               {identity.description}
             </p>
             <p className="mt-2 text-xs leading-6 text-zinc-500 dark:text-zinc-500">
-              依据：{identity.evidence}
+              观察依据：{identity.evidence}
             </p>
             {identity.link ? (
               <a

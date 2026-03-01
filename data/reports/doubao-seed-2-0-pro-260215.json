@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-03-01T16:21:12.942Z",
+    "lastUpdated": "2026-03-01T18:44:07.130Z",
     "model": "doubao-seed-2-0-pro-260215",
     "modelName": "Doubao Seed2.0 ",
     "provider": "Bytedance",
@@ -14,71 +14,59 @@
   "report": {
     "hero": {
       "title": "AI 视角下的罗磊",
-      "summary": "非科班出身的资深全栈开发者，兼具硬核技术输出能力、高人气开源项目实战经验与多元生活探索精神的跨领域科技内容创作者",
-      "intro": "罗磊拥有超过10年互联网开发经验，先后任职于猎豹移动、阅文集团等企业，主导过网文平台前端架构重构、头部厂商Hybrid App性能优化等核心项目。2024年起转型为独立开源开发者，深耕AI辅助开发、网络工具与个人数字基建领域，同时长期输出技术、数码、旅行、生活类优质内容，在垂直领域拥有稳定受众。"
+      "summary": "是那种坐在深圳家里的实木桌前，左手折腾代码搞开源，右手敲键盘写测评，闲了就跑马拉松、到处旅行拍素材的非科班出身全栈开发者",
+      "intro": "从非科班自学转做开发十多年，现在是全职独立开发者，兼顾开源项目和内容输出。除了写代码折腾数字工具，他还完成过8场全程马拉松、骑行过2200公里川藏线，去各地旅行都习惯拍素材写攻略，连配眼镜、装电脑这种日常小事也会认认真真写成实测分享。他的Unsplash摄影作品累计有1500万+浏览，全网内容更新频繁，经常在X上同步折腾进度跟同好互动。"
     },
     "identities": [
       {
-        "name": "资深全栈/前端开发者",
-        "description": "拥有10年以上开发经验，擅长从前端到后端全链路项目落地，专注性能优化与用户体验提升",
-        "evidence": "先后任职阅文集团、猎豹移动等企业，主导起点中文网前端重构，实现Hybrid App性能提升30%，2024年转型为独立全栈开源开发者，2017年受邀担任腾讯FEEXP前端体验大会演讲嘉宾",
-        "link": "https://luolei.org/feexp-2017-shenzhen"
+        "name": "AI工具全链路落地实践",
+        "description": "把AI深度融入从代码开发、UI设计到项目上线的全流程，同时分享各类AI工具的使用技巧、避坑指南和基础设施搭建方案，帮助普通人降低AI使用门槛",
+        "evidence": "发布了《实现AI自由》等AI相关经验文章，开发Neko Master等开源项目时全程用AI辅助提效，经常在X上分享Vibe Coding实战经验和AI工具测评",
+        "link": "https://luolei.org/ai-2026"
       },
       {
-        "name": "高人气开源项目创作者",
-        "description": "开发多款高Star开源工具，覆盖网络分析、效率插件等领域，是AI辅助开发范式的先行者",
-        "evidence": "开发Neko Master、Clash Master等开源项目，其中Clash Master上线24小时获400+Star，Docker Hub拉取超1000次，Neko Master累计Star超1000",
-        "link": "https://github.com/foru17/neko-master"
+        "name": "家庭网络与数码折腾指南",
+        "description": "从家庭弱电布线、NAS配置、路由器优化到各类数码硬件选购，所有方案都经过自己实测验证，输出普通人也能看懂的高性价比实操教程",
+        "evidence": "发布了IPTV组播转单播测试、家庭弱电方案、NAS测评、宽带套餐对比等内容，开发了Clash Master、Neko Master等面向家庭网络场景的开源工具",
+        "link": "https://luolei.org/chinanet-iptv"
       },
       {
-        "name": "跨领域科技内容创作者",
-        "description": "长期输出技术、数码、旅行、生活类优质内容，兼顾专业实用性与生活体验感",
-        "evidence": "运营独立博客luolei.org超过10年，累计发布文章120余篇，同时在YouTube、Bilibili、X(Twitter)等多平台同步内容",
-        "link": "https://luolei.org"
-      },
-      {
-        "name": "户外生活探索者",
-        "description": "热爱马拉松、骑行、潜水等户外运动，足迹覆盖多国，拥有丰富的户外与旅行经验",
-        "evidence": "完成8场全程马拉松，29天骑行川藏线2200公里，持有PADI开放水域潜水员认证，旅行足迹覆盖8个国家",
-        "link": "https://luolei.org/tibet-road-2012"
+        "name": "马拉松与生活实测攻略",
+        "description": "不管是跑马拉松、外出旅行，还是配眼镜、办证件、装电脑，都会把完整流程、实测体验和踩过的坑整理成可复用的攻略，给其他有同样需求的人参考",
+        "evidence": "发布了京都马拉松、长沙马拉松等赛事游记，验光配镜、装机、香港开户等生活实测内容，还有多个国家的旅行攻略和摄影作品",
+        "link": "https://luolei.org/kyoto-marathon-2025"
       }
     ],
     "strengths": [
       {
-        "title": "技术开发能力",
+        "title": "项目开发方式",
         "points": [
-          "具备全栈开发能力，精通React、TypeScript、NestJS等前后端技术栈，可独立完成从产品设计到运维部署的全链路项目落地",
-          "资深前端领域专家，拥有企业级Node.js框架设计、网文平台前端重构、Hybrid App性能优化等大型项目经验，曾将Hybrid App性能提升30%",
-          "开源项目实战经验丰富，打造了Neko Master、Clash Master等多个高Star开源工具，擅长快速响应用户需求迭代产品",
-          "AI辅助开发先行者，探索出Vibe Coding开发范式，可借助AI工具大幅提升开发效率，曾1小时完成Clash Master MVP开发"
+          "习惯用AI辅助全流程开发，能快速从原型迭代到成熟产品",
+          "所有项目都从自己的真实使用需求出发，做出来的工具自己日常也会用",
+          "项目完成后会把完整开发流程、踩坑经验都整理成公开文章分享"
         ]
       },
       {
-        "title": "内容创作与运营能力",
+        "title": "内容创作方式",
         "points": [
-          "内容覆盖维度广，横跨技术开发、数码测评、旅行攻略、生活经验四大领域，可满足不同受众的内容需求",
-          "内容实用性强，所有技术、生活类内容均来自个人实操经验，具备可复现性，能直接为读者提供落地参考与避坑指南",
-          "长期内容创作经验，运营独立博客超10年，累计发布120余篇优质内容，拥有稳定的垂直受众群体",
-          "具备多平台内容分发能力，内容同步覆盖独立博客、YouTube、Bilibili、小红书、X(Twitter)等多个平台"
+          "所有内容都是亲身实测后输出，数据和体验全部真实可复现",
+          "喜欢把复杂的技术问题拆解成通俗步骤，新手也能跟着操作",
+          "会持续跟进分享过的内容，有政策或版本变化时会及时更新信息"
         ]
       }
     ],
     "styles": [
       {
-        "trait": "务实的实战派",
-        "description": "所有输出内容均来自个人实操经验，拒绝空泛理论，无论是技术开发教程、数码测评还是生活攻略，均提供可直接复用的落地方法"
+        "trait": "进度条体质",
+        "description": "不管是折腾新硬件、开发新项目还是跑马拉松，做的过程中就顺手发动态同步到X，连AI额度被榨干、装机缺配件这种小插曲也会随手分享"
       },
       {
-        "trait": "效率优先的工具控",
-        "description": "热衷于探索各类效率工具与数字基建方案，擅长通过工具组合、技术优化降低个人与企业的运营成本，提升工作效率"
+        "trait": "实测对比党",
+        "description": "选手机套餐、买数码产品、配眼镜都习惯跑实测拉对比表，把不同方案的优劣、价格、踩坑点都列得明明白白，不会只说优点不说缺点"
       },
       {
-        "trait": "跨界的生活探索者",
-        "description": "不局限于技术领域，兼顾工作与生活平衡，长期探索户外、旅行、健康等多元领域，将技术思维融入日常生活的方方面面"
-      },
-      {
-        "trait": "AI原生开发实践者",
-        "description": "深度拥抱AI技术，探索出Vibe Coding的独特开发范式，将AI工具融入开发全流程，大幅缩短产品从创意到落地的周期"
+        "trait": "生活化输出",
+        "description": "不会只发干巴巴的技术内容，生活里遇到的跑马、旅行、甚至遇到的离谱家政服务体验都会做成内容，跟读者的距离感很弱"
       }
     ],
     "proofs": {
@@ -86,94 +74,72 @@
         {
           "title": "Neko Master: 从 0 到 1K+ Star 的 Vibe Coding 实践",
           "url": "https://luolei.org/neko-master-vibe-coding",
-          "reason": "全面展示了作者AI辅助开发的实战经验与开源项目运营能力，是其近期技术输出的代表性作品",
+          "reason": "完整分享了用AI辅助开发开源项目的全流程，是他技术输出风格的典型代表",
           "date": "2026-03-01"
         },
         {
           "title": "实现 AI 自由：我为未来准备的 4 个数字通行证",
           "url": "https://luolei.org/ai-2026",
-          "reason": "体现了作者在个人数字基建领域的深度探索，为开发者使用全球AI工具提供了实用参考",
+          "reason": "分享了自己在用的AI工具和基础设施方案，体现了他对AI落地的长期关注",
           "date": "2026-02-04"
         },
         {
-          "title": "非典型程序员之路:腾讯第二届前端体验大会 | 嘉宾分享",
-          "url": "https://luolei.org/feexp-2017-shenzhen",
-          "reason": "记录了作者作为非科班开发者的职业成长路径，是其技术领域行业影响力的证明",
-          "date": "2018-02-01"
+          "title": "我的新电脑: 2025 年 MATX 小主机",
+          "url": "https://luolei.org/pc-2025",
+          "reason": "记录了自己装机的完整过程和实测数据，是他数码折腾类内容的典型",
+          "date": "2025-05-25"
         },
         {
-          "title": "Cloudflare 创业扶持计划申请经验",
-          "url": "https://luolei.org/cloudflare-for-startups",
-          "reason": "作者实操经验类内容的典型代表，为初创开发者申请云服务资源提供了可复用的避坑指南",
-          "date": "2025-01-12"
+          "title": "京都马拉松: 第一次去日本跑马",
+          "url": "https://luolei.org/kyoto-marathon-2025",
+          "reason": "完整记录了参赛和当地旅行的全流程，是他生活类内容的代表作品",
+          "date": "2025-02-28"
         },
         {
-          "title": "西藏 | 骑行川藏四千里:2012年的青春影像",
-          "url": "https://luolei.org/tibet-road-2012",
-          "reason": "展现了作者多元的生活探索经历，体现了其除技术身份外的户外探索特质",
-          "date": "2018-10-31"
-        },
-        {
-          "title": "Raycast Hoarder: 开源 AI 书签管理插件",
-          "url": "https://luolei.org/raycast-hoarder",
-          "reason": "作者效率工具类开发的代表性作品，展示了其将技术能力落地到日常效率提升的思路",
-          "date": "2024-11-24"
+          "title": "广东电信 IPTV 组播转单播极限测试",
+          "url": "https://luolei.org/chinanet-iptv",
+          "reason": "实测了家庭网络改造的具体方案，是他家庭网络折腾内容的典型",
+          "date": "2024-12-27"
         }
       ],
       "tweets": [
         {
+          "title": "中国联通香港 CUniq 月神卡应该算是目前手机卡套餐里一个真正的 Bug 级存在",
+          "url": "https://x.com/luoleiorg/status/1993296964684071429",
+          "reason": "分享实用的手机套餐攻略，是他日常在X上输出干货内容的典型",
+          "date": "2025-11-25T00:00:00Z"
+        },
+        {
           "title": "昨晚随手 Vibe 的一个项目 Clash Master，不到 24 小时，收获 GitHub 400+ Star，Docker Hub 1000+ 次拉取",
           "url": "https://x.com/luoleiorg/status/2019758733983912111",
-          "reason": "展示了作者开源项目的高人气与AI辅助开发的高效性，是其近期技术成果的直接体现",
+          "reason": "同步自己开发项目的实时进度，体现了他边做边更的内容风格",
           "date": "2026-02-06T00:00:00Z"
         },
         {
-          "title": "🚀 2026 年最优雅的 Clash 流量可视化工具 Clash Master 来了！推荐家里用 OpenClash 或 Clash 内核的朋友体验下",
-          "url": "https://x.com/luoleiorg/status/2019508580555321508",
-          "reason": "作者Clash Master项目的官宣推文，互动量高，体现了其开源项目的市场认可度",
-          "date": "2026-02-05T00:00:00Z"
-        },
-        {
-          "title": "我又来吹 Kimi K2.5 了。刚花一小时 Vibe 了一个 Clash 流量分析工具，完成度极高。部署在内网，监听 OpenClash 流量，实现域名、节点流量统计及 IP 归属地查询，数据持久化",
-          "url": "https://x.com/luoleiorg/status/2019418455276204185",
-          "reason": "记录了作者使用AI工具一小时完成MVP开发的全过程，是其Vibe Coding开发范式的实战证明",
-          "date": "2026-02-05T00:00:00Z"
-        },
-        {
-          "title": "🐱 2026 年最优雅的家庭网关流量分析工具 Neko Master v1.2.2 焕新登场",
-          "url": "https://x.com/luoleiorg/status/2021816174447919603",
-          "reason": "作者Neko Master项目的版本更新推文，体现了其对开源项目的持续迭代能力",
-          "date": "2026-02-12T00:00:00Z"
+          "title": "强烈建议各位 开发者/产品经理 朋友花 15 分钟看看这个文档，Lovable 官方的 Prompting 1.1 手册太棒了，这份手册是 Vibe Coding 的完整方法论",
+          "url": "https://x.com/luoleiorg/status/1972928152507978196",
+          "reason": "分享自己的AI开发方法论，是他关注AI提效的典型表现",
+          "date": "2025-09-30T00:00:00Z"
         }
       ],
       "projects": [
         {
           "title": "Neko Master",
           "url": "https://github.com/foru17/neko-master",
-          "reason": "开源网络流量分析面板，累计Star超1000，是作者Vibe Coding开发范式的代表性成果，具备高性能与高实用性"
-        },
-        {
-          "title": "Clash Master",
-          "url": "https://github.com/foru17/clash-master",
-          "reason": "Clash流量可视化工具，上线24小时收获400+Star，Docker Hub拉取超1000次，深受网络工具爱好者欢迎"
+          "reason": "开源网络流量分析面板，拿到1K+Star，是他近期核心的开源项目"
         },
         {
           "title": "raycast-sink",
           "url": "https://github.com/foru17/raycast-sink",
-          "reason": "Raycast短链管理插件，注重工作流整合，可提升内容创作者的链接管理效率，已上架Raycast Store"
+          "reason": "Raycast短链管理插件，是他开发效率工具的典型作品"
         },
         {
-          "title": "luoleiorg-x",
-          "url": "https://github.com/foru17/luoleiorg-x",
-          "reason": "作者个人博客的开源代码仓库，基于Vinext + Cloudflare Workers构建，支持AI摘要与搜索，是其个人数字基建的核心组成部分"
-        },
-        {
-          "title": "raycast-hoarder",
-          "url": "https://github.com/foru17/raycast-hoarder",
-          "reason": "Raycast与Hoarder的桥接插件，优化收藏检索体验，为追求数据隐私和效率的用户提供便捷的跨平台书签管理方案"
+          "title": "Clash Master",
+          "url": "https://github.com/foru17/clash-master",
+          "reason": "AI辅助开发的Clash流量可视化工具，上线24小时收获400+Star，体现了他的AI开发效率"
         }
       ]
     },
-    "disclaimer": "本画像为AI基于公开资料生成，仅供参考，不构成任何评价或承诺，如需了解作者最新动态请访问其官方博客与社交媒体账号。"
+    "disclaimer": "本内容由AI基于作者公开的博客、推文、开源项目内容生成，仅供参考，所有信息以作者公开发布的原作为准"
   }
 }

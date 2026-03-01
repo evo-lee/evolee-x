@@ -43,7 +43,10 @@
       "Bash(curl:*)",
       "mcp__plugin_playwright_playwright__browser_navigate",
       "Bash(npm run:*)",
-      "Bash(pnpm typecheck:*)"
+      "Bash(pnpm typecheck:*)",
+      "Bash(pnpm next:*)",
+      "Bash(pnpm node:*)",
+      "mcp__plugin_serena_serena__replace_content"
     ]
   }
 }

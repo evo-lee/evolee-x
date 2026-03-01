@@ -23,9 +23,10 @@ interface SerializedReport {
 interface AboutPageClientProps {
   manifest: ProfileManifest;
   reports: SerializedReport[];
+  postCovers: Record<string, string>;
 }
 
-export function AboutPageClient({ manifest, reports }: AboutPageClientProps) {
+export function AboutPageClient({ manifest, reports, postCovers }: AboutPageClientProps) {
   // 构建 modelId → report 的快速查找映射
   const reportMap = useMemo(() => {
     const map = new Map<string, SerializedReport>();
@@ -79,6 +80,7 @@ export function AboutPageClient({ manifest, reports }: AboutPageClientProps) {
               posts={report.proofs.posts}
               tweets={report.proofs.tweets}
               projects={report.proofs.projects}
+              postCovers={postCovers}
             />
 
             <AboutDisclaimer disclaimer={report.disclaimer} meta={meta} />

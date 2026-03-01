@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-03-01T16:17:54.860Z",
+    "lastUpdated": "2026-03-01T18:45:20.722Z",
     "model": "qwen3.5-plus",
     "modelName": "Qwen 3.5 Plus",
     "provider": "Alibaba",
@@ -13,60 +13,60 @@
   },
   "report": {
     "hero": {
-      "title": "全栈开发者与数字生活实践者罗磊",
-      "summary": "一位擅长利用 AI 提效的全栈开发者，兼具开源精神与深度数字生活实践经验的独立创作者。",
-      "intro": "从大厂前端架构师转型为独立开发者，专注于全栈应用开发与个人数字基建。他在开源社区拥有多个高星项目，同时通过博客持续输出技术与生活洞察，展现了技术与生活深度融合的实践路径。"
+      "title": "AI 视角下的罗磊",
+      "summary": "经常在深夜调试完家庭网络后，第二天清晨又出现在马拉松赛道上的人。",
+      "intro": "作为一名独立开发者，他习惯把折腾过程公开在博客和 X 上，更新频率很高。除了代码，你也经常能看到他分享的旅行攻略或硬件实测，生活和技术在他这里没有明显的界限。"
     },
     "identities": [
       {
-        "name": "独立全栈开发者",
-        "description": "脱离大厂体系后，专注于使用 React、NestJS、PostgreSQL 等技术栈独立开发应用，强调性能优化与全球用户体验。",
-        "evidence": "Apr 2024 - Present | Full Stack Developer @ Independent / Open Source，使用 React、NestJS、PostgreSQL、Prisma、GraphQL 开发应用",
+        "name": "把家里网络折腾明白",
+        "description": "从 IPTV 组播测试到全屋监控方案，他把家庭网络当成了实验室，不仅自己用，还把配置细节写成教程。",
+        "evidence": "多篇关于电信 IPTV 极限测试、智能家居监控方案及 Cloudflare 网络优化的博客文章，以及 X 上关于 DNS 分流的讨论。",
+        "link": "https://luolei.org/chinanet-iptv"
+      },
+      {
+        "name": "AI 当工具链用",
+        "description": "不空谈概念，而是直接用 AI 辅助写代码、做项目，从原型到上线的整个过程都公开分享，包括踩过的坑。",
+        "evidence": "Neko Master 和 Clash Master 项目的开发日志，以及多条关于使用 Kimi、Cursor 进行 Vibe Coding 的推文。",
         "link": "https://luolei.org/neko-master-vibe-coding"
       },
       {
-        "name": "技术内容创作者",
-        "description": "长期在个人博客及视频平台输出技术与生活方式内容，涵盖 AI 工具落地、效率工作流及个人数字基础设施建设。",
-        "evidence": "长期在博客（luolei.org）与 YouTube/Bilibili 持续输出技术与生活方式内容，博客文章共 120 篇",
-        "link": "https://luolei.org/ai-2026"
-      },
-      {
-        "name": "开源项目维护者",
-        "description": "在 GitHub 维护多个开源项目，涉及网络流量分析、效率工具插件等，部分项目获得社区广泛关注与星数增长。",
-        "evidence": "Neko Master: 开源网络流量分析面板，从 0 到 1K+ Star 的 Vibe Coding 实践",
-        "link": "https://github.com/foru17/neko-master"
+        "name": "旅行也写成攻略",
+        "description": "跑马拉松、出国旅行不只是体验，还会记录路线、装备和花费，像做项目一样复盘每一次出行。",
+        "evidence": "京都马拉松参赛记录、日本旅行游记以及多篇关于摄影装备和旅行网络的实测文章。",
+        "link": "https://luolei.org/kyoto-marathon-2025"
       }
     ],
     "strengths": [
       {
-        "title": "AI 辅助工程化能力",
+        "title": "做事方式",
         "points": [
-          "采用 Vibe Coding 模式快速构建 MVP，利用视觉锚点截图引导 AI 生成具有 SaaS 级设计感的界面",
-          "通过 AI 加速从用户反馈到 Bug 修复的迭代循环，实现项目早期快速增长",
-          "能够同时调度多个 AI 模型（Claude/Codex/Antigravity）进行交叉 Review 与代码生成"
+          "性价比优先，喜欢挖掘平价替代方案",
+          "隐私敏感，倾向自建服务而非依赖大厂",
+          "实测说话，硬件软件都要跑分对比"
         ]
       },
       {
-        "title": "全栈基础设施构建",
+        "title": "内容风格",
         "points": [
-          "具备前端到后端、产品到运维的全栈实践能力，熟悉云计算服务、DNS、负载均衡及 Nginx 反向代理",
-          "擅长前后端性能优化，包括 HTTP 请求优化、异步加载、SSR、缓存策略及数据库索引优化",
-          "能够搭建自主可控的监控方案，如基于 TP-Link 摄像头与群晖 NAS 的智能家居监控系统"
+          "教程详细，步骤清晰可复现",
+          "进度透明，开发过程边做边发",
+          "不避坑点，优缺点都会如实记录"
         ]
       }
     ],
     "styles": [
       {
-        "trait": "数据量化生活",
-        "description": "习惯通过实测数据验证产品性能与生活质量，如网络速度测试、云账单分析及硬件评测，拒绝模糊描述。"
+        "trait": "进度条体质",
+        "description": "做着做着就顺手发个更新，项目从 0 到 1 的每个阶段都能在 X 上找到记录，像追连载一样。"
       },
       {
-        "trait": "技术透明化",
-        "description": "公开分享项目代码仓库、开发心得及家庭医疗决策过程，强调信息开源与经验共享以降低他人试错成本。"
+        "trait": "对比党",
+        "description": "买东西或选方案都要拉表、跑测试，连宽带套餐和眼镜镜片都要写篇长文对比优劣。"
       },
       {
-        "trait": "极致效率导向",
-        "description": "热衷于开发 Raycast 插件等效率工具，优化个人工作流以减少重复劳动，追求工具与场景的无缝整合。"
+        "trait": "隐私守门员",
+        "description": "对数据归属很在意，家里摄像头要自建，域名要迁移，总觉得把数据放在自己手里才踏实。"
       }
     ],
     "proofs": {
@@ -74,72 +74,72 @@
         {
           "title": "Neko Master: 从 0 到 1K+ Star 的 Vibe Coding 实践",
           "url": "https://luolei.org/neko-master-vibe-coding",
-          "reason": "展示 AI 辅助开发流程与开源项目成长路径的核心文章",
+          "reason": "详细记录了如何用 AI 辅助开发开源项目，体现了他技术落地的能力。",
           "date": "2026-03-01"
         },
         {
           "title": "实现 AI 自由：我为未来准备的 4 个数字通行证",
           "url": "https://luolei.org/ai-2026",
-          "reason": "体现其对数字基建与全球 AI 工具访问能力的深度思考",
+          "reason": "分享全球 AI 工具使用经验，展示了他对前沿技术的敏感度。",
           "date": "2026-02-04"
         },
         {
-          "title": "抗癌笔记：评论信息汇总",
-          "url": "https://luolei.org/fighting-cancer-collection",
-          "reason": "展现其面对生活挑战时的理性决策与信息整合能力",
-          "date": "2024-03-25"
+          "title": "我的新电脑：2025 年 MATX 小主机",
+          "url": "https://luolei.org/pc-2025",
+          "reason": "记录装机全过程，体现了他对硬件性价比和性能的追求。",
+          "date": "2025-05-25"
         },
         {
-          "title": "2024 年：我用的手机和宽带套餐",
-          "url": "https://luolei.org/cellphone-plans-2024",
-          "reason": "反映其对网络基础设施的实测经验与资费优化建议",
-          "date": "2024-12-01"
+          "title": "京都马拉松：第一次去日本跑马",
+          "url": "https://luolei.org/kyoto-marathon-2025",
+          "reason": "将体育赛事写成详细攻略，展示了他生活记录的一面。",
+          "date": "2025-02-28"
         },
         {
-          "title": "我的云账单：2023 年",
-          "url": "https://luolei.org/how-much-i-spend-on-cloud-monthly-2023",
-          "reason": "体现其降本增效的理性消费原则与云服务管理能力",
-          "date": "2023-01-07"
+          "title": "广东电信 IPTV 组播转单播极限测试",
+          "url": "https://luolei.org/chinanet-iptv",
+          "reason": "硬核网络测试文章，代表了他对家庭网络技术的深入钻研。",
+          "date": "2024-12-27"
         }
       ],
       "tweets": [
         {
-          "title": "昨晚随手 Vibe 的一个项目 Clash Master，不到 24 小时，收获 GitHub 400+ Star",
+          "title": "Clash Master 项目进度同步",
           "url": "https://x.com/luoleiorg/status/2019758733983912111",
-          "reason": "记录开源项目快速启动与社区反馈的真实案例",
-          "date": "2026-02-06T00:00:00Z"
+          "reason": "展示了项目从原型到完全体的快速迭代，体现开发效率。",
+          "date": "2026-02-06"
         },
         {
-          "title": "我又来吹 Kimi K2.5 了。刚花一小时 Vibe 了一个 Clash 流量分析工具",
+          "title": "家庭网络 DNS 分流经验",
+          "url": "https://x.com/luoleiorg/status/2013076234360566269",
+          "reason": "分享具体的网络配置细节，体现他对隐私和稳定性的关注。",
+          "date": "2026-01-19"
+        },
+        {
+          "title": "Kimi K2.5 模型使用体验",
           "url": "https://x.com/luoleiorg/status/2019418455276204185",
-          "reason": "展示利用国产 AI 模型进行高效开发的具体实践",
-          "date": "2026-02-05T00:00:00Z"
-        },
-        {
-          "title": "快报：Clash Master 还没迭代完，AI 们的周额度先被我榨干了",
-          "url": "https://x.com/luoleiorg/status/2021210217833431233",
-          "reason": "反映高强度 AI 辅助开发下的资源消耗与模型对比",
-          "date": "2026-02-10T00:00:00Z"
+          "reason": "实时分享 AI 工具实测感受，体现他作为早期使用者的习惯。",
+          "date": "2026-02-05"
         }
       ],
       "projects": [
         {
           "title": "Neko Master",
           "url": "https://github.com/foru17/neko-master",
-          "reason": "核心开源项目，集成 ClickHouse 高性能存储的网络流量分析面板"
-        },
-        {
-          "title": "raycast-sink",
-          "url": "https://github.com/foru17/raycast-sink",
-          "reason": "强调轻量与工作流整合的 Raycast 短链管理插件"
+          "reason": "开源网络流量分析面板，代表他在全栈开发和可视化方面的能力。"
         },
         {
           "title": "Clash Master",
           "url": "https://github.com/foru17/clash-master",
-          "reason": "不到 24 小时收获 400+ Star 的开源网络流量可视化工具"
+          "reason": "流量可视化工具，展示了他解决具体网络痛点的工程化能力。"
+        },
+        {
+          "title": "Raycast Sink",
+          "url": "https://github.com/foru17/raycast-sink",
+          "reason": "效率工具插件，体现他对工作流优化和轻量级开发的关注。"
         }
       ]
     },
-    "disclaimer": "本报告由 AI 基于公开数据生成，旨在客观呈现作者画像，不构成任何投资或职业建议。"
+    "disclaimer": "本页面内容由 AI 基于公开数据生成，仅供参考。"
   }
 }

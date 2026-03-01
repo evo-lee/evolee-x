@@ -1,6 +1,16 @@
 import { siteConfig } from "@/lib/site-config";
 import type { ProfileMeta } from "@/lib/content/author-profile";
 
+function formatDate(value: string): string {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat("zh-CN", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(date);
+}
+
 interface AboutHeroProps {
   title: string;
   summary: string;
@@ -10,18 +20,33 @@ interface AboutHeroProps {
 
 export function AboutHero({ title, summary, intro, meta }: AboutHeroProps) {
   return (
-    <section className="rounded-2xl border border-zinc-200/80 bg-gradient-to-b from-white to-zinc-50 p-6 dark:border-zinc-800/80 dark:from-zinc-900 dark:to-zinc-950">
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex-1">
-          <p className="text-xs uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-500">
-            AI Profile Report · {meta.modelName}
-          </p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900 md:text-4xl dark:text-zinc-100">
-            {title}
-          </h1>
+    <section className="rounded-2xl border border-zinc-200/80 bg-gradient-to-b from-white to-zinc-50 p-6 md:p-8 dark:border-zinc-800/80 dark:from-zinc-900 dark:to-zinc-950">
+      {/* AI provenance bar */}
+      <div className="rounded-lg border border-zinc-100 bg-zinc-50/80 px-3.5 py-2.5 dark:border-zinc-800/60 dark:bg-zinc-800/30">
+        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-200 bg-violet-50 px-2.5 py-0.5 font-medium text-violet-700 dark:border-violet-800/60 dark:bg-violet-950/40 dark:text-violet-300">
+            <svg viewBox="0 0 16 16" fill="currentColor" className="h-3 w-3" aria-hidden="true">
+              <path d="M8 1a.75.75 0 0 1 .692.462l1.476 3.56 3.567.453a.75.75 0 0 1 .424 1.296l-2.636 2.42.712 3.63a.75.75 0 0 1-1.106.803L8 11.79l-3.129 1.834a.75.75 0 0 1-1.106-.803l.712-3.63-2.636-2.42a.75.75 0 0 1 .424-1.296l3.567-.453L7.308 1.462A.75.75 0 0 1 8 1Z" />
+            </svg>
+            AI Generated
+          </span>
+          <span className="hidden text-zinc-300 sm:inline dark:text-zinc-600">|</span>
+          <span>{meta.modelName} by {meta.provider}</span>
+          <span className="hidden text-zinc-300 sm:inline dark:text-zinc-600">·</span>
+          <span>{formatDate(meta.lastUpdated)}</span>
+          <span className="hidden text-zinc-300 sm:inline dark:text-zinc-600">·</span>
+          <span className="text-zinc-400 dark:text-zinc-500">
+            来源 {meta.sources.join(" / ")}
+          </span>
         </div>
-        {/* 社交链接入口 */}
-        <div className="hidden items-center gap-2 md:flex">
+      </div>
+
+      {/* Title + social links */}
+      <div className="mt-5 flex items-start justify-between gap-4">
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 md:text-3xl dark:text-zinc-100">
+          {title}
+        </h1>
+        <div className="hidden shrink-0 items-center gap-2 md:flex">
           <SocialLink href={siteConfig.social.github} label="GitHub">
             <GitHubIcon />
           </SocialLink>
@@ -34,7 +59,8 @@ export function AboutHero({ title, summary, intro, meta }: AboutHeroProps) {
         </div>
       </div>
 
-      <p className="mt-4 max-w-3xl text-[15px] leading-8 text-zinc-700 dark:text-zinc-300">
+      {/* Summary — editorial serif style */}
+      <p className="mt-4 max-w-3xl text-lg leading-9 text-zinc-800 [font-family:var(--font-serif-cn)] md:text-xl md:leading-10 dark:text-zinc-200">
         {summary}
       </p>
       {intro ? (
@@ -44,7 +70,7 @@ export function AboutHero({ title, summary, intro, meta }: AboutHeroProps) {
       ) : null}
 
       {/* 移动端社交链接 */}
-      <div className="mt-4 flex items-center gap-2 md:hidden">
+      <div className="mt-5 flex items-center gap-2 md:hidden">
         <SocialLink href={siteConfig.social.github} label="GitHub">
           <GitHubIcon />
         </SocialLink>

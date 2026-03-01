@@ -24,10 +24,14 @@ const OUTPUT_FILE = path.join(DATA_DIR, "author-context.json");
 
 const DEFAULT_SITE_URL = "https://luolei.org";
 const DEFAULT_USERNAME = "luoleiorg";
-const MAX_POSTS = 120;
-const MAX_TWEETS = 80;
+const MAX_RECENT_POSTS = 150;
+const MAX_HOT_POSTS = 100;
+const MAX_TWEETS = 300;
 const MAX_PROJECTS = 10;
 const TWEET_CACHE_MAX_AGE_DAYS = 7;
+
+const UMAMI_API_URL = "https://u.is26.com/api";
+const UMAMI_WEBSITE_ID = "185ef031-29b2-49e3-bc50-1c9f80b4e831";
 
 // ─── 工具函数 ────────────────────────────────────────────────
 
@@ -92,13 +96,62 @@ function truncate(text, max = 120) {
   return `${text.slice(0, max - 1)}…`;
 }
 
+async function fetchHotSlugs() {
+  const token = process.env.UMAMI_API_TOKEN;
+  if (!token) {
+    console.log("   ⚠️  未设置 UMAMI_API_TOKEN，跳过热门文章获取");
+    return [];
+  }
+
+  try {
+    const now = Date.now();
+    const oneYearAgo = now - 365 * 24 * 60 * 60 * 1000;
+    const url = new URL(`${UMAMI_API_URL}/websites/${UMAMI_WEBSITE_ID}/metrics`);
+    url.searchParams.set("startAt", String(oneYearAgo));
+    url.searchParams.set("endAt", String(now));
+    url.searchParams.set("type", "path");
+    url.searchParams.set("limit", "200");
+
+    const response = await fetch(url.toString(), {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) {
+      console.warn(`   ⚠️  Umami API 请求失败: ${response.status}`);
+      return [];
+    }
+
+    const metrics = await response.json();
+    // metrics 格式: [{ x: "/slug-name", y: pageview_count }, ...]
+    // 过滤出文章路径（排除首页、分页等）
+    return metrics
+      .filter((m) => {
+        const p = m.x;
+        return (
+          p &&
+          p !== "/" &&
+          !p.startsWith("/page/") &&
+          !p.startsWith("/about") &&
+          !p.startsWith("/api/") &&
+          !p.startsWith("/_next/") &&
+          !p.includes("?")
+        );
+      })
+      .map((m) => m.x.replace(/^\//, "").replace(/\/$/, ""))
+      .slice(0, MAX_HOT_POSTS);
+  } catch (err) {
+    console.warn(`   ⚠️  获取热门文章失败: ${err.message}`);
+    return [];
+  }
+}
+
 async function collectBlogDigest(siteUrl) {
   const files = await collectMarkdownFiles(POSTS_DIR);
   const aiSummaries = await readJson(path.join(DATA_DIR, "ai-summaries.json"), {
     articles: {},
   });
 
-  const posts = [];
+  const allPosts = [];
   for (const filePath of files) {
     const relative = path.relative(POSTS_DIR, filePath);
     const slug = toSlug(relative);
@@ -110,9 +163,10 @@ async function collectBlogDigest(siteUrl) {
     const summaryEntry = aiSummaries?.articles?.[slug]?.data ?? null;
     const plainContent = stripMarkdown(parsed.content);
 
-    posts.push({
+    allPosts.push({
       title: String(data.title),
       date: String(data.date),
+      slug,
       url: `${siteUrl.replace(/\/$/, "")}/${slug}`,
       categories: Array.isArray(data.categories)
         ? data.categories.map((c) => String(c))
@@ -124,10 +178,39 @@ async function collectBlogDigest(siteUrl) {
     });
   }
 
-  posts.sort(
+  // 按日期降序排列
+  allPosts.sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
-  return posts.slice(0, MAX_POSTS);
+
+  // 最新文章
+  const recentPosts = allPosts.slice(0, MAX_RECENT_POSTS);
+
+  // 热门文章（按 Umami pageview 排名）
+  const hotSlugs = await fetchHotSlugs();
+  const slugSet = new Set(hotSlugs);
+  const hotPosts = allPosts.filter((p) => slugSet.has(p.slug)).slice(0, MAX_HOT_POSTS);
+
+  // 去重合并: hotPosts 先放，recentPosts 后放（相同 URL 时 recent 覆盖 hot）
+  const merged = new Map(
+    [...hotPosts, ...recentPosts].map((p) => [p.url, p]),
+  );
+  const result = [...merged.values()];
+  // 按日期降序排列最终结果
+  result.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
+
+  // 移除内部使用的 slug 字段
+  for (const post of result) {
+    delete post.slug;
+  }
+
+  console.log(
+    `   📊 ${result.length} 篇文章（最新 ${recentPosts.length} + 热门 ${hotPosts.length}，去重后 ${result.length}）`,
+  );
+
+  return result;
 }
 
 // ─── 推文数据 ────────────────────────────────────────────────
@@ -241,7 +324,6 @@ async function main() {
 
   console.log("📦 收集博客文章数据...");
   const posts = await collectBlogDigest(siteUrl);
-  console.log(`   └─ ${posts.length} 篇文章`);
 
   // 保存博客摘要到 sources
   await writeJson(path.join(SOURCES_DIR, "blog-digest.json"), {

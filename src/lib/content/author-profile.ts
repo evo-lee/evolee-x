@@ -54,6 +54,7 @@ export interface ModelEntry {
   id: string;
   name: string;
   provider: string;
+  providerSite: string;
   icon: string;
   generatedAt: string;
   generatedBy: "ai" | "rule-based";
@@ -217,6 +218,7 @@ function loadManifest(): ProfileManifest {
               id: ensureString(obj.id),
               name: ensureString(obj.name),
               provider: ensureString(obj.provider),
+              providerSite: ensureString(obj.providerSite),
               icon: ensureString(obj.icon),
               generatedAt: ensureString(obj.generatedAt),
               generatedBy:
@@ -268,6 +270,7 @@ export function getMultiModelProfileData(): MultiModelProfileData {
       id: "fallback",
       name: "Default",
       provider: "Local",
+      providerSite: "",
       icon: "default",
       generatedAt: new Date(0).toISOString(),
       generatedBy: "rule-based",
@@ -286,7 +289,7 @@ export function getMultiModelProfileData(): MultiModelProfileData {
         hero: {
           title: "AI 视角下的罗磊",
           summary:
-            "一位把技术实践、产品审美与生活方式持续融合的全栈开发者与内容创作者。",
+            "一个把技术折腾、工具优化和生活方式都写进博客的前端开发者。",
         },
         identities: [],
         strengths: [],

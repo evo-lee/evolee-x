@@ -1,44 +1,58 @@
 {
-  "defaultModel": "gemini-3-flash-preview",
+  "defaultModel": "gpt-5.2",
   "models": [
+    {
+      "id": "gpt-5.2",
+      "name": "GPT-5.2",
+      "provider": "OpenAI",
+      "providerSite": "https://chatgpt.com/",
+      "icon": "openai",
+      "generatedAt": "2026-03-01T18:42:20.539Z",
+      "generatedBy": "ai"
+    },
     {
       "id": "gemini-3-flash-preview",
       "name": "Gemini 3",
       "provider": "Google",
+      "providerSite": "https://gemini.google.com/",
       "icon": "gemini",
-      "generatedAt": "2026-03-01T16:15:09.884Z",
+      "generatedAt": "2026-03-01T18:42:10.335Z",
       "generatedBy": "ai"
     },
     {
       "id": "qwen3.5-plus",
       "name": "Qwen 3.5 Plus",
       "provider": "Alibaba",
+      "providerSite": "https://tongyi.aliyun.com/",
       "icon": "qwen",
-      "generatedAt": "2026-03-01T16:17:54.860Z",
+      "generatedAt": "2026-03-01T18:45:20.722Z",
       "generatedBy": "ai"
     },
     {
       "id": "kimi-k2.5",
       "name": "Kimi K2.5",
       "provider": "Moonshot",
+      "providerSite": "https://www.kimi.com/",
       "icon": "kimi",
-      "generatedAt": "2026-03-01T16:23:46.468Z",
+      "generatedAt": "2026-03-01T18:42:47.117Z",
       "generatedBy": "ai"
     },
     {
       "id": "doubao-seed-2-0-pro-260215",
       "name": "Doubao Seed2.0 ",
       "provider": "Bytedance",
+      "providerSite": "https://www.doubao.com/chat/",
       "icon": "doubao",
-      "generatedAt": "2026-03-01T16:21:12.942Z",
+      "generatedAt": "2026-03-01T18:44:07.130Z",
       "generatedBy": "ai"
     },
     {
       "id": "glm-5",
       "name": "GLM 5.0 ",
       "provider": "Zhipu",
+      "providerSite": "https://chat.z.ai/",
       "icon": "zhipu",
-      "generatedAt": "2026-03-01T16:30:07.803Z",
+      "generatedAt": "2026-03-01T18:46:07.827Z",
       "generatedBy": "ai"
     }
   ]

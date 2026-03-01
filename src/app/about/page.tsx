@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { getMultiModelProfileData } from "@/lib/content/author-profile";
+import { getAllPosts } from "@/lib/content/posts";
+import { getPreviewImage } from "@/lib/content/utils";
 import { siteConfig } from "@/lib/site-config";
 import { AboutPageClient } from "./client";
 
@@ -27,6 +29,14 @@ export function generateMetadata(): Metadata {
 export default function AboutPage() {
   const { manifest, reports } = getMultiModelProfileData();
 
+  // Build slug → cover image map from all posts
+  const postCovers: Record<string, string> = {};
+  for (const post of getAllPosts()) {
+    if (post.cover) {
+      postCovers[post.slug] = getPreviewImage(post.cover);
+    }
+  }
+
   // Serialize for client component
   const serializedReports = reports.map((r) => ({
     modelId: r.model.id,
@@ -39,6 +49,7 @@ export default function AboutPage() {
       <AboutPageClient
         manifest={manifest}
         reports={serializedReports}
+        postCovers={postCovers}
       />
     </main>
   );

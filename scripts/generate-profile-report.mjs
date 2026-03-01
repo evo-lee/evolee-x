@@ -104,10 +104,12 @@ function stripMarkdown(text) {
 // ─── AI API 调用 ─────────────────────────────────────────────
 
 async function callAI({ baseUrl, apiKey, model, messages, temperature = 0.4, stream = false }) {
+  // OpenAI 新模型使用 max_completion_tokens，其他兼容 API 使用 max_tokens
+  const isOpenAI = baseUrl.includes("api.openai.com");
   const body = {
     model,
     messages,
-    max_tokens: 8192,
+    ...(isOpenAI ? { max_completion_tokens: 8192 } : { max_tokens: 8192 }),
     stream,
   };
   // 只在 temperature 不为 null 时设置（某些模型如 Kimi K2.5 不接受自定义 temperature）
@@ -194,35 +196,110 @@ function parseJsonText(text) {
   }
 }
 
+// ─── 隐私校验 ──────────────────────────────────────────────
+
+const PRIVACY_BANNED_TERMS = [
+  // 家庭成员
+  "妻子", "老婆", "爱人", "伴侣", "家人", "父母", "父亲", "母亲",
+  "孩子", "女儿", "儿子", "丈夫", "配偶",
+  // 健康与疾病
+  "抗癌", "癌症", "化疗", "疾病", "病情", "住院", "手术", "肿瘤",
+  // 职级（只拦截明确的职级代号，不拦截通用词汇如"架构师"）
+  "总监", "P7", "P8", "P9", "P10",
+];
+
+/**
+ * 扫描报告 JSON 中是否包含隐私敏感词，返回违规列表。
+ * 如果返回非空数组，报告不应被保存。
+ *
+ * 注意：数量词（如"20K 订阅"）不再作为违规处理——
+ * prompt 约束"只能引用上下文已有数据，不得编造"即可。
+ */
+function checkPrivacyViolations(report) {
+  const violations = [];
+  const jsonStr = JSON.stringify(report);
+
+  for (const term of PRIVACY_BANNED_TERMS) {
+    if (jsonStr.includes(term)) {
+      violations.push(term);
+    }
+  }
+
+  return violations;
+}
+
 // ─── AI 报告生成 ──────────────────────────────────────────────
 
 function buildSystemPrompt() {
-  return `你是一位中文科技写作编辑。请基于给定上下文，以第三方视角生成作者画像 JSON。
-要求：
-1. 严格只输出一个 JSON 对象，不要包含 markdown 代码块标记、注释或多余文本。
-2. 语气客观、克制、具体，不要夸张和空泛。
-3. 必须遵守给定 schema，字段齐全。
-4. 结论必须可由上下文支撑，避免编造。
-5. 文案使用中文，第三人称，不使用"我"。
-6. proofs 中的 posts/tweets/projects 必须引用上下文中真实存在的内容，URL 必须来自上下文。
-7. hero.summary 应该能在一句话内概括此人最核心的特质。
-8. identities 至少 3 个，每个需包含 evidence 字段证据。
-9. strengths 至少 2 组，每组至少3个 points。
-10. styles 至少 3 个行为特征。
-11. proofs.posts 至少 5 篇，proofs.tweets 至少 3 条，proofs.projects 至少 3 个。
-12. 基于所有数据进行深度分析，给出有洞察力的画像，不要只停留在表面描述。
+  return `你是一位写作自然、有点网感的中文编辑。你的任务：基于博客文章、X 动态和 GitHub 项目等公开内容，为普通访客介绍这位作者——他在关注什么、怎么做事、有什么特点。
+
+输出会展示在博客的"关于/作者画像"页面。语气像"一个了解他的人在介绍他"，要有温度、有画面，但不吹捧、不夸大。
+
+## 核心原则
+
+1. **基于内容说话**：所有判断必须来自上下文中可观察的内容；不要推测心理、动机或未来。
+2. **允许轻判断**：可以用"看得出来/明显/经常/很像那种…"这类表达来增加人味，但不要写成定性诊断（不要"他就是/他一定/他内心/他的人格"）。
+   - 允许："看得出来他很爱折腾""明显是那种喜欢把工具调顺手的人"
+   - 禁止："他就是一个极客""他一定对技术有执念"
+3. **技术与生活同等重要**：旅行、跑步、消费体验、居住与工具选择等必须进入主体叙述，不得只做"附加兴趣"。
+4. **描述而非官衔**：不要用"架构师/治理者/专家/主义者"等称号；更像博客栏目：例如"把折腾写成教程""喜欢实测对比""AI 当工具链用"。
+5. **证据绑定**：每个 identity 必须有 evidence（自然语言说明哪些文章/推文/项目支撑），evidence 中不要放 URL——URL 只放在 link 字段。没有证据就不要写。
+6. **proofs.reason 要讲人话**：一句话说清"为什么它能代表他"，不要写"展示了XX能力""体现了XX精神"。
+
+## 个人色彩（必须体现）
+
+- hero.summary 要有记忆点，像朋友聊天时介绍他会说的那句话——要有动作、有场景、能想象画面，不是形容词堆叠。
+- hero.intro 或 styles 中至少出现 2 处"活跃感/创作者气质"：例如"边做边公开进度""更新频繁""跟同好互动""图文/视频并行""经常把进度同步到 X"等。
+- identities 命名要自然、像博客栏目，不像 PPT 目录：例如"把家里网络折腾明白""AI 当工具链用""旅行也写成攻略""把小麻烦做成插件"。
+- styles 要让读者脑补出画面，可以带一点轻松幽默：例如"进度条体质：做着做着就顺手发个更新""对比党：买东西/选方案都要拉表、跑测试"。
+- 如果上下文里明确出现公开影响力数据（例如 YouTube 订阅数、X 关注数），允许提及一次，帮助读者建立直觉；**禁止新增数字、禁止夸大、禁止把不确定写成事实**。
+
+## 隐私保护（违反即为生成失败）
+
+以下信息即使出现在上下文中，也绝对不能出现在输出里：
+- 家庭成员相关：妻子、老婆、爱人、伴侣、家人、父母、孩子、女儿、儿子
+- 健康与疾病：抗癌、癌症、化疗、疾病、病情、住院、手术
+- 公司与职级：不要提及具体公司名、职级（P几/总监）、薪资
+
+## 写作要求
+
+1. hero.title 为"AI 视角下的罗磊"。
+2. hero.summary 一句话概括，带动作和场景（见上"个人色彩"）。
+3. hero.intro 展开介绍 2-3 句，至少包含 1 个非技术方向。
+4. identities 是"他在关注和投入的方向"，命名自然具体（见上"个人色彩"）。
+5. strengths 写"从内容中可以观察到的做事方式"，每组最多 1-2 个技术名词，不要堆砌。
+6. styles 写"和他的内容打交道时会注意到的特点"，用具体场景描述（见上"个人色彩"）。
+7. proofs.reason 一句话讲人话（见上原则 6）。
+
+## 文风限制
+
+- 友好、有温度、第三方口吻；不写鸡汤、不写颁奖词、不总结人生。
+- 禁止"AI 腔/大词"：范式、治理、同构、反脆弱、数字主权、对齐、底座、降维、赋能、闭环、极致、卓越、深度融合、全面。
+- 少用"X 是一位……"的定义句开头；多用"从他的内容来看/可以看到/经常出现/很多时候会…"的观察句。
+- identities 的 evidence 和 description 中不要出现任何 URL（http/https 链接），URL 只能放在 link 字段。
+
+## 格式要求
+
+- 严格只输出一个 JSON 对象，不要 markdown 代码块、不要注释、不要多余文本。
+- 必须遵守给定 schema，字段齐全。
+- proofs 中的 URL 必须来自上下文中的真实内容，禁止编造 URL。
+- 中文第三人称，不使用"我"。
+- identities 至少 3 个，每个需包含 evidence 字段。
+- strengths 至少 2 组，每组至少 3 个 points。
+- styles 至少 3 个。
+- proofs.posts 至少 5 篇，proofs.tweets 至少 3 条，proofs.projects 至少 3 个。
 
 输出 schema:
 {
   "report": {
-    "hero": {"title":"AI 视角下的罗磊","summary":"一句话概括","intro":"2-3句详细介绍"},
-    "identities":[{"name":"身份标签","description":"描述","evidence":"具体证据","link":"相关URL"}],
-    "strengths":[{"title":"类别名","points":["具体能力1","具体能力2"]}],
-    "styles":[{"trait":"特质名","description":"描述"}],
+    "hero": {"title":"AI 视角下的罗磊","summary":"一句话概括（有动作有画面）","intro":"2-3句展开介绍"},
+    "identities":[{"name":"关注方向（自然命名）","description":"他在这个方向上做了什么","evidence":"支撑依据（自然语言，不放URL）","link":"最相关的一个URL"}],
+    "strengths":[{"title":"做事方式类别","points":["方式1","方式2","方式3"]}],
+    "styles":[{"trait":"会注意到的特点","description":"具体场景描述（有画面感）"}],
     "proofs":{
-      "posts":[{"title":"文章标题","url":"文章URL","reason":"选择理由","date":"YYYY-MM-DD"}],
-      "tweets":[{"title":"推文标题","url":"推文URL","reason":"选择理由","date":"ISO日期"}],
-      "projects":[{"title":"项目名","url":"项目URL","reason":"选择理由"}]
+      "posts":[{"title":"文章标题","url":"文章URL","reason":"讲人话说为什么能代表他","date":"YYYY-MM-DD"}],
+      "tweets":[{"title":"推文摘要","url":"推文URL","reason":"讲人话说为什么能代表他","date":"ISO日期"}],
+      "projects":[{"title":"项目名","url":"项目URL","reason":"讲人话说为什么能代表他"}]
     },
     "disclaimer":"AI 生成声明"
   }
@@ -310,7 +387,16 @@ function buildUserPrompt(context) {
     sections.push(`## X (Twitter) 推文（共 ${context.tweets.length} 条，按互动量排序）\n${tweetLines}`);
   }
 
-  return `请根据以下作者的全面数据，生成深度人物画像报告。\n\n${sections.join("\n\n")}`;
+  return `请根据以下数据，为普通访客介绍这位作者——他在关注什么、做什么、有什么特点。
+
+提示：
+- 你是在帮访客了解这个人，像一个认识他的人在介绍他，要有温度和画面。
+- 基于数据中能看到的东西来写，允许"看得出来/明显/经常"这类轻判断，但不要推测内心。
+- 技术方向和生活方向同等重要，不分主次。
+- 如果数据中出现公开的影响力数字（如 YouTube 订阅数、X 关注数），可以提及一次帮读者建立直觉，但不得新增数字或夸大。
+- 隐私保护：绝对不要提及家庭成员、健康状况、具体公司名或职级。
+
+${sections.join("\n\n")}`;
 }
 
 async function generateReportWithAI(context, modelEntry) {
@@ -349,6 +435,13 @@ async function generateReportWithAI(context, modelEntry) {
     throw new Error("AI 返回缺少 report 字段");
   }
 
+  // 隐私校验
+  const violations = checkPrivacyViolations(report);
+  if (violations.length > 0) {
+    console.warn(`      ⚠️  隐私校验未通过，检测到敏感词: ${violations.join(", ")}`);
+    console.warn("      → 报告将被标记，请检查内容后决定是否保留。");
+  }
+
   return {
     meta: {
       lastUpdated: new Date().toISOString(),
@@ -376,7 +469,7 @@ function buildRuleBasedReport(context) {
   const posts = (context.posts ?? []).slice(0, 5).map((post) => ({
     title: post.title,
     url: post.url,
-    reason: post.summary || "该文章可体现作者近期关注方向。",
+    reason: post.summary || "从这篇文章可以看到作者近期关注的方向。",
     date: post.date,
   }));
 
@@ -390,7 +483,7 @@ function buildRuleBasedReport(context) {
   const projects = (context.projects ?? []).slice(0, 4).map((project) => ({
     title: project.name,
     url: project.url,
-    reason: project.description || "该项目体现了作者的工程实践方向。",
+    reason: project.description || "这个项目体现了博客中常见的工程实践方向。",
   }));
 
   const majorProjectNames = projects
@@ -399,7 +492,7 @@ function buildRuleBasedReport(context) {
     .join("、");
   const highLevelTopic = context.highlights?.[0]
     ? truncate(context.highlights[0], 56)
-    : "持续输出技术、产品与生活方式内容";
+    : "技术实践、工具折腾与生活方式";
 
   return {
     meta: {
@@ -414,68 +507,68 @@ function buildRuleBasedReport(context) {
       hero: {
         title: "AI 视角下的罗磊",
         summary:
-          "如果把他放在技术内容创作者光谱中，罗磊更接近把工程能力、产品审美和生活方式长期结合的全栈实践者。",
-        intro: `从近期内容看，他的核心重心是：${highLevelTopic}。`,
+          "一边写代码做开源，一边把网络、工具、旅行和生活方式都写进博客里。",
+        intro: `从他近期的内容来看，最集中的方向是：${highLevelTopic}。`,
       },
       identities: [
         {
-          name: "全栈开发者",
-          description: "长期围绕 Web、工具链和云边部署做完整链路实践。",
+          name: "前端工程实践",
+          description: "博客中有不少从项目搭建到部署上线的完整记录，涉及前后端、CI/CD 和性能优化。",
           evidence: majorProjectNames
-            ? `代表项目包括 ${majorProjectNames}。`
-            : "持续发布编程与工具类文章和项目。",
+            ? `从 GitHub 来看，${majorProjectNames} 是比较有代表性的项目。`
+            : "博客中持续出现编程与工具类文章。",
           link: "https://github.com/foru17",
         },
         {
-          name: "内容创作者",
-          description: "在博客与社交平台稳定输出高频、可执行的经验内容。",
+          name: "工具与效率",
+          description: "经常可以看到关于工具选择、工作流优化和自动化脚本的讨论。",
           evidence: posts[0]
-            ? `近期文章《${posts[0].title}》体现了强执行与复盘风格。`
-            : "博客长期保持内容更新。",
+            ? `比如最近的文章《${posts[0].title}》就涉及了相关主题。`
+            : "博客长期保持对效率工具的讨论。",
           link: "https://luolei.org",
         },
         {
-          name: "数字生活方式实践者",
-          description: "强调效率工具、审美细节和可持续工作流的结合。",
+          name: "旅行与生活方式",
+          description: "博客和社交动态中有不少关于旅行、城市体验和日常生活方式的内容。",
           evidence: context.tweets?.length
-            ? "从 X 动态可见其对工具、工作方式与生活质量的持续讨论。"
-            : "在历史内容中反复呈现技术与生活融合主题。",
+            ? "从 X 动态可以看到对旅行、居住和日常工具的持续讨论。"
+            : "历史内容中有旅行和生活方式相关的文章。",
         },
       ],
       strengths: [
         {
-          title: "技术与工程",
+          title: "从内容中可以观察到的工程方式",
           points: [
-            "偏向端到端交付，覆盖前端、后端与部署链路。",
-            "重视工程可维护性，倾向脚本化与可复用方案。",
-            "对 AI 工具落地有持续实践。",
+            "文章中常见从想法到可用产品的完整记录。",
+            "重复性工作倾向于脚本化和自动化。",
+            "会把 AI 工具整合进实际工作流，而不是单独讨论。",
           ],
         },
         {
-          title: "产品与审美",
+          title: "写作与内容输出方式",
           points: [
-            "关注工具体验与视觉细节，不止于「功能可用」。",
-            "内容表达注重结构化、可复现与读者理解成本。",
+            "习惯把折腾过程写成可复现的教程。",
+            "关注阅读体验和视觉细节，文章排版讲究。",
           ],
         },
       ],
       styles: [
         {
-          trait: "行动导向",
-          description: "习惯快速验证想法，先做可用版本，再逐步迭代。",
+          trait: "实测驱动",
+          description: "文章中经常出现先做实验、再写结论的模式，很少纯理论讨论。",
         },
         {
-          trait: "真诚公开",
-          description: "愿意公开讨论决策、困惑与经验，形成可信内容风格。",
+          trait: "过程公开",
+          description: "愿意在博客和社交媒体上分享决策过程和踩过的坑。",
         },
         {
-          trait: "长期主义",
-          description: "在技术输出与个人生活方式建设上保持长期投入。",
+          trait: "长期迭代",
+          description: "从内容时间线来看，不少主题会反复出现和更新，不是一次性的热度文章。",
         },
       ],
       proofs: { posts, tweets, projects },
       disclaimer:
-        "该页面由规则模板生成，旨在帮助访客快速建立认知，可能存在概括偏差，请以原始文章、动态与项目信息为准。",
+        "该页面由 AI 基于博客文章、社交动态和 GitHub 项目生成，旨在帮助访客快速了解作者。内容可能存在概括偏差，请以原始文章和项目为准。",
     },
   };
 }
@@ -493,6 +586,7 @@ async function updateManifest(modelEntry, reportMeta) {
     id: modelEntry.id,
     name: modelEntry.name,
     provider: modelEntry.provider,
+    providerSite: modelEntry.providerSite || "",
     icon: modelEntry.icon,
     generatedAt: reportMeta.lastUpdated,
     generatedBy: reportMeta.generatedBy,
@@ -502,6 +596,22 @@ async function updateManifest(modelEntry, reportMeta) {
     manifest.models[existing] = entry;
   } else {
     manifest.models.push(entry);
+  }
+
+  // 按 .profile-models.json 中的顺序重排 manifest.models
+  try {
+    const configRaw = await fs.readFile(MODELS_CONFIG_FILE, "utf-8");
+    const config = JSON.parse(configRaw);
+    if (Array.isArray(config?.models)) {
+      const orderMap = new Map(config.models.map((m, i) => [m.id, i]));
+      manifest.models.sort((a, b) => {
+        const ia = orderMap.get(a.id) ?? Number.MAX_SAFE_INTEGER;
+        const ib = orderMap.get(b.id) ?? Number.MAX_SAFE_INTEGER;
+        return ia - ib;
+      });
+    }
+  } catch {
+    // 读取配置失败时保持原序
   }
 
   if (!manifest.defaultModel) {

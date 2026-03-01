@@ -1,0 +1,179 @@
+{
+  "meta": {
+    "lastUpdated": "2026-03-01T18:42:20.539Z",
+    "model": "gpt-5.2",
+    "modelName": "GPT-5.2",
+    "provider": "OpenAI",
+    "generatedBy": "ai",
+    "sources": [
+      "posts",
+      "tweets",
+      "github"
+    ]
+  },
+  "report": {
+    "hero": {
+      "title": "AI 视角下的罗磊",
+      "summary": "他很像那种一边把家里网络和工具链折腾到“毕业水平”，一边顺手把踩坑、实测和迭代进度同步到博客和 X 的人。",
+      "intro": "从他的内容里能看到两条线并行：一条是全栈开发与开源项目的快速迭代，另一条是把生活里的体验（跑马、旅行、消费与居住）写成可复用的攻略。更新节奏也挺“进度条体质”——项目刚有雏形就会先发动态，后面再补一篇长文复盘。除了代码，他也会认真记录一副眼镜、一台小主机、一次马拉松的组织细节，读起来像在跟一个爱做功课的人同行。"
+    },
+    "identities": [
+      {
+        "name": "把家庭网络折腾明白（还要做成面板）",
+        "description": "他会把“家里网络怎么跑得更稳、更快、更可控”当成一个长期工程：从 IPTV 组播转单播的极限并发测试，到公网访问、DNS 分流、跨网质量，再到自己做流量可视化面板，把家里网关的复杂策略画成一张能看懂的拓扑图。",
+        "evidence": "博客里有 OpenWrt 上 IPTV 组播转单播的极限测试、家庭弱电与网络布线方案、以及围绕家庭网络监控与优化的多篇文章；X 上多次讨论 NAS 公网访问、运营商跨网限速、DNS 分流与 Homelab 网络“毕业水平”等实践记录；GitHub 上有 Neko Master、Clash Master 这类面向家庭网关/Clash 场景的流量分析项目。",
+        "link": "https://luolei.org/chinanet-iptv"
+      },
+      {
+        "name": "AI 当工具链用：Vibe Coding 从 MVP 到可长期跑",
+        "description": "他不太把 AI 当“灵感”，更像当“生产力外骨骼”：用它快速起 MVP、再拉着不同模型做交叉 Review、最后落到性能、架构、数据结构这些硬骨头上。项目做着做着就开源，顺便把方法论写成复盘。",
+        "evidence": "博客有 Neko Master 的 Vibe Coding 实战长文，以及关于“AI 自由/数字通行证”的工具化文章；X 上频繁同步 Clash Master、Neko Master 的版本更新、性能优化、模型对比与限额吐槽；GitHub 上对应项目持续迭代，并出现从日志处理到 ClickHouse 存储的工程化演进。",
+        "link": "https://luolei.org/neko-master-vibe-coding"
+      },
+      {
+        "name": "效率与数字基建控：账号、订阅、工作流都要顺手",
+        "description": "他会把“能不能顺畅用上全球服务”当成基础设施问题来解决：从数字身份、网络通行证，到浏览器插件、Raycast 插件、短链与书签系统，目标是让信息流和工作流少绕弯。",
+        "evidence": "博客里有“数字通行证”、Chrome 插件清单、Setapp 长期订阅经验、以及个人网络安全策略等内容；X 上经常分享快捷键管理、浏览器新特性、以及各种服务接入/订阅的实测坑点；GitHub 上有 raycast-sink、raycast-hoarder 等围绕工作流的插件项目，以及博客代码仓库内置 AI 摘要与搜索。",
+        "link": "https://luolei.org/ai-2026"
+      },
+      {
+        "name": "旅行与运动也写成攻略：跑马、徒步、城市体验都带细节",
+        "description": "他写旅行不太走“抒情路线”，更像把路线、交通、住宿、补给、以及现场体验拆开讲清楚；跑马也是同样的风格：赛前领物、赛道补给、配速策略、以及“哪里容易翻车”都会写出来。",
+        "evidence": "博客里有京都马拉松、长沙马拉松、香港麦理浩径徒步、东京与镰仓行程等长文记录，细节覆盖交通、住宿、路线与体验对比；个人信息里也明确有多次全马完赛与长距离骑行经历。",
+        "link": "https://luolei.org/kyoto-marathon-2025"
+      }
+    ],
+    "strengths": [
+      {
+        "title": "先实测再下结论（对比党）",
+        "points": [
+          "写宽带/套餐、IPTV、设备评测时，习惯用实测数据和边界条件说话，而不是只给结论",
+          "会把不同方案的优缺点摊开讲：比如组播转单播方案对 CPU 占用、并发、带宽影响的差异",
+          "对消费决策也偏“工程化”：装机、显示器、随身 Wi‑Fi、眼镜验光等内容都带对比与取舍"
+        ]
+      },
+      {
+        "title": "边做边公开进度（创作者式开发）",
+        "points": [
+          "项目刚起步就会在 X 同步进展、截图、版本号和下一步计划，让人能跟着进度一起看",
+          "遇到性能瓶颈会继续追更：从 I/O、数据结构到存储方案升级，复盘写得很具体",
+          "能把工具做成可交付形态：例如 Raycast 插件上架、Docker 镜像发布、博客框架迁移并开源"
+        ]
+      },
+      {
+        "title": "全栈视角下的“可用性优先”",
+        "points": [
+          "内容覆盖前端、后端、数据库到部署（如 Cloudflare Workers、Docker、Nginx），但落点常是“用户体验/维护成本”",
+          "会把“免维护”和“可控”放在很前面：比如短链迁移到 Cloudflare、书签系统自部署、家庭监控断网隔离",
+          "写教程时偏实操：材料准备、配置步骤、常见坑与替代方案都给到"
+        ]
+      }
+    ],
+    "styles": [
+      {
+        "trait": "进度条体质：做着做着就发更新",
+        "description": "你会经常看到他在 X 里用“昨晚随手 Vibe 了个项目”“v1.0.7 发布”这种口吻同步进度，配上前后对比图；过几天博客再来一篇长文，把从 MVP 到稳定版本的坑一口气讲完。"
+      },
+      {
+        "trait": "把生活当成可复用的“说明书”",
+        "description": "跑马不是一句“完赛了”，而是从领物展会、交通路线到赛道补给；旅行不是“打卡”，而是酒店对比、超市物价、城市漫步路线——读者照着做就能复刻。"
+      },
+      {
+        "trait": "轻松吐槽但不糊弄细节",
+        "description": "他很爱用“花费巨资”“🤡”这种自嘲来讲消费和踩坑，但真到关键处会把参数、限制条件、以及为什么这么选说清楚，比如装机的 BIOS/PBO 调整、网络限速规律、以及服务订阅的隐藏规则。"
+      },
+      {
+        "trait": "安全感来自“可控”：能白名单就不裸奔",
+        "description": "在公网服务、NAS 访问、账号体系这些话题上，他会反复强调白名单、分流、隔离、备份这类做法；不是吓唬人，而是把“域名一解析就会被扫”这种现实直接摆出来。"
+      }
+    ],
+    "proofs": {
+      "posts": [
+        {
+          "title": "Neko Master: 从 0 到 1K+ Star 的 Vibe Coding 实践",
+          "url": "https://luolei.org/neko-master-vibe-coding",
+          "reason": "把“AI 辅助开发”讲到工程细节：从界面生成到 I/O 瓶颈、ClickHouse 升级，能看出他不是玩玩而已。",
+          "date": "2026-03-01"
+        },
+        {
+          "title": "实现 AI 自由：我为未来准备的 4 个数字通行证",
+          "url": "https://luolei.org/ai-2026",
+          "reason": "他把“能不能顺畅用上全球 AI 服务”当成数字基建问题来拆解，写得像一份通关攻略。",
+          "date": "2026-02-04"
+        },
+        {
+          "title": "广东电信 IPTV 组播转单播极限测试",
+          "url": "https://luolei.org/chinanet-iptv",
+          "reason": "典型的实测派：带宽上限、并发路数、CPU/GPU 瓶颈都写出来，读者能直接拿去复现。",
+          "date": "2024-12-27"
+        },
+        {
+          "title": "我开发了一个短链管理插件: Raycast Sink",
+          "url": "https://luolei.org/raycast-sink",
+          "reason": "把自己的工作流需求做成插件并上架，顺带讲清楚缓存、响应速度这些“用起来爽不爽”的关键点。",
+          "date": "2024-11-14"
+        },
+        {
+          "title": "京都马拉松: 第一次去日本跑马",
+          "url": "https://luolei.org/kyoto-marathon-2025",
+          "reason": "跑马写得像旅行+赛事说明书：交通、领物、赛道补给、身体状态与心态调整都很具体。",
+          "date": "2025-02-28"
+        },
+        {
+          "title": "装修笔记: 从 0 到 1 打造家庭弱电方案（上篇）",
+          "url": "https://luolei.org/home-network-1",
+          "reason": "能看出他对“住得舒服”这件事同样认真：布线、机柜、验收工具一条条列清楚。",
+          "date": "2022-10-07"
+        }
+      ],
+      "tweets": [
+        {
+          "title": "Clash Master 不到 24 小时收获 400+ Star、Docker Hub 1000+ 次拉取的进度同步",
+          "url": "https://x.com/luoleiorg/status/2019758733983912111",
+          "reason": "很能代表他“边做边公开”的节奏：项目刚成型就把数据和前后对比图发出来。",
+          "date": "2026-02-06"
+        },
+        {
+          "title": "强烈推荐阅读 Lovable Prompting 1.1 手册，作为 Vibe Coding 方法论",
+          "url": "https://x.com/luoleiorg/status/1972928152507978196",
+          "reason": "他会把好用的方法论直接抛给同好，属于“自己用顺了就分享”的那类更新。",
+          "date": "2025-09-30"
+        },
+        {
+          "title": "Homelab 网络折腾到毕业水平：低延迟、高带宽、隐私，并用 Neko Master 跑拓扑",
+          "url": "https://x.com/luoleiorg/status/2025174856799850927",
+          "reason": "一句话把他的长期兴趣点说透：家庭网络不是配置完就算，而是持续优化到可控、可视化。",
+          "date": "2026-02-21"
+        }
+      ],
+      "projects": [
+        {
+          "title": "Neko Master",
+          "url": "https://github.com/foru17/neko-master",
+          "reason": "把家庭网关流量分析做成可长期运行的面板项目，是他“家里网络工程化”的集中体现。"
+        },
+        {
+          "title": "Clash Master",
+          "url": "https://github.com/foru17/clash-master",
+          "reason": "围绕 Clash/OpenClash 场景做可视化与统计，更新节奏快，也很符合他爱实测、爱迭代的风格。"
+        },
+        {
+          "title": "raycast-sink",
+          "url": "https://github.com/foru17/raycast-sink",
+          "reason": "把短链管理这种小麻烦做成顺手的 Raycast 插件，典型“工具链思维”。"
+        },
+        {
+          "title": "raycast-hoarder",
+          "url": "https://github.com/foru17/raycast-hoarder",
+          "reason": "把自部署书签系统接进 Raycast，强调检索与预览体验，能看出他对效率工具的执着是“用起来要爽”。"
+        },
+        {
+          "title": "luoleiorg-x",
+          "url": "https://github.com/foru17/luoleiorg-x",
+          "reason": "博客本身也是工程：用 Cloudflare Workers 等组件做 AI 摘要与搜索，内容与技术栈一起迭代。"
+        }
+      ]
+    },
+    "disclaimer": "本页面内容由 AI 根据你提供的公开资料整理生成，尽量做到“有据可查、不过度解读”。为保护隐私，已主动过滤不应出现在作者画像中的敏感信息；若有错漏或希望补充更准确的来源条目，可再提供更新数据。"
+  }
+}

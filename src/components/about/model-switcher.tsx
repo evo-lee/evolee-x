@@ -10,6 +10,11 @@ interface ModelSwitcherProps {
 }
 
 const MODEL_COLORS: Record<string, { bg: string; border: string; text: string }> = {
+  openai: {
+    bg: "bg-zinc-100 dark:bg-zinc-800/40",
+    border: "border-zinc-300 dark:border-zinc-700",
+    text: "text-zinc-800 dark:text-zinc-200",
+  },
   gemini: {
     bg: "bg-blue-50 dark:bg-blue-950/30",
     border: "border-blue-200 dark:border-blue-800",
@@ -25,6 +30,16 @@ const MODEL_COLORS: Record<string, { bg: string; border: string; text: string }>
     border: "border-emerald-200 dark:border-emerald-800",
     text: "text-emerald-700 dark:text-emerald-300",
   },
+  doubao: {
+    bg: "bg-sky-50 dark:bg-sky-950/30",
+    border: "border-sky-200 dark:border-sky-800",
+    text: "text-sky-700 dark:text-sky-300",
+  },
+  zhipu: {
+    bg: "bg-amber-50 dark:bg-amber-950/30",
+    border: "border-amber-200 dark:border-amber-800",
+    text: "text-amber-700 dark:text-amber-300",
+  },
 };
 
 function getModelColors(icon: string) {
@@ -35,16 +50,27 @@ function getModelColors(icon: string) {
   };
 }
 
+function getFaviconUrl(providerSite: string): string | null {
+  if (!providerSite) return null;
+  try {
+    const domain = new URL(providerSite).hostname;
+    return `https://img.is26.com/static.is26.com/favicon/${domain}`;
+  } catch {
+    return null;
+  }
+}
+
 export function ModelSwitcher({
   models,
   activeModelId,
   onModelChange,
 }: ModelSwitcherProps) {
   return (
-    <div className="flex items-center gap-1.5 overflow-x-auto rounded-xl border border-zinc-200/80 bg-zinc-50/80 p-1 dark:border-zinc-800/80 dark:bg-zinc-900/40">
+    <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-zinc-200/80 bg-zinc-50/80 p-1 dark:border-zinc-800/80 dark:bg-zinc-900/40">
       {models.map((model) => {
         const isActive = model.id === activeModelId;
         const colors = getModelColors(model.icon);
+        const faviconUrl = getFaviconUrl(model.providerSite);
 
         return (
           <button
@@ -58,7 +84,7 @@ export function ModelSwitcher({
             }`}
             aria-pressed={isActive}
           >
-            <ModelIcon icon={model.icon} className="h-4 w-4" />
+            <ProviderFavicon url={faviconUrl} name={model.name} />
             <span>{model.name}</span>
             {model.generatedBy === "ai" && (
               <span className="ml-0.5 text-[10px] opacity-60">AI</span>
@@ -70,36 +96,35 @@ export function ModelSwitcher({
   );
 }
 
-// ─── Model Icons (inline SVGs for each provider) ─────────────
+// ─── Provider Favicon (uses the same API as article external links) ───
 
-function ModelIcon({ icon, className }: { icon: string; className?: string }) {
-  switch (icon) {
-    case "gemini":
-      return (
-        <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c3.95.49 7 3.85 7 7.93s-3.05 7.44-7 7.93V4.07z" />
-        </svg>
-      );
-    case "qwen":
-      return (
-        <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="1.5" fill="none" />
-        </svg>
-      );
-    case "kimi":
-      return (
-        <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" fill="none" />
-          <path d="M8 12l3 3 5-6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      );
-    default:
-      return (
-        <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" fill="none" />
-        </svg>
-      );
+function ProviderFavicon({ url, name }: { url: string | null; name: string }) {
+  if (!url) {
+    return <FallbackIcon />;
   }
+
+  return (
+    <img
+      src={url}
+      alt={name}
+      width={16}
+      height={16}
+      loading="lazy"
+      className="h-4 w-4 shrink-0 rounded-sm object-contain"
+      onError={(e) => {
+        // Hide broken image, show nothing rather than a broken icon
+        (e.target as HTMLImageElement).style.display = "none";
+      }}
+    />
+  );
+}
+
+function FallbackIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <circle cx="12" cy="12" r="10" />
+    </svg>
+  );
 }
 
 // ─── About Client Wrapper ────────────────────────────────────

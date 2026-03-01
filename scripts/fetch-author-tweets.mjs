@@ -3,8 +3,9 @@
  *
  * 用法:
  *   source .env && node scripts/fetch-author-tweets.mjs
- *   source .env && node scripts/fetch-author-tweets.mjs --username=luoleiorg --max=80
+ *   source .env && node scripts/fetch-author-tweets.mjs --username=luoleiorg --max=300
  *   source .env && node scripts/fetch-author-tweets.mjs --include-replies
+ *   source .env && node scripts/fetch-author-tweets.mjs --force  (忽略缓存，全量拉取)
  */
 
 import fs from "fs/promises";
@@ -14,13 +15,15 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.join(__dirname, "..");
 const OUTPUT_PATH = path.join(ROOT_DIR, "data", "author-tweets-cache.json");
+const TWEET_CACHE_MAX_AGE_DAYS = 7;
 
 function parseArgs() {
   const args = process.argv.slice(2);
   const flags = {
     username: "luoleiorg",
-    max: 60,
+    max: 300,
     includeReplies: false,
+    force: false,
   };
 
   for (const arg of args) {
@@ -29,10 +32,12 @@ function parseArgs() {
     } else if (arg.startsWith("--max=")) {
       const value = Number.parseInt(arg.slice("--max=".length), 10);
       if (Number.isFinite(value) && value > 0) {
-        flags.max = Math.min(200, value);
+        flags.max = Math.min(500, value);
       }
     } else if (arg === "--include-replies") {
       flags.includeReplies = true;
+    } else if (arg === "--force") {
+      flags.force = true;
     }
   }
 
@@ -132,7 +137,8 @@ async function fetchAuthorTweets(userId, token, options) {
 
   while (allTweets.length < options.max) {
     const remaining = options.max - allTweets.length;
-    const pageSize = Math.min(100, remaining);
+    // Twitter API v2 要求 max_results 在 5-100 之间
+    const pageSize = Math.min(100, Math.max(5, remaining));
 
     const timelineUrl = new URL(
       `https://api.x.com/2/users/${encodeURIComponent(userId)}/tweets`,
@@ -155,6 +161,9 @@ async function fetchAuthorTweets(userId, token, options) {
     } else {
       timelineUrl.searchParams.set("exclude", "retweets");
     }
+    if (options.sinceId) {
+      timelineUrl.searchParams.set("since_id", options.sinceId);
+    }
     if (nextToken) {
       timelineUrl.searchParams.set("pagination_token", nextToken);
     }
@@ -176,6 +185,22 @@ async function fetchAuthorTweets(userId, token, options) {
   };
 }
 
+async function readJsonSafe(filePath) {
+  try {
+    const raw = await fs.readFile(filePath, "utf-8");
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+function isCacheFresh(cacheData) {
+  const updatedAt = cacheData?.meta?.lastUpdated;
+  if (!updatedAt) return false;
+  const age = Date.now() - new Date(updatedAt).getTime();
+  return age < TWEET_CACHE_MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
+}
+
 async function main() {
   await loadEnv();
   const args = parseArgs();
@@ -185,34 +210,84 @@ async function main() {
     process.exit(1);
   }
 
+  // 检查已有缓存，判断是否可以增量拉取
+  const existingCache = await readJsonSafe(OUTPUT_PATH);
+  const canIncremental =
+    !args.force &&
+    existingCache?.tweets?.length > 0 &&
+    isCacheFresh(existingCache);
+
   console.log(`🔍 获取用户信息 @${args.username} ...`);
   const user = await getUserByUsername(args.username, token);
   console.log(`✅ 用户: ${user.name} (@${user.username})`);
 
-  console.log(
-    `📡 拉取时间线推文（max=${args.max}，includeReplies=${args.includeReplies}）...`,
-  );
-  const { tweets, requestCount } = await fetchAuthorTweets(user.id, token, {
-    max: args.max,
-    includeReplies: args.includeReplies,
-  });
+  let finalTweets;
+  let totalRequests;
+
+  if (canIncremental) {
+    // 增量模式：只拉取缓存中最新推文之后的新推文
+    const newestId = existingCache.tweets[0]?.id;
+    console.log(
+      `📡 增量拉取（缓存 ${existingCache.tweets.length} 条，since_id=${newestId}）...`,
+    );
+    const { tweets: newTweets, requestCount } = await fetchAuthorTweets(
+      user.id,
+      token,
+      {
+        max: args.max,
+        includeReplies: args.includeReplies,
+        sinceId: newestId,
+      },
+    );
+    totalRequests = requestCount;
+
+    // 合并: 新推文在前 + 旧推文在后，按 ID 去重后截断
+    const idSet = new Set();
+    const merged = [];
+    for (const tweet of [...newTweets, ...existingCache.tweets]) {
+      if (!idSet.has(tweet.id)) {
+        idSet.add(tweet.id);
+        merged.push(tweet);
+      }
+    }
+    finalTweets = merged.slice(0, args.max);
+    console.log(
+      `   └─ 新增 ${newTweets.length} 条，合并后 ${finalTweets.length} 条`,
+    );
+  } else {
+    // 全量拉取
+    const reason = args.force
+      ? "--force"
+      : !existingCache?.tweets?.length
+        ? "无缓存"
+        : "缓存过期";
+    console.log(
+      `📡 全量拉取时间线推文（max=${args.max}，原因: ${reason}）...`,
+    );
+    const { tweets, requestCount } = await fetchAuthorTweets(user.id, token, {
+      max: args.max,
+      includeReplies: args.includeReplies,
+    });
+    finalTweets = tweets;
+    totalRequests = requestCount;
+  }
 
   const cache = {
     meta: {
       lastUpdated: new Date().toISOString(),
       username: user.username,
-      fetchedCount: tweets.length,
-      requestCount,
+      fetchedCount: finalTweets.length,
+      requestCount: totalRequests,
       includeReplies: args.includeReplies,
     },
     user,
-    tweets,
+    tweets: finalTweets,
   };
 
   await fs.mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
   await fs.writeFile(OUTPUT_PATH, JSON.stringify(cache, null, 2), "utf-8");
   console.log(`✅ 已写入: ${OUTPUT_PATH}`);
-  console.log(`📊 推文数量: ${tweets.length}`);
+  console.log(`📊 推文数量: ${finalTweets.length}（API 请求: ${totalRequests}）`);
 }
 
 main().catch((error) => {

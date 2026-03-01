@@ -15,7 +15,7 @@
         "like_count": 96,
         "quote_count": 0,
         "bookmark_count": 123,
-        "impression_count": 47442
+        "impression_count": 48071
       },
       "media": []
     },
@@ -34,7 +34,7 @@
         "like_count": 392,
         "quote_count": 1,
         "bookmark_count": 207,
-        "impression_count": 114837
+        "impression_count": 114840
       },
       "media": [
         {
@@ -70,7 +70,7 @@
         "like_count": 138,
         "quote_count": 6,
         "bookmark_count": 89,
-        "impression_count": 44118
+        "impression_count": 44122
       },
       "media": [
         {
@@ -118,7 +118,7 @@
         "like_count": 1568,
         "quote_count": 101,
         "bookmark_count": 690,
-        "impression_count": 1396545
+        "impression_count": 1396549
       },
       "media": [
         {
@@ -165,8 +165,8 @@
         "reply_count": 98,
         "like_count": 2322,
         "quote_count": 20,
-        "bookmark_count": 2436,
-        "impression_count": 501460
+        "bookmark_count": 2437,
+        "impression_count": 501468
       },
       "media": [
         {
@@ -190,7 +190,7 @@
         "like_count": 150,
         "quote_count": 2,
         "bookmark_count": 117,
-        "impression_count": 40860
+        "impression_count": 40870
       },
       "media": [
         {
@@ -209,12 +209,12 @@
         "profile_image_url": "https://pbs.twimg.com/profile_images/1550157622300786688/672YmCpB_normal.jpg"
       },
       "public_metrics": {
-        "retweet_count": 36,
+        "retweet_count": 37,
         "reply_count": 40,
         "like_count": 442,
         "quote_count": 2,
         "bookmark_count": 334,
-        "impression_count": 67986
+        "impression_count": 68014
       },
       "media": [
         {
@@ -245,8 +245,8 @@
         "reply_count": 29,
         "like_count": 733,
         "quote_count": 2,
-        "bookmark_count": 806,
-        "impression_count": 78566
+        "bookmark_count": 807,
+        "impression_count": 78642
       },
       "media": [
         {
@@ -395,5 +395,5 @@
       ]
     }
   },
-  "lastUpdated": "2026-03-01T06:05:41.019Z"
+  "lastUpdated": "2026-03-01T17:47:29.420Z"
 }

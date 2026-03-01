@@ -10,7 +10,7 @@ export function AboutStrengths({ strengths }: AboutStrengthsProps) {
   return (
     <div className="rounded-2xl border border-zinc-200/80 bg-white/70 p-5 dark:border-zinc-800/80 dark:bg-zinc-900/60">
       <h2 className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-        技术与审美特长
+        做事方法
       </h2>
       <div className="mt-4 space-y-4">
         {strengths.map((group) => (

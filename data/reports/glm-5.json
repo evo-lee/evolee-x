@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-03-01T16:30:07.803Z",
+    "lastUpdated": "2026-03-01T18:46:07.827Z",
     "model": "glm-5",
     "modelName": "GLM 5.0 ",
     "provider": "Zhipu",
@@ -14,77 +14,59 @@
   "report": {
     "hero": {
       "title": "AI 视角下的罗磊",
-      "summary": "一位将工程思维延伸至生活每个角落的全栈独立开发者，以 Vibe Coding 实践著称，擅长将复杂技术降维为可复用的开源工具。",
-      "intro": "前阅文集团资深前端开发者，现全栈独立开发者。非科班出身，自学成才。深耕前端架构、性能优化与 AI 辅助开发领域，同时是 Unsplash 摄影师（1500万+浏览）、马拉松跑者（8场全马）与持续12年的技术博客作者。"
+      "summary": "在深圳家里折腾软路由和AI，抽空跑个马拉松，顺手把踩过的坑写成开源项目。",
+      "intro": "从他的内容来看，是一位把折腾变成内容、把问题做成工具的开发者。博客和GitHub上既有网络流量分析面板，也有马拉松攻略；既分享AI辅助开发的实战，也记录香港银行卡怎么开。"
     },
     "identities": [
       {
-        "name": "AI 原生开发者",
-        "description": "深度实践 Vibe Coding 开发范式，将 AI 工具深度融入开发全流程，从原型到生产级项目的效率极高。",
-        "evidence": "Neko Master 项目从 0 到 1K+ Star，全程 AI 辅助开发；博客详细记录 Vibe Coding 方法论；同时使用 Claude Code、Codex、Kimi K2.5 等多模型交叉协作。",
+        "name": "把家里网络折腾明白",
+        "description": "从宽带套餐选型到IPTV转单播，再到开源流量分析面板，把家庭网络基建玩出了专业级深度。",
+        "evidence": "发表了《广东电信 IPTV 组播转单播极限测试》《2024年:我用的手机和宽带套餐》等文章，开源了Neko Master网络流量分析面板，在X上分享家庭网络拓扑方案。",
+        "link": "https://luolei.org/chinanet-iptv"
+      },
+      {
+        "name": "AI 当工具链用",
+        "description": "不是谈论AI概念，而是用AI加速开发、优化工作流，把AI当成日常生产力的一部分。",
+        "evidence": "写了《如何用 ChatGPT 助力开发》经验分享（有15万人看过），用AI辅助在短时间内开发出Raycast插件并上架，文章《Neko Master: 从 0 到 1K+ Star 的 Vibe Coding 实践》详细记录了AI驱动开发的全过程。",
         "link": "https://luolei.org/neko-master-vibe-coding"
       },
       {
-        "name": "开源项目构建者",
-        "description": "持续输出高质量开源项目，覆盖网络分析、效率工具、内容管理等多个垂直领域，注重工程规范与用户体验。",
-        "evidence": "GitHub 主持 Neko Master、raycast-sink、raycast-hoarder、Clash Master 等多个项目，其中 Neko Master 获 1K+ Star，Clash Master 24小时内获 400+ Star。",
-        "link": "https://github.com/foru17/neko-master"
-      },
-      {
-        "name": "数字基建实践者",
-        "description": "在个人网络基础设施、跨境通信、隐私安全等领域有深度实践，构建自主可控的数字生活体系。",
-        "evidence": "撰写《脱钩: 我的个人网络安全策略》《香港银行开户攻略》《我的云账单》系列，分享家庭万兆网络、IPTV 组播测试、智能家居监控等硬核方案。",
-        "link": "https://luolei.org/personal-decoupling-cybersecurity"
-      },
-      {
-        "name": "生活方式创作者",
-        "description": "将程序员思维延伸至旅行、摄影、运动等生活领域，产出兼具实用性与审美价值的内容。",
-        "evidence": "Unsplash 摄影作品 1500万+ 浏览量；完成 8 场全程马拉松及川藏线骑行；博客持续 12 年产出 120 篇深度文章，涵盖马拉松游记、装备评测、家庭装修等。",
+        "name": "旅行也写成攻略",
+        "description": "跑步赛事、海外旅行都留下详细记录，从路线规划到避坑指南，像是为下次要去的人准备的备忘录。",
+        "evidence": "京都马拉松、香港麦理浩径徒步、日本东京旅行都写成带实用细节的长文，还基于旅行好奇做了个3D航班轨迹科普网站。",
         "link": "https://luolei.org/kyoto-marathon-2025"
       }
     ],
     "strengths": [
       {
-        "title": "技术落地能力",
+        "title": "实测党：先上手再分享",
         "points": [
-          "从架构设计到部署运维的全链路独立完成能力，具备企业级 Node.js 框架设计经验",
-          "性能优化实战经验丰富，曾推动 Hybrid App 性能提升 30%，博客实现 10ms 级 TTFB",
-          "AI 辅助开发效率极高，能在 24 小时内完成从创意到可部署产品的 MVP 迭代"
+          "选宽带、配眼镜、开境外卡都会实际跑一遍流程再写攻略",
+          "开发插件和工具时，会记录从遇到问题到解决的全过程",
+          "网络优化方案会贴出真实测试数据，不满足于理论"
         ]
       },
       {
-        "title": "知识体系化输出",
+        "title": "边做边写：折腾即内容",
         "points": [
-          "技术文章结构清晰、细节详实，善于将复杂问题拆解为可执行的步骤指南",
-          "跨领域知识整合能力强，能将技术、产品、生活美学融合为统一叙事",
-          "内容具有长期价值，多篇攻略类文章持续多年更新迭代"
-        ]
-      },
-      {
-        "title": "问题解决导向",
-        "points": [
-          "善于发现真实痛点并快速构建解决方案，如开发 Raycast 插件解决书签管理效率问题",
-          "不追求技术炫技，更关注方案的实用性、可维护性与成本效益",
-          "注重用户体验细节，开源项目支持多语言、PWA、移动端适配等"
+          "遇到痛点（短链管理、书签管理）就顺手做个开源插件",
+          "装修、装机这类日常事，也写成带技术细节的记录",
+          "项目开发过程同步更新到博客和GitHub，更新频繁"
         ]
       }
     ],
     "styles": [
       {
-        "trait": "工程化生活",
-        "description": "将工程师思维应用于生活各领域，如用 Notion 管理云账单、用 Docker 构建家庭监控、用脚本优化旅行攻略，追求可量化、可复用、可优化的生活系统。"
+        "trait": "进度条体质：做着做着就顺手发个更新",
+        "description": "开源项目（如Neko Master）的版本迭代和博客更新节奏都很紧密，像是边开发边把进度同步出来。"
       },
       {
-        "trait": "深度测评者",
-        "description": "购买决策前进行详尽调研，购买后进行深度实测并公开分享。文章涵盖参数对比、场景测试、成本分析，帮助读者做出理性决策。"
+        "trait": "对比党：买东西/选方案都要拉表、跑测试",
+        "description": "选宽带套餐对比三家运营商，配眼镜对比医院验光和眼镜店，装机选配件也罗列利弊，追求有数据支撑的选择。"
       },
       {
-        "trait": "开源分享者",
-        "description": "坚持将个人项目开源，从博客主题到网络工具全部公开代码。在 X 平台高频分享开发过程与迭代思路，形成「构建-分享-迭代」的正向循环。"
-      },
-      {
-        "trait": "跨界实践者",
-        "description": "技术背景但内容不限技术，涵盖马拉松、摄影、旅行、装修、投资等。每项爱好都追求深度实践，如骑行川藏线、考取潜水证、完成多场全马。"
+        "trait": "实用主义：不聊概念，只写怎么做到的",
+        "description": "文章标题多是“如何实现”“经验分享”，内容导向是读者照着步骤能复现，很少讲抽象道理。"
       }
     ],
     "proofs": {
@@ -92,94 +74,72 @@
         {
           "title": "Neko Master: 从 0 到 1K+ Star 的 Vibe Coding 实践",
           "url": "https://luolei.org/neko-master-vibe-coding",
-          "reason": "展示了作者在 AI 辅助开发领域的深度实践，从技术选型到性能优化到社区运营的完整方法论",
+          "reason": "完整记录了一个开源项目如何用AI驱动开发，从想法到获得社区认可的过程。",
           "date": "2026-03-01"
         },
         {
-          "title": "脱钩: 我的个人网络安全策略",
-          "url": "https://luolei.org/personal-decoupling-cybersecurity",
-          "reason": "体现了作者在数字主权、隐私安全领域的系统性思考与工程化落地方案",
-          "date": "2023-09-16"
-        },
-        {
-          "title": "如何用 ChatGPT 助力开发",
-          "url": "https://luolei.org/chatgpt-in-development",
-          "reason": "早在 2023 年即系统总结 AI 辅助开发工作流，展现技术前瞻性",
-          "date": "2023-06-09"
+          "title": "实现 AI 自由：我为未来准备的 4 个数字通行证",
+          "url": "https://luolei.org/ai-2026",
+          "reason": "分享如何构建自己的数字基础设施来访问全球AI服务，体现其实测与实用风格。",
+          "date": "2026-02-04"
         },
         {
           "title": "京都马拉松: 第一次去日本跑马",
           "url": "https://luolei.org/kyoto-marathon-2025",
-          "reason": "展现了作者将程序员思维延伸至生活方式领域的典型写作风格",
+          "reason": "生活向内容的代表，详细记录了赛事体验和旅行细节，有画面也有攻略价值。",
           "date": "2025-02-28"
         },
         {
-          "title": "编程五年: 我辞职了",
-          "url": "https://luolei.org/new-journey",
-          "reason": "记录人生关键转折点，展现对职业发展与人生价值的深度思考",
-          "date": "2018-10-10"
+          "title": "2024年:我用的手机和宽带套餐",
+          "url": "https://luolei.org/cellphone-plans-2024",
+          "reason": "典型的实测对比类文章，用真实使用数据帮读者做选择。",
+          "date": "2024-12-01"
         },
         {
-          "title": "我的老婆确诊肺癌, 希望能得到你的帮助",
-          "url": "https://luolei.org/fighting-cancer",
-          "reason": "展现个人真实生活困境与理性应对，体现内容创作的人格化特质",
-          "date": "2024-03-19"
+          "title": "科普网站:航班在 3D 地球的飞行真实轨迹",
+          "url": "https://luolei.org/flight-3d-earth",
+          "reason": "因旅行好奇而产生的创作，展示了从生活兴趣到技术实现的能力。",
+          "date": "2025-04-19"
         }
       ],
       "tweets": [
         {
-          "title": "Clash Master 项目发布与迭代更新",
+          "title": "推荐 CUniq 月神卡，9港币/月的一卡双号方案",
+          "url": "https://x.com/luoleiorg/status/1993296964684071429",
+          "reason": "一条高互动推文，分享高性价比的实用信息，是其内容受欢迎的例证。",
+          "date": "2025-11-25"
+        },
+        {
+          "title": "分享 Vibe Coding 方法论和 Lovable 官方 Prompting 手册",
+          "url": "https://x.com/luoleiorg/status/1972928152507978196",
+          "reason": "主动整理和分享AI开发方法论，体现其乐于将经验提炼分享的创作者气质。",
+          "date": "2025-09-30"
+        },
+        {
+          "title": "Clash Master 项目发布，24小时内收获400+ Star",
           "url": "https://x.com/luoleiorg/status/2019758733983912111",
-          "reason": "展示开源项目快速获得社区认可的过程，体现开源运营能力",
+          "reason": "同步开源项目进展，展示其边做边公开、与社区互动的活跃状态。",
           "date": "2026-02-06"
-        },
-        {
-          "title": "Vibe Coding 多模型协作经验分享",
-          "url": "https://x.com/luoleiorg/status/2020829243991806432",
-          "reason": "分享同时使用 Claude Code、Codex、Antigravity 进行交叉 Review 的高级开发技巧",
-          "date": "2026-02-09"
-        },
-        {
-          "title": "Neko Master 1K+ Star 里程碑",
-          "url": "https://x.com/luoleiorg/status/2028026998749335706",
-          "reason": "开源项目达成重要里程碑的总结，体现持续迭代的执行力",
-          "date": "2026-03-01"
-        },
-        {
-          "title": "Kimi K2.5 模型深度使用体验",
-          "url": "https://x.com/luoleiorg/status/2019418455276204185",
-          "reason": "展示对国产 AI 模型的客观评价与实践应用，不盲目追捧国外模型",
-          "date": "2026-02-05"
         }
       ],
       "projects": [
         {
           "title": "Neko Master",
           "url": "https://github.com/foru17/neko-master",
-          "reason": "开源网络流量分析面板，集成 ClickHouse 高性能存储，获 1K+ Star，代表作者在工程化系统设计方面的综合能力"
+          "reason": "从零开始用AI辅助开发并获得社区认可的开源流量分析工具，是其技术实践与折腾精神的集中体现。"
         },
         {
           "title": "raycast-sink",
           "url": "https://github.com/foru17/raycast-sink",
-          "reason": "Raycast 短链管理插件，体现作者对效率工作流的敏锐洞察与快速落地能力"
+          "reason": "一个解决自己短链管理痛点的工具插件，体现遇到问题就顺手做个解决方案的风格。"
         },
         {
-          "title": "raycast-hoarder",
-          "url": "https://github.com/foru17/raycast-hoarder",
-          "reason": "Raycast 与 Hoarder 的桥接插件，展示作者在开源生态整合方面的技术实力"
-        },
-        {
-          "title": "luoleiorg-x",
+          "title": "luoleiorg-x (博客源码)",
           "url": "https://github.com/foru17/luoleiorg-x",
-          "reason": "个人博客源码，基于 Vinext + Cloudflare Workers，支持 AI 摘要与搜索，体现全栈开发能力"
-        },
-        {
-          "title": "Clash Master",
-          "url": "https://github.com/foru17/clash-master",
-          "reason": "不到 24 小时获 400+ Star，展示快速构建有价值开源产品的能力"
+          "reason": "博客代码仓库本身也是持续更新的项目，承载了他多年的思考和记录。"
         }
       ]
     },
-    "disclaimer": "本报告由 AI 基于公开数据分析生成，仅供参考，不构成任何形式的背书或评价。"
+    "disclaimer": "以上内容为 AI 基于公开博客、X 动态和 GitHub 项目生成，旨在帮助访客快速了解作者，非官方简介。"
   }
 }
