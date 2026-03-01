@@ -8,8 +8,27 @@ import rehypeStringify from "rehype-stringify";
 import { getAllPosts, getPostRawContent } from "@/lib/content/posts";
 import { getAISummary } from "@/lib/content/ai-data";
 import { siteConfig } from "@/lib/site-config";
+import tweetsCache from "@/../data/tweets-cache.json";
 
 export const dynamic = "force-static";
+
+interface CachedTweet {
+  id: string;
+  text: string;
+  created_at: string;
+  author: {
+    name: string;
+    username: string;
+    profile_image_url: string;
+  };
+  media?: Array<{
+    type: string;
+    url: string;
+    preview_image_url: string;
+  }>;
+}
+
+const tweets = tweetsCache.tweets as unknown as Record<string, CachedTweet | undefined>;
 
 function escapeXml(str: string): string {
   return str
@@ -24,10 +43,44 @@ function compressHtml(html: string): string {
   return html.replace(/\n{2,}/g, "\n").replace(/>\s+</g, "> <").trim();
 }
 
+function renderTweetForRss(tweetId: string): string {
+  const tweetUrl = `https://x.com/i/status/${tweetId}`;
+  const tweet = tweets[tweetId];
+
+  if (!tweet) {
+    return `<blockquote style="border-left:4px solid #1d9bf0;padding:12px 16px;margin:16px 0;background:#f7f9fa;"><p>🐦 <a href="${tweetUrl}" style="color:#1d9bf0;font-weight:bold;">查看推文 →</a></p></blockquote>`;
+  }
+
+  const { author, text, created_at, media } = tweet;
+  const authorUrl = `https://x.com/${author.username}`;
+  const date = new Date(created_at).toLocaleDateString("zh-CN", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  // Render tweet text: preserve line breaks, escape XML entities
+  const tweetText = escapeXml(text).replace(/\n/g, "<br/>");
+
+  // Build image HTML if tweet has photos
+  const images = media?.filter((m) => m.type === "photo") ?? [];
+  const imageHtml = images.length > 0
+    ? `<p>${images.map((img) => `<img src="${escapeXml(img.url || img.preview_image_url)}" alt="Tweet image" style="max-width:100%;border-radius:8px;margin-top:8px;" />`).join("")}</p>`
+    : "";
+
+  return `<blockquote style="border-left:4px solid #1d9bf0;padding:12px 16px;margin:16px 0;background:#f7f9fa;border-radius:0 8px 8px 0;"><p style="margin:0 0 8px;"><strong><a href="${authorUrl}" style="color:#0f1419;text-decoration:none;">${escapeXml(author.name)}</a></strong> <span style="color:#536471;">@${escapeXml(author.username)} · ${date}</span></p><p style="margin:0 0 12px;white-space:pre-wrap;line-height:1.6;">${tweetText}</p>${imageHtml}<p style="margin:8px 0 0;"><a href="${tweetUrl}" style="color:#1d9bf0;font-weight:bold;text-decoration:none;">🐦 在 X (Twitter) 上查看原文 →</a></p></blockquote>`;
+}
+
+function replaceTweetCards(markdown: string): string {
+  return markdown.replace(
+    /<TweetCard[\s\S]*?tweetId=["']([^"']+)["'][\s\S]*?\/>/g,
+    (_match, tweetId: string) => renderTweetForRss(tweetId),
+  );
+}
+
 async function renderMarkdownToHtml(markdown: string): Promise<string> {
-  const cleaned = markdown
-    .replace(/<TweetCard[\s\S]*?\/>/g, "")
-    .replace(/<GearCard[\s\S]*?\/>/g, "");
+  const withTweets = replaceTweetCards(markdown);
+  const cleaned = withTweets.replace(/<GearCard[\s\S]*?\/>/g, "");
 
   const result = await unified()
     .use(remarkParse)

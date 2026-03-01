@@ -614,5 +614,13 @@
     "failCount": 1,
     "lastFailedAt": "2026-02-27T02:06:35.808Z",
     "firstFailedAt": "2026-02-27T02:06:35.808Z"
+  },
+  "seo:weibo-kaifang": {
+    "slug": "weibo-kaifang",
+    "task": "seo",
+    "reason": "Unterminated string in JSON at position 123 (line 1 column 124)",
+    "failCount": 1,
+    "lastFailedAt": "2026-03-01T05:31:25.729Z",
+    "firstFailedAt": "2026-03-01T05:31:25.729Z"
   }
 }

@@ -1,9 +1,11 @@
 import vinext from "vinext";
 import { defineConfig } from "vite";
 import { cloudflare } from "@cloudflare/vite-plugin";
+import { contentHmr } from "./src/lib/vite-plugins/content-hmr";
 
 export default defineConfig({
   plugins: [
+    contentHmr(),
     vinext(),
     cloudflare({
       viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },

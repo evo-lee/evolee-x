@@ -42,7 +42,8 @@
       "Bash(npx next:*)",
       "Bash(curl:*)",
       "mcp__plugin_playwright_playwright__browser_navigate",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(pnpm typecheck:*)"
     ]
   }
 }

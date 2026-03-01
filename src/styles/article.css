@@ -6,13 +6,19 @@
 
 .article-content h2 {
   border-top: 0 none transparent;
-  margin: 24px 0 12px;
+  margin: 40px 0 16px;
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1.34;
+  letter-spacing: -0.01em;
 }
 
 .article-content h3 {
-  margin: 16px 0 12px;
-  font-size: 18px;
-  font-weight: 500;
+  margin: 28px 0 14px;
+  font-size: 1.28rem;
+  font-weight: 600;
+  line-height: 1.42;
+  letter-spacing: -0.005em;
 }
 
 .article-content p {
@@ -23,7 +29,7 @@
 }
 
 .article-content li {
-  line-height: 28px;
+  line-height: 1.72;
 }
 
 .article-content p img:not(.favicon) {
@@ -102,40 +108,59 @@
   text-overflow: ellipsis;
   padding: 0 1px;
   border-radius: 2px;
-  transition: all 0.15s ease;
+  transition:
+    color 0.2s ease,
+    text-decoration-color 0.2s ease,
+    text-underline-offset 0.2s ease,
+    opacity 0.15s ease;
 }
 
 /* 悬停效果 - 微妙下划线 */
 .article-content a:hover {
   color: var(--vp-c-brand);
-  background-color: transparent;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
-  text-decoration-color: var(--vp-c-brand-soft);
 }
 
-/* 外链标识 - 更 subtle 的外部链接图标 */
+/* 外链：默认虚下划线，悬停变实线 */
+.article-content a[href^="http"] {
+  font-weight: 500;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: rgb(100 116 139 / 58%);
+}
+
+.article-content a[href^="http"]:hover {
+  text-decoration-style: solid;
+  text-decoration-color: var(--vp-c-brand);
+  text-underline-offset: 4px;
+}
+
+/* 外链标识 */
 .article-content a[href^="http"]::after {
   content: "";
   display: inline-block;
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   margin-left: 1px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234f46e5' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'/%3E%3C/svg%3E");
   background-size: contain;
   background-repeat: no-repeat;
-  opacity: 0.4;
-  transition: all 0.15s ease;
+  opacity: 0.62;
+  transition: opacity 0.2s ease;
 }
 
 .article-content a[href^="http"]:hover::after {
-  opacity: 0.7;
+  opacity: 0.9;
 }
 
 /* 暗色模式下的外链样式 */
 .dark .article-content a {
   color: var(--vp-c-brand-lighter);
+}
+
+.dark .article-content a[href^="http"] {
+  text-decoration-color: rgb(148 163 184 / 62%);
 }
 
 .dark .article-content a[href^="http"]::after {
@@ -182,9 +207,17 @@
 .article-content :not(pre) > code {
   margin: 0 2px;
   padding: 2px 5px;
-  background-color: var(--vp-code-bg);
-  color: var(--c-brand-light);
+  background-color: rgb(79 170 239 / 10%);
+  color: var(--vp-c-brand-light);
+  border: 1px solid rgb(79 170 239 / 24%);
+  border-radius: 5px;
   font-weight: 500;
+}
+
+.dark .article-content :not(pre) > code {
+  background-color: rgb(105 187 248 / 16%);
+  color: var(--vp-c-brand-lighter);
+  border-color: rgb(105 187 248 / 32%);
 }
 
 .article-content pre {
@@ -201,15 +234,15 @@
 
 .article-content ul,
 .article-content ol {
-  padding-left: 26px;
+  padding-left: 1.55rem;
   padding-right: 0;
-  margin: 24px auto;
+  margin: 18px 0;
 }
 
 .article-content li + li {
   margin: 5px 0;
   font-weight: 400;
-  line-height: 28px;
+  line-height: inherit;
 }
 
 /* Favicon 样式优化 - 精致对齐版 */
@@ -295,7 +328,9 @@
 }
 
 .article-content h2[id],
-.article-content h3[id] {
+.article-content h3[id],
+.article-content h4[id],
+.article-content h5[id] {
   scroll-margin-top: 110px;
 }
 /* TOC 滚动条 - 始终隐藏 */
@@ -377,24 +412,24 @@
 @media (min-width: 960px) {
   .article-content ul,
   .article-content ol {
-    padding-left: 36px;
-    padding-right: 36px;
-    margin: 40px auto;
+    padding-left: 2rem;
+    padding-right: 0;
+    margin: 24px 0;
   }
 
   .article-content li + li {
-    margin: 10px 0;
+    margin: 6px 0;
     font-weight: 400;
-    line-height: 30px;
+    line-height: inherit;
   }
 
   .article-content h2 {
     border-top: 0 none transparent;
-    margin: 30px 0 10px;
+    margin: 46px 0 18px;
   }
 
   .article-content h2:first-child {
-    margin: 0 0 12px;
+    margin: 0 0 16px;
   }
 
   .article-content p img:not(.favicon) {
@@ -426,30 +461,32 @@
 
 /* H1 - 文章标题通常不用，但以防万一 */
 .article-content h1 {
-  margin: 32px 0 16px;
-  font-size: 28px;
-  font-weight: 600;
-  line-height: 1.4;
+  margin: 36px 0 18px;
+  font-size: 1.95rem;
+  font-weight: 700;
+  line-height: 1.28;
+  letter-spacing: -0.01em;
 }
 
 /* H4, H5, H6 */
 .article-content h4 {
-  margin: 16px 0 12px;
-  font-size: 16px;
+  margin: 22px 0 10px;
+  font-size: 1.12rem;
   font-weight: 600;
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
 .article-content h5 {
-  margin: 14px 0 10px;
-  font-size: 14px;
+  margin: 18px 0 8px;
+  font-size: 1rem;
   font-weight: 600;
-  line-height: 1.5;
+  line-height: 1.45;
+  color: var(--vp-c-text-2);
 }
 
 .article-content h6 {
-  margin: 12px 0 8px;
-  font-size: 13px;
+  margin: 14px 0 6px;
+  font-size: 0.92rem;
   font-weight: 600;
   line-height: 1.5;
   color: var(--vp-c-text-2);
@@ -495,13 +532,13 @@
 }
 
 .article-content li {
-  margin: 8px 0;
-  line-height: 1.8;
+  margin: 7px 0;
+  line-height: 1.72;
 }
 
 .article-content li > ul,
 .article-content li > ol {
-  margin: 8px 0 8px 20px;
+  margin: 8px 0 8px 18px;
 }
 
 /* Blockquote */
@@ -542,19 +579,23 @@
 /* Desktop 优化 */
 @media (min-width: 960px) {
   .article-content h1 {
-    font-size: 32px;
+    font-size: 2.15rem;
   }
   
   .article-content h2 {
-    font-size: 26px;
+    font-size: 1.95rem;
   }
   
   .article-content h3 {
-    font-size: 20px;
+    font-size: 1.5rem;
   }
   
   .article-content h4 {
-    font-size: 18px;
+    font-size: 1.2rem;
+  }
+
+  .article-content h5 {
+    font-size: 1.05rem;
   }
   
   .article-content table {
@@ -652,6 +693,8 @@
   gap: 0;
   font-weight: inherit;
   color: inherit;
+  text-decoration: none;
+  text-decoration-color: transparent;
   padding: 0;
   border-radius: 0;
   background-color: transparent;

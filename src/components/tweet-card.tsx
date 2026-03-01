@@ -29,23 +29,23 @@ interface TweetCardProps {
   tweetId: string;
 }
 
-function formatTimeAgo(dateString: string): string {
+function formatTweetDateTime(dateString: string): string {
   const date = new Date(dateString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
+  if (Number.isNaN(date.getTime())) return dateString;
 
-  if (diffMins < 60) return `${diffMins}分钟前`;
-  if (diffHours < 24) return `${diffHours}小时前`;
-  if (diffDays < 30) return `${diffDays}天前`;
-  
-  return date.toLocaleDateString("zh-CN", {
+  const time = date.toLocaleTimeString("zh-CN", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  const fullDate = date.toLocaleDateString("zh-CN", {
     year: "numeric",
-    month: "short",
+    month: "long",
     day: "numeric",
   });
+
+  return `${time} · ${fullDate}`;
 }
 
 function formatNumber(num: number): string {
@@ -213,7 +213,7 @@ export function TweetCard({ tweetId }: TweetCardProps) {
         {/* Footer */}
         <div className="flex items-center justify-between border-t border-gray-100 pt-3 text-sm text-gray-500 dark:border-zinc-700 dark:text-slate-400"
         >
-          <span>{formatTimeAgo(created_at)}</span>
+          <span>{formatTweetDateTime(created_at)}</span>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1" title="回复">
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

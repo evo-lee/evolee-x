@@ -1,8 +1,8 @@
 {
   "meta": {
-    "lastUpdated": "2026-02-27T02:06:33.140Z",
+    "lastUpdated": "2026-03-01T05:31:06.721Z",
     "model": "gemini-3-flash-preview",
-    "totalProcessed": 274
+    "totalProcessed": 275
   },
   "articles": {
     "pc-2025": {
@@ -6432,6 +6432,30 @@
       },
       "contentHash": "92885036",
       "processedAt": "2026-02-27T01:56:55.006Z"
+    },
+    "neko-master-vibe-coding": {
+      "data": {
+        "summary": "本文分享了流量分析面板 Neko Master 的开发经验，通过 Vibe Coding 在 4 小时内完成 MVP 并收获千星。文章探讨了利用 AI 快速迭代、提升 UI 审美及解决 I/O 性能等深水区问题的实战策略。",
+        "abstract": "本文详细记录了开源网络流量分析面板 Neko Master 的开发全过程。针对 Homelab 用户在流量感知方面的痛点，作者利用 Kimi K2.5、Claude 等 AI 工具通过 Vibe Coding 模式，在极短时间内实现了支持多后端（OpenClash/Surge等）的监控方案。文章重点介绍了如何通过提供视觉锚点解决 AI 生成界面“千篇一律”的审美问题，并深入剖析了项目上线后的技术调优：包括通过内存缓冲队列将 SQLite 硬盘日写入量从 200GB 优化至 1.6GB，以及引入 ClickHouse 应对大规模数据分析的架构升级。作者强调，AI 虽能加速“0到1”的开发与反馈循环，但性能瓶颈定位与架构权衡仍依赖开发者的经验判断。",
+        "keyPoints": [
+          "Neko Master 是支持多维度统计与多后端的开源流量分析面板。",
+          "利用 Kimi K2.5 模型在 4 小时内快速构建 MVP 并上线。",
+          "通过设计截图作为视觉锚点，引导 AI 生成高审美 SaaS 风格 UI。",
+          "采用内存缓冲与批量落盘策略，解决 SQLite 写入导致的 I/O 瓶颈。",
+          "针对大规模数据场景引入 ClickHouse 并进行预聚合查询优化。",
+          "Vibe Coding 的核心价值在于加速从用户反馈到功能交付的循环。"
+        ],
+        "tags": [
+          "Vibe Coding",
+          "Neko Master",
+          "网络监控",
+          "ClickHouse",
+          "Docker"
+        ],
+        "readingTime": 6
+      },
+      "contentHash": "a31df0d0",
+      "processedAt": "2026-03-01T05:31:06.721Z"
     }
   }
 }

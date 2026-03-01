@@ -18,6 +18,9 @@
   --c-brand: #3eaf7c;
   --c-brand-light: #4abf8a;
   --vp-c-brand: #4faaef;
+  --vp-c-brand-light: #3d96dc;
+  --vp-c-brand-lighter: #7ac7ff;
+  --vp-c-brand-soft: rgb(79 170 239 / 45%);
   --vp-c-mute: #e5e5e5;
   --vp-code-bg: #f3f3f3;
   --font-serif-cn: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
@@ -45,6 +48,9 @@ body {
   --vp-c-bg: #1e1e20;
   --vp-c-bg-alt: #29292d;
   --vp-c-text-1: #e5e7eb;
+  --vp-c-brand-light: #69bbf8;
+  --vp-c-brand-lighter: #a0d9ff;
+  --vp-c-brand-soft: rgb(105 187 248 / 45%);
   --vp-c-mute: #9ca3af;
   --vp-code-bg: #0f0f0f;
 }
