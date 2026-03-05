@@ -189,21 +189,33 @@ function imageTransformPlugin() {
     });
   };
 }
-// Rehype 插件：在构建时为外部链接添加 favicon
-
-// Rehype 插件：在构建时为外部链接添加 favicon
-function externalLinkFaviconPlugin() {
+// Rehype 插件：为链接添加 favicon（包括内链和外链）
+function linkFaviconPlugin() {
   return function transformer(tree: Root) {
     visit(tree, "element", (node) => {
+      if (node.tagName !== "a") return;
+
       const element = node as Element;
-      if (element.tagName !== "a") return;
-
       const href = String(element.properties?.href ?? "");
-      if (!href) return;
+      if (!href || href.startsWith("#")) return;
 
-      const externalUrl = getExternalUrl(href);
-      if (!externalUrl) return;
-      const domain = externalUrl.hostname.toLowerCase();
+      // 解析 URL，判断是内链还是外链
+      let url: URL | null = null;
+      let domain: string;
+      let isExternal = false;
+
+      try {
+        url = new URL(href);
+        if (url.protocol !== "http:" && url.protocol !== "https:") return;
+        
+        const hostname = url.hostname.toLowerCase();
+        isExternal = !internalHostnames.has(hostname);
+        domain = hostname;
+      } catch {
+        // 相对路径或无效 URL，视为内链
+        const siteUrl = new URL(siteConfig.siteUrl);
+        domain = siteUrl.hostname.toLowerCase();
+      }
 
       // 获取链接的子元素
       const children = element.children || [];
@@ -241,21 +253,32 @@ function externalLinkFaviconPlugin() {
         children: [faviconImg],
       };
 
-      const rel = new Set(getClassNames(element.properties?.rel));
-      rel.add("noopener");
-      rel.add("noreferrer");
-
       const classNames = new Set(getClassNames(element.properties?.className));
       classNames.add("has-favicon");
 
-      element.properties = {
-        ...element.properties,
-        className: Array.from(classNames),
-        target: "_blank",
-        rel: Array.from(rel).join(" "),
-        "data-external-link": "true",
-        "data-external-domain": domain,
-      };
+      // 外链添加额外属性
+      if (isExternal) {
+        const rel = new Set(getClassNames(element.properties?.rel));
+        rel.add("noopener");
+        rel.add("noreferrer");
+
+        element.properties = {
+          ...element.properties,
+          className: Array.from(classNames),
+          target: "_blank",
+          rel: Array.from(rel).join(" "),
+          "data-external-link": "true",
+          "data-external-domain": domain,
+        };
+      } else {
+        // 内链只添加 favicon，不添加新标签页等属性
+        element.properties = {
+          ...element.properties,
+          className: Array.from(classNames),
+          "data-internal-link": "true",
+          "data-internal-domain": domain,
+        };
+      }
 
       if (!hasFavicon) {
         element.children = [wrapper, ...children];
@@ -434,7 +457,7 @@ export async function getPostBySlug(slug: string): Promise<PostDetail | null> {
       },
     })
     .use(imageTransformPlugin)
-    .use(externalLinkFaviconPlugin)
+    .use(linkFaviconPlugin)
     .use(rehypeStringify, { allowDangerousHtml: true })
     .process(transformedContent);
   const html = String(rendered);

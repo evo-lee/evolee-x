@@ -11,6 +11,7 @@
 | [../AGENTS.md](../AGENTS.md) | AI Agent 工作规范 | ✅ 活跃 |
 | [./TWEET_CARD_USAGE.md](./TWEET_CARD_USAGE.md) | TweetCard 系统使用指南 | ✅ 活跃 |
 | [./about-page-ai-profile-prd.md](./about-page-ai-profile-prd.md) | About 页面 AI 第三方画像需求文档 | 🧪 评审中 |
+| [./chat-prompt-v2-refactor.md](./chat-prompt-v2-refactor.md) | 首页 AI 分身 Prompt v2 分层重构说明 | ✅ 已完成 |
 
 ### 开发指南
 

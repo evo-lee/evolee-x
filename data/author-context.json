@@ -1,9 +1,9 @@
 {
   "$schema": "author-context-v1",
-  "generatedAt": "2026-03-02T06:03:38.903Z",
+  "generatedAt": "2026-03-04T03:27:47.798Z",
   "profile": {
     "name": "罗磊",
-    "headline": "Senior Full-Stack Developer / Engineering Efficiency Advocate",
+    "headline": "高级全栈开发工程师 / 工程效能倡导者",
     "location": "Shenzhen, China",
     "social": {
       "github": "https://github.com/foru17",
@@ -20,50 +20,46 @@
   },
   "experience": [
     {
-      "title": "Independent Full-Stack Developer / Open Source Creator",
-      "company": "Independent",
-      "period": "Apr 2024 - Present",
-      "description": "Architected and delivered global-facing web applications utilizing React, NestJS, PostgreSQL, Prisma, and GraphQL.；Embraced an AI-first development workflow (Vibe Coding) to rapidly prototype and scale robust tools and dashboards, reducing time-to-market by up to 90% for complex feature sets.；Built open-source networking and productivity tools widely adopted by the homelab and developer communities."
+      "title": "独立全栈开发工程师 / 开源创作者",
+      "company": "独立",
+      "period": "2024年4月 - 至今",
+      "description": "使用 React、NestJS、PostgreSQL、Prisma 和 GraphQL 架构并交付面向全球用户的 Web 应用。；采用 AI 优先的开发工作流（Vibe Coding），快速原型设计和扩展健壮的工具和仪表板，将复杂功能的上市时间缩短高达 90%。；构建开源网络和生产力工具，被家庭实验室和开发者社区广泛采用。"
     },
     {
-      "title": "Senior Frontend Developer",
-      "company": "Yuewen Group - Shenzhen",
-      "period": "Jan 2021 - Mar 2024",
-      "description": "Spearheaded frontend services for leading Chinese smartphone manufacturers (OPPO, vivo, Huawei).；Developed Hybrid App web views and QuickApps, enhancing hybrid rendering performance by over 30%.；Integrated complex advertising SDKs and performed rigorous A/B testing on monetization strategies.；Streamlined developer workflows by building an automated tool that extracts and parses offline HTML from unscheduled product documentation updates."
+      "title": "高级前端开发工程师",
+      "company": "阅文集团 - 深圳",
+      "period": "2021年1月 - 2024年3月",
+      "description": "主导国内领先智能手机厂商（OPPO、vivo、华为）的前端服务工作。；开发混合 App 网页视图和快应用，将混合渲染性能提升超过 30%。；集成复杂的广告 SDK，并对变现策略进行严格的 A/B 测试。；通过构建自动化工具优化开发者工作流程，从非计划性的产品文档更新中提取和解析离线 HTML。"
     },
     {
-      "title": "Founder",
-      "company": "ZUOLUOTV™ - Shenzhen",
-      "period": "Jan 2019 - Oct 2020",
-      "description": "Founded a tech and lifestyle media brand, cultivating an engaged community across YouTube, Bilibili, and WeChat.；Engineered automated community bots for Telegram and WeChat using Node.js, MongoDB, and Puppeteer, integrating data visualization via Echarts and Google Search APIs.；Built and operated an e-commerce WeChat Mini Program from the ground up, generating sustainable revenue."
+      "title": "创始人",
+      "company": "ZUOLUOTV™ - 深圳",
+      "period": "2019年1月 - 2020年10月",
+      "description": "创立科技生活方式媒体品牌，在 YouTube、Bilibili 和微信平台培养活跃社区。；使用 Node.js、MongoDB 和 Puppeteer 开发 Telegram 和微信自动社群机器人，集成 Echarts 和 Google 搜索 API 进行数据可视化。；从零开始搭建并运营电商微信小程序，实现可持续收入。"
     },
     {
-      "title": "Senior Frontend Developer",
-      "company": "Yuewen Group - Shanghai HQ",
-      "period": "Oct 2015 - Oct 2018",
-      "description": "Designed and built enterprise-grade BFF (Backend-For-Frontend) frameworks using Node.js and Koa.；Built low-latency infrastructure APIs to support dynamic Chinese Web Fonts delivery.；Key contributor to the front-end modernization and refactoring of China's largest webnovel reading platform."
+      "title": "高级前端开发工程师",
+      "company": "阅文集团 - 上海总部",
+      "period": "2015年10月 - 2018年10月",
+      "description": "使用 Node.js 和 Koa 设计并构建企业级 BFF（Backend-For-Frontend）框架。；构建低延迟基础设施 API，支持动态中文字体交付。；作为中国最大网络文学阅读平台前端现代化和重构的核心贡献者。"
     },
     {
-      "title": "Frontend Developer",
-      "company": "Xiaoyi Tech - Shanghai",
-      "period": "May 2015 - Sep 2015",
-      "description": "Managed the development of the primary consumer product website and user community forums.；Developed an automated web-based application testing and distribution management system."
+      "title": "前端开发工程师",
+      "company": "小蚁科技 - 上海",
+      "period": "2015年5月 - 2015年9月",
+      "description": "负责主要消费产品网站和用户社区论坛的开发。；开发基于 Web 的自动化应用测试和分发管理系统。"
     },
     {
-      "title": "Junior Developer / Intern",
-      "company": "Cheetah Mobile (NYSE: CMCM) - Beijing",
-      "period": "Jul 2013 - May 2015",
-      "description": "Contributed to web properties for flagship products including CM Browser and Clean Master.；Developed experimental hybrid mobile websites as part of an internal incubator project."
+      "title": "初级开发工程师 / 实习生",
+      "company": "金山猎豹网络科技（纽交所：CMCM）- 北京",
+      "period": "2013年7月 - 2015年5月",
+      "description": "参与旗舰产品（包括猎豹浏览器和清理大师）的 Web 属性开发。；作为内部孵化项目的一部分，开发实验性混合移动网站。"
     }
   ],
-  "sideProjects": [
-    "AI Native Applications: Integrating LLMs for automated customer service, data summarizing, and daily task automation.",
-    "Homelab & Networking: Expert in home networking optimization, from OpenWrt configurations to IPTV multicast-to-unicast routing and high-availability DNS setups.",
-    "Photography & Travel: Avid traveler (Tibet bike tour, multiple marathons globally) and photographer with over 15 million views on Unsplash."
-  ],
+  "sideProjects": [],
   "publicActivities": [
-    "Invited Speaker at 2017 FRONT END & EXPERIENCE CONFERENCE (Tencent).",
-    "Internal Tech Lecturer at Yuewen Group, training peers on advanced frontend practices."
+    "2017 前端体验大会（腾讯）邀请演讲嘉宾。",
+    "阅文集团内部技术讲师，为同事培训高级前端实践。"
   ],
   "skills": {
     "frontend": [
@@ -74,7 +70,7 @@
       "JavaScript",
       "Vue.js",
       "HTML/CSS",
-      "QuickApp"
+      "快应用"
     ],
     "backend": [
       "Node.js",
@@ -92,38 +88,54 @@
       "Nginx",
       "Linux",
       "CI/CD",
-      "Shell Scripting",
-      "Networking (Homelab routing",
-      "DNS)"
+      "Shell 脚本",
+      "网络（家庭实验室路由",
+      "DNS）"
     ],
     "tools": [
       "Vibe Coding",
-      "Prompt Engineering",
-      "LLM Integration",
-      "Raycast plugin development"
+      "提示词工程",
+      "大语言模型集成",
+      "Raycast 插件开发"
     ],
     "design": [
-      "UI/UX intuition",
+      "UI/UX 直觉",
       "Figma",
       "Sketch",
       "Photoshop"
     ]
   },
   "education": {
-    "degree": "Bachelor of Management",
-    "school": "School of Public Administration (Jinan University (Guangzhou, China) • Sep 2009 - Jun 2013)",
-    "note": "Self-taught programmer who successfully transitioned into professional software engineering.；Fluent in English (Passed CET-6)."
+    "degree": "管理学学士",
+    "school": "公共管理学院 (暨南大学（广州，中国）• 2009年9月 - 2013年6月)",
+    "note": "自学成才的程序员，成功转型为专业软件工程师。；英语流利（通过 CET-6 考试）。"
   },
   "highlights": [
-    "Senior Front-End / Full-Stack Developer: Specializing in React, Next.js, Node.js, and Docker.",
-    "AI & Vibe Coding Advocate: I aggressively use AI tooling (Claude, Kimi, GPT) to build and ship open-source products rapidly.",
-    "Pet Parent: Living with 2 cats 🐈 and 1 Shiba Inu 🐕 in Shenzhen.",
-    "Content Creator: Documenting my tech reviews, tutorials, and life hacks on [LUOLEI.ORG](https://luolei.org), YouTube, and Bilibili.",
-    "Photographer: My visual works have garnered 15M+ views and 80K+ downloads on [Unsplash](https://unsplash.com/@luolei).",
-    "Globetrotter & Outdoor Enthusiast: Traveled to 🇨🇳🇺🇸🇯🇵🇰🇷🇹🇭🇵🇭🇻🇳🇳🇵, PADI® Open Water Diver 🤿, and completed a 2,200km month-long bike trip to Tibet 🚲.",
-    "Marathoner: Completed 10+ Marathons (Personal Best: ⏱️4h28m)."
+    "资深前端 / 全栈工程师：擅长 React、Next.js、Node.js 和 Docker。",
+    "AI 与 Vibe Coding 倡导者：积极使用 AI 工具（Claude、Kimi、GPT）快速构建和发布开源产品。",
+    "铲屎官：在深圳与 2 只猫咪 🐈 和 1 只柴犬 🐕 一起生活。",
+    "内容创作者：在 [LUOLEI.ORG](https://luolei.org)、YouTube 和 Bilibili 上分享科技评测、教程和生活技巧。",
+    "摄影师：视觉作品在 [Unsplash](https://unsplash.com/@luolei) 上获得 1500万+ 浏览量和 8万+ 下载。",
+    "环球旅行者与户外爱好者：游历过 🇨🇳🇺🇸🇯🇵🇰🇷🇹🇭🇵🇭🇻🇳🇳🇵，PADI® 开放水域潜水员 🤿，完成 2200 公里西藏骑行之旅 🚲。",
+    "马拉松跑者：已完成 10+ 场全程马拉松（个人最佳成绩：⏱️4小时28分）。"
   ],
   "posts": [
+    {
+      "title": "2026 年，我把自己做成了一个 AI",
+      "date": "2026-03-03",
+      "url": "https://luolei.org/luolei-ai",
+      "categories": [
+        "code"
+      ],
+      "summary": "文章介绍了作者利用多年积累的博客、社交动态及代码库数据，通过多模型分析与RAG技术构建个人AI分身的过程，旨在实现主动的语义索引并建立智能对话系统，提升个人内容的传播效率与解释权。",
+      "keyPoints": [
+        "通过主动建立个人知识语义索引，夺回AI对个人内容的解释权。",
+        "利用多模型摘要预处理技术，克服大模型在长上下文分析时的瓶颈。",
+        "采用Vinext、Vercel AI SDK及Cloudflare Workers构建高性能RAG系统。",
+        "通过加权搜索算法与严格的Prompt策略，有效抑制AI产生事实幻觉。",
+        "探讨了数字分身与真实自我的偏差，强调AI是创作者知识体系的延伸。"
+      ]
+    },
     {
       "title": "Neko Master: 从 0 到 1K+ Star 的 Vibe Coding 实践",
       "date": "2026-03-01",
@@ -3205,6 +3217,20 @@
       }
     },
     {
+      "id": "2028667842875580795",
+      "text": "过去七八年，去了惠州应该有二十多次了，如果你年轻没小孩，每个月 remote 或者网赚，每个月能有个大几千到小几万，在惠州生活不要太爽。配套齐全，海景公寓房，每个月 1000 多房租，其实是房东养你，最好再有个车，闲了就开车去深圳和香港也不远。 https://t.co/UdSXsXqjxH",
+      "date": "2026-03-03T03:04:39.000Z",
+      "url": "https://x.com/luoleiorg/status/2028667842875580795",
+      "metrics": {
+        "retweet_count": 91,
+        "reply_count": 201,
+        "like_count": 1214,
+        "quote_count": 16,
+        "bookmark_count": 422,
+        "impression_count": 266098
+      }
+    },
+    {
       "id": "1936658137035243521",
       "text": "对于国内 NAS 用户而言，公网访问一直是个难题。常见的解决方法是自建公网服务器，并配合 frp 或 Cloudflare Tunnel 等内网穿透工具。然而，由于国内运营商线路质量和带宽的限制，访问体验往往不够理想。😫 \n\n尤其是在跨网跨省时，家庭宽带上行的限速和 QoS，更是让网络质量大打折扣，比如深圳联通 https://t.co/DDA7ekZ1Ul",
       "date": "2025-06-22T05:30:55.000Z",
@@ -4367,20 +4393,6 @@
       }
     },
     {
-      "id": "1903343038342087118",
-      "text": "人在飞机，刚到意大利，佛山伦萨真的太好玩辣 😊 https://t.co/LnuGTdQkda",
-      "date": "2025-03-22T07:08:37.000Z",
-      "url": "https://x.com/luoleiorg/status/1903343038342087118",
-      "metrics": {
-        "retweet_count": 0,
-        "reply_count": 15,
-        "like_count": 143,
-        "quote_count": 0,
-        "bookmark_count": 11,
-        "impression_count": 36224
-      }
-    },
-    {
       "id": "1993297181760245923",
       "text": "每 15 分钟同步最新号码数据:  https://t.co/QqDKQajVUj",
       "date": "2025-11-25T12:34:16.000Z",
@@ -4504,6 +4516,20 @@
         "quote_count": 0,
         "bookmark_count": 47,
         "impression_count": 12306
+      }
+    },
+    {
+      "id": "2028389734377250984",
+      "text": "🔗 https://t.co/UIJ5qWQSvr\n我把过去 10 多年 300+ 篇博客、推文、GitHub 内容全部做了 Embedding 向量化，构建了一个基于 RAG 的个人知识系统 🧠\n刚刚又花了 1 个小时，让这个「AI 罗磊」接入新的 Vinext 博客。\n现在可以直接在博客和我的数字分身聊天 🤖\n和自己聊天的感觉，还挺奇妙的。 https://t.co/TFRstiw6Zt",
+      "date": "2026-03-02T08:39:32.000Z",
+      "url": "https://x.com/luoleiorg/status/2028389734377250984",
+      "metrics": {
+        "retweet_count": 3,
+        "reply_count": 6,
+        "like_count": 45,
+        "quote_count": 1,
+        "bookmark_count": 49,
+        "impression_count": 8563
       }
     },
     {
@@ -4840,20 +4866,6 @@
         "quote_count": 1,
         "bookmark_count": 15,
         "impression_count": 42228
-      }
-    },
-    {
-      "id": "1903448548349514075",
-      "text": "实在受不了意大利的披萨了，赶上最后一班空客 A787，连夜回国，落地广州，直奔佛山，今晚吃鸡，没想到这家这么多人🥹 https://t.co/nydFuzN18D",
-      "date": "2025-03-22T14:07:52.000Z",
-      "url": "https://x.com/luoleiorg/status/1903448548349514075",
-      "metrics": {
-        "retweet_count": 2,
-        "reply_count": 8,
-        "like_count": 54,
-        "quote_count": 0,
-        "bookmark_count": 8,
-        "impression_count": 16988
       }
     },
     {
@@ -5361,6 +5373,20 @@
       }
     },
     {
+      "id": "2028708022521102371",
+      "text": "这两天做了一件挺有意思的事。\n把自己过去十多年的公开内容全部结构化，做成一个可以聊天的「AI 版的我」。\n多模型画像、加权 RAG、强反幻觉规则、三级限流与安全校验。\n写了篇博客，把完整架构和设计流程梳理了一遍。\n🔗 https://t.co/rtl6NDkr7O",
+      "date": "2026-03-03T05:44:18.000Z",
+      "url": "https://x.com/luoleiorg/status/2028708022521102371",
+      "metrics": {
+        "retweet_count": 2,
+        "reply_count": 3,
+        "like_count": 14,
+        "quote_count": 1,
+        "bookmark_count": 13,
+        "impression_count": 4306
+      }
+    },
+    {
       "id": "1955635072226431120",
       "text": "Cursor Cli 搭配 GPT-5 的代码质量和完成效果令人更加惊艳，相比 Claude code 5 小时的限制 ，Cursor CLI 写了一天都还没 limit ，而且解决和优化了好多 CC 不规范和无法解决的问题。 https://t.co/dWO23O6NC7",
       "date": "2025-08-13T14:18:29.000Z",
@@ -5400,6 +5426,20 @@
         "quote_count": 1,
         "bookmark_count": 0,
         "impression_count": 36755
+      }
+    },
+    {
+      "id": "2028182053637021878",
+      "text": "我让 5 个 AI 读了我的博客、推文和 GitHub，写出各自眼里的「AI 视角下的罗磊」。\n同一份数据，不同模型，像 5 个旁观者给出的作者介绍。\n📡 https://t.co/J71SuFwgJp https://t.co/pXyllrio8T",
+      "date": "2026-03-01T18:54:18.000Z",
+      "url": "https://x.com/luoleiorg/status/2028182053637021878",
+      "metrics": {
+        "retweet_count": 0,
+        "reply_count": 2,
+        "like_count": 14,
+        "quote_count": 0,
+        "bookmark_count": 16,
+        "impression_count": 5938
       }
     },
     {
@@ -5456,20 +5496,6 @@
         "quote_count": 2,
         "bookmark_count": 4,
         "impression_count": 11749
-      }
-    },
-    {
-      "id": "1901999469828415784",
-      "text": "刚刚发现 Telegram 客户端的新功能: 展示其他陌生用户的手机号国别、注册时间、验证状态，刚刚瞄了一眼最近添加我好友的几个用户，好家伙，这么多+86 的🥲 https://t.co/9rOUbf2SCo",
-      "date": "2025-03-18T14:09:45.000Z",
-      "url": "https://x.com/luoleiorg/status/1901999469828415784",
-      "metrics": {
-        "retweet_count": 1,
-        "reply_count": 3,
-        "like_count": 14,
-        "quote_count": 0,
-        "bookmark_count": 12,
-        "impression_count": 10349
       }
     },
     {
@@ -5921,17 +5947,17 @@
       }
     },
     {
-      "id": "1904558066403799173",
-      "text": "这应该是今年最成功的广告了 😂 https://t.co/jM8fEirv6Q",
-      "date": "2025-03-25T15:36:42.000Z",
-      "url": "https://x.com/luoleiorg/status/1904558066403799173",
+      "id": "2028334415479451848",
+      "text": "做 AI 花的钱又多了一笔 🥹 https://t.co/FTcMNrOdYe",
+      "date": "2026-03-02T04:59:43.000Z",
+      "url": "https://x.com/luoleiorg/status/2028334415479451848",
       "metrics": {
-        "retweet_count": 1,
-        "reply_count": 6,
-        "like_count": 9,
+        "retweet_count": 0,
+        "reply_count": 10,
+        "like_count": 11,
         "quote_count": 0,
-        "bookmark_count": 6,
-        "impression_count": 10684
+        "bookmark_count": 3,
+        "impression_count": 12826
       }
     },
     {
@@ -6184,6 +6210,20 @@
         "quote_count": 1,
         "bookmark_count": 1,
         "impression_count": 8992
+      }
+    },
+    {
+      "id": "2028742833025544607",
+      "text": "还是我们中国电信安全，不小心点了高风险网站都会发短信提醒  👍 https://t.co/O1HFMITNA6",
+      "date": "2026-03-03T08:02:38.000Z",
+      "url": "https://x.com/luoleiorg/status/2028742833025544607",
+      "metrics": {
+        "retweet_count": 0,
+        "reply_count": 7,
+        "like_count": 13,
+        "quote_count": 0,
+        "bookmark_count": 1,
+        "impression_count": 11071
       }
     },
     {
@@ -6943,20 +6983,6 @@
       }
     },
     {
-      "id": "1904206736002830588",
-      "text": "算法为啥要给我推这个呀，我大大的良民呀 🥹 https://t.co/kXpwQjgXjy",
-      "date": "2025-03-24T16:20:38.000Z",
-      "url": "https://x.com/luoleiorg/status/1904206736002830588",
-      "metrics": {
-        "retweet_count": 0,
-        "reply_count": 2,
-        "like_count": 5,
-        "quote_count": 0,
-        "bookmark_count": 2,
-        "impression_count": 6322
-      }
-    },
-    {
       "id": "1961476104646266909",
       "text": "没想到今晚机场这么多人 🥲 https://t.co/iY6eAVUvEA",
       "date": "2025-08-29T17:08:40.000Z",
@@ -7066,20 +7092,6 @@
         "quote_count": 0,
         "bookmark_count": 0,
         "impression_count": 7358
-      }
-    },
-    {
-      "id": "1904863845270905109",
-      "text": "红红火火，好事多磨 🤪 https://t.co/Gsc5BK4h0P",
-      "date": "2025-03-26T11:51:46.000Z",
-      "url": "https://x.com/luoleiorg/status/1904863845270905109",
-      "metrics": {
-        "retweet_count": 0,
-        "reply_count": 2,
-        "like_count": 5,
-        "quote_count": 0,
-        "bookmark_count": 0,
-        "impression_count": 4019
       }
     },
     {
@@ -7325,34 +7337,34 @@
     {
       "name": "Neko Master",
       "url": "https://github.com/foru17/neko-master",
-      "description": "Designed and developed an elegant, open-source home network traffic analysis dashboard with ClickHouse storage integration. Gained 1K+ stars rapidly through efficient AI-assisted \"Vibe Coding.\"",
+      "description": "设计并开发了一款优雅的开源家庭网络流量分析仪表板，集成 ClickHouse 存储。通过高效的 AI 辅助\"Vibe Coding\"方式快速获得 1000+ Stars。",
       "tags": []
     },
     {
-      "name": "Raycast Plugins",
+      "name": "Raycast 插件",
       "url": "https://github.com/foru17",
-      "description": "Developed productivity extensions `raycast-sink` and `raycast-hoarder` to optimize URL management and bookmarking workflows.",
+      "description": "开发了 `raycast-sink` 和 `raycast-hoarder` 等生产力扩展，优化 URL 管理和书签工作流程。",
       "tags": []
     },
     {
       "name": "luoleiorg-x",
       "url": "https://github.com/foru17/luoleiorg-x",
-      "description": "Migrated and rebuilt personal tech blog using Vinext and Cloudflare Workers, integrating AI-generated summaries and SEO capabilities.",
+      "description": "使用 Vinext 和 Cloudflare Workers 迁移并重建个人技术博客，集成 AI 生成的摘要和 SEO 功能。",
       "tags": []
     }
   ],
   "sourceVersions": {
     "tweets": {
-      "fetchedAt": "2026-03-01T18:12:24.285Z",
+      "fetchedAt": "2026-03-03T14:10:16.734Z",
       "count": 300,
       "source": "author-tweets-cache"
     },
     "posts": {
-      "scannedAt": "2026-03-02T06:03:38.903Z",
-      "count": 180
+      "scannedAt": "2026-03-04T03:27:47.798Z",
+      "count": 181
     },
     "github": {
-      "updatedAt": "2026-03-02T06:03:38.901Z"
+      "updatedAt": "2026-03-04T03:27:47.796Z"
     }
   }
 }

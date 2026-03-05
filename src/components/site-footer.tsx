@@ -327,7 +327,7 @@ export function SiteFooter() {
             </span>
             <span className="hidden md:inline text-zinc-300 dark:text-zinc-700">·</span>
             <a
-              href="https://github.com/foru17/luoleiorg-x"
+              href={`https://github.com/${siteConfig.contentRepo.owner}/${siteConfig.contentRepo.repo}`}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1 hover:text-zinc-600 dark:hover:text-zinc-300"
@@ -341,7 +341,7 @@ export function SiteFooter() {
             <span>
               &copy; {new Date().getFullYear()}{" "}
               <a href={siteConfig.siteUrl} className="hover:text-zinc-600 dark:hover:text-zinc-300">
-                LUOLEI.ORG
+                {new URL(siteConfig.siteUrl).hostname.toUpperCase()}
               </a>
             </span>
             <span className="hidden md:inline text-zinc-300 dark:text-zinc-700">·</span>

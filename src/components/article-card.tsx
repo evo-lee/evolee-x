@@ -89,13 +89,13 @@ export function ArticleCard({
       <div className="flex-1 flex flex-col px-6 py-5">
         <Link
           href={post.url}
-          className="line-clamp-2 text-sm leading-snug antialiased font-medium text-gray-800 dark:!text-slate-300 sm:text-base"
+          className="line-clamp-2 text-base leading-snug antialiased font-medium text-gray-800 dark:!text-slate-300 sm:text-base"
         >
           {post.title}
         </Link>
 
         {/* 日期栏：使用 mt-auto 推到最底部 */}
-        <div className="flex items-center justify-between mt-auto pt-4 text-sm">
+        <div className="mt-auto flex items-center justify-between pt-4 text-sm">
           <p className="flex items-center font-mono text-slate-500 dark:text-slate-400">
             <IconCalendar className="mr-1 h-3 w-3" />
             {post.formatShowDate}

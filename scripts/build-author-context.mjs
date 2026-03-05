@@ -336,7 +336,7 @@ function parseBullets(text) {
 }
 
 function parseGithubProfile(readmeMd, resumeMd) {
-  // ─ Bio from README tagline
+  // ─ Bio from README tagline (支持中英文关键词)
   const bioLine =
     readmeMd
       .split("\n")
@@ -345,7 +345,8 @@ function parseGithubProfile(readmeMd, resumeMd) {
           !l.startsWith("#") &&
           !l.startsWith("|") &&
           !l.startsWith("!") &&
-          (l.includes("Developer") || l.includes("Photographer") || l.includes("YouTuber")),
+          (l.includes("Developer") || l.includes("Photographer") || l.includes("YouTuber") ||
+           l.includes("开发") || l.includes("摄影") || l.includes("马拉松")),
       ) ?? "";
 
   // ─ Headline from RESUME title
@@ -370,44 +371,44 @@ function parseGithubProfile(readmeMd, resumeMd) {
   };
   for (const [label, url] of Object.entries(allLinks)) {
     const ll = label.toLowerCase();
-    if (url.includes("x.com") || ll.includes("twitter")) social.x = url;
+    if (url.includes("x.com") || ll.includes("twitter") || ll.includes("twitter:")) social.x = url;
     else if (ll.includes("youtube") || url.includes("zuoluo.tv/youtube")) social.youtube = url;
     else if (ll.includes("bilibili")) social.bilibili = url;
-    else if (ll.includes("blog") || (url.includes("luolei.org") && !url.includes("mailto"))) social.blog = url;
+    else if (ll.includes("blog") || ll.includes("博客") || (url.includes("luolei.org") && !url.includes("mailto"))) social.blog = url;
     else if (ll.includes("instagram")) social.instagram = url;
     else if (ll.includes("unsplash")) social.unsplash = url;
-    else if (ll.includes("telegram")) social.telegram = url;
+    else if (ll.includes("telegram") || ll.includes("telegram 频道")) social.telegram = url;
     else if (ll.includes("linkedin")) social.linkedin = url;
     else if (url.startsWith("mailto:")) social.email = url.replace("mailto:", "");
   }
 
-  // ─ Highlights from README "About Me"
-  const aboutSection = extractMdSection(readmeMd, "About Me");
+  // ─ Highlights from README "关于我" (中文) or "About Me" (英文，兜底)
+  const aboutSection = extractMdSection(readmeMd, "关于我") || extractMdSection(readmeMd, "About Me");
   const highlights = parseBullets(aboutSection)
     .map((h) => h.replace(/^[^\w\u4e00-\u9fff]+/, "").trim())
     .filter(Boolean);
 
-  // ─ Skills from RESUME "Key Skills"
-  const skillsSection = extractMdSection(resumeMd, "Key Skills");
+  // ─ Skills from RESUME "核心技能" (中文) or "Key Skills" (英文，兜底)
+  const skillsSection = extractMdSection(resumeMd, "核心技能") || extractMdSection(resumeMd, "Key Skills");
   const skills = {};
-  const skillRe = /\*\*([^*]+)\*\*:\s*(.+)/g;
+  const skillRe = /\*\*([^*]+)\*\*[：:]\s*(.+)/g;
   let sm;
   while ((sm = skillRe.exec(skillsSection))) {
     const cat = sm[1].trim();
-    const items = sm[2].split(",").map((s) => s.trim()).filter(Boolean);
+    const items = sm[2].split(/[,，、]/).map((s) => s.trim()).filter(Boolean);
     const catLow = cat.toLowerCase();
-    if (catLow.includes("front")) skills.frontend = items;
-    else if (catLow.includes("back") || catLow.includes("db")) skills.backend = items;
-    else if (catLow.includes("devops") || catLow.includes("architect")) skills.devops = items;
-    else if (catLow.includes("design")) skills.design = items;
-    else if (catLow.includes("ai") || catLow.includes("productivity")) skills.tools = items;
+    if (cat.includes("前端") || catLow.includes("front")) skills.frontend = items;
+    else if (cat.includes("后端") || cat.includes("数据库") || catLow.includes("back") || catLow.includes("db")) skills.backend = items;
+    else if (cat.includes("DevOps") || cat.includes("架构") || catLow.includes("devops") || catLow.includes("architect")) skills.devops = items;
+    else if (cat.includes("设计") || catLow.includes("design")) skills.design = items;
+    else if (cat.includes("AI") || cat.includes("生产力") || catLow.includes("ai") || catLow.includes("productivity")) skills.tools = items;
     else skills[catLow.replace(/[^a-z0-9]/g, "_")] = items;
   }
 
-  // ─ Projects from RESUME "Open Source & Featured Projects"
-  const projectsSection = extractMdSection(resumeMd, "Open Source & Featured Projects");
+  // ─ Projects from RESUME "开源与精选项目" (中文) or "Open Source & Featured Projects" (英文，兜底)
+  const projectsSection = extractMdSection(resumeMd, "开源与精选项目") || extractMdSection(resumeMd, "Open Source & Featured Projects");
   const projects = [];
-  const projRe = /\[?\*\*([^*\]]+)\*\*\]?\(([^)]+)\)[:\s]*(.+)/g;
+  const projRe = /\[?\*\*([^*\]]+)\*\*\]?\(([^)]+)\)[：:\s]*(.+)/g;
   let pm;
   while ((pm = projRe.exec(projectsSection))) {
     projects.push({
@@ -418,29 +419,37 @@ function parseGithubProfile(readmeMd, resumeMd) {
     });
   }
 
-  // ─ Experience from RESUME
-  const expSection = extractMdSection(resumeMd, "Experience");
+  // ─ Experience from RESUME "工作经历" (中文) or "Experience" (英文，兜底)
+  // 中文格式1（独立开发）: ### 职位名称 \n _期间_
+  // 中文格式2（公司）:     ### 公司名称 \n _职位（期间）_
+  const expSection = extractMdSection(resumeMd, "工作经历") || extractMdSection(resumeMd, "Experience");
   const experience = [];
   const expBlocks = expSection.split(/\n(?=### )/);
   for (const block of expBlocks) {
     const lines = block.split("\n").map((l) => l.trim()).filter(Boolean);
     const headerLine = lines.find((l) => l.startsWith("### "));
     if (!headerLine) continue;
-    const companyRaw = headerLine.replace(/^###\s+/, "").trim();
+    const headerRaw = headerLine.replace(/^###\s+/, "").trim();
     const italicLine = lines.find((l) => /^_.*_$/.test(l));
     let title = "";
-    let company = companyRaw;
+    let company = headerRaw;
     let period = "";
     if (italicLine) {
       const content = italicLine.replace(/^_/, "").replace(/_$/, "").trim();
-      const periodMatch = content.match(/\(([^)]+)\)\s*$/);
-      if (periodMatch) {
-        period = periodMatch[1].trim();
+      // 中文格式：_职位（期间）_ 或 _期间_（独立开发者）
+      const cnPeriodMatch = content.match(/（([^）]+)）\s*$/);
+      const enPeriodMatch = content.match(/\(([^)]+)\)\s*$/);
+      if (cnPeriodMatch) {
+        period = cnPeriodMatch[1].trim();
+        title = content.replace(/（[^）]+）\s*$/, "").trim();
+      } else if (enPeriodMatch) {
+        period = enPeriodMatch[1].trim();
         title = content.replace(/\([^)]+\)\s*$/, "").trim();
       } else {
+        // 纯期间行（独立开发者格式）
         period = content;
         title = company;
-        company = "Independent";
+        company = "独立";
       }
     }
     if (!title) title = company;
@@ -455,19 +464,19 @@ function parseGithubProfile(readmeMd, resumeMd) {
     });
   }
 
-  // ─ Education from RESUME
-  const eduSection = extractMdSection(resumeMd, "Education");
+  // ─ Education from RESUME "教育背景" (中文) or "Education" (英文，兜底)
+  const eduSection = extractMdSection(resumeMd, "教育背景") || extractMdSection(resumeMd, "Education");
   let degree = "";
   let school = "";
   let eduNote = "";
   for (const line of eduSection.split("\n")) {
-    const bold = line.match(/\*\*([^*]+)\*\*\s*-\s*(.+)/);
+    const bold = line.match(/\*\*([^*]+)\*\*\s*[-－]\s*(.+)/);
     if (bold) {
       degree = bold[1].trim();
       school = bold[2].trim();
     }
     const italic = line.match(/^_([^_]+)_$/);
-    if (italic && italic[1].includes("•")) {
+    if (italic && (italic[1].includes("•") || italic[1].includes("大学") || italic[1].includes("University"))) {
       school = `${school} (${italic[1].trim()})`;
     }
     if (line.trim().startsWith("- ")) {
@@ -476,12 +485,12 @@ function parseGithubProfile(readmeMd, resumeMd) {
     }
   }
 
-  // ─ Side Projects & Interests
+  // ─ Side Projects & Interests (中文简历无此独立章节，用空数组)
   const sideSection = extractMdSection(resumeMd, "Side Projects & Interests");
   const sideProjects = parseBullets(sideSection);
 
-  // ─ Public Activities
-  const pubSection = extractMdSection(resumeMd, "Public Activities");
+  // ─ Public Activities from "公开活动" (中文) or "Public Activities" (英文，兜底)
+  const pubSection = extractMdSection(resumeMd, "公开活动") || extractMdSection(resumeMd, "Public Activities");
   const publicActivities = parseBullets(pubSection);
 
   return {
@@ -512,10 +521,10 @@ function parseGithubProfile(readmeMd, resumeMd) {
 async function fetchGithubProfile() {
   console.log(`   🔗 从 GitHub 在线获取 (${GITHUB_PROFILE_REPO})...`);
   const [readmeMd, resumeMd] = await Promise.all([
-    fetchGithubRaw("README.md"),
-    fetchGithubRaw("RESUME.md"),
+    fetchGithubRaw("README.zh-CN.md"),
+    fetchGithubRaw("RESUME.zh-CN.md"),
   ]);
-  console.log(`   └─ README ${readmeMd.length} 字符 / RESUME ${resumeMd.length} 字符`);
+  console.log(`   └─ README.zh-CN ${readmeMd.length} 字符 / RESUME.zh-CN ${resumeMd.length} 字符`);
   const profile = parseGithubProfile(readmeMd, resumeMd);
   await writeJson(GITHUB_RESUME_FILE, profile);
   console.log(`   └─ 已更新本地缓存: data/github-resume.json`);

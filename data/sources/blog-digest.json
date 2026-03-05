@@ -1,7 +1,23 @@
 {
-  "generatedAt": "2026-03-02T06:03:38.165Z",
-  "count": 180,
+  "generatedAt": "2026-03-04T03:27:47.075Z",
+  "count": 181,
   "posts": [
+    {
+      "title": "2026 年，我把自己做成了一个 AI",
+      "date": "2026-03-03",
+      "url": "https://luolei.org/luolei-ai",
+      "categories": [
+        "code"
+      ],
+      "summary": "文章介绍了作者利用多年积累的博客、社交动态及代码库数据，通过多模型分析与RAG技术构建个人AI分身的过程，旨在实现主动的语义索引并建立智能对话系统，提升个人内容的传播效率与解释权。",
+      "keyPoints": [
+        "通过主动建立个人知识语义索引，夺回AI对个人内容的解释权。",
+        "利用多模型摘要预处理技术，克服大模型在长上下文分析时的瓶颈。",
+        "采用Vinext、Vercel AI SDK及Cloudflare Workers构建高性能RAG系统。",
+        "通过加权搜索算法与严格的Prompt策略，有效抑制AI产生事实幻觉。",
+        "探讨了数字分身与真实自我的偏差，强调AI是创作者知识体系的延伸。"
+      ]
+    },
     {
       "title": "Neko Master: 从 0 到 1K+ Star 的 Vibe Coding 实践",
       "date": "2026-03-01",

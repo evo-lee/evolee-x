@@ -1,6 +1,7 @@
 import tweetsCache from "@/../data/tweets-cache.json";
 import { getPreviewImage } from "@/lib/content/utils";
 import { siteConfig } from "@/lib/site-config";
+import { formatTweetDateTime, formatNumber } from "@/lib/tweet-utils";
 
 interface TweetData {
   id: string;
@@ -28,31 +29,6 @@ interface TweetData {
 
 interface TweetCardProps {
   tweetId: string;
-}
-
-function formatTweetDateTime(dateString: string): string {
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return dateString;
-
-  const time = date.toLocaleTimeString("zh-CN", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-
-  const fullDate = date.toLocaleDateString("zh-CN", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
-  return `${time} · ${fullDate}`;
-}
-
-function formatNumber(num: number): string {
-  if (num >= 10000) return `${(num / 10000).toFixed(1)}万`;
-  if (num >= 1000) return `${(num / 1000).toFixed(1)}千`;
-  return num.toString();
 }
 
 function TweetMediaGrid({

@@ -57,12 +57,12 @@ interface PagefindApi {
   options?: (options: { bundlePath?: string; baseUrl?: string }) => void;
 }
 
+import { SKELETON_ROWS } from "@/lib/constants";
+
 function getCacheKey(rawQuery: string, relatedSlug: string): string {
   const normalized = rawQuery.trim().toLowerCase();
   return !normalized && relatedSlug ? `related:${relatedSlug}` : normalized;
 }
-
-const SKELETON_ROWS = 5;
 
 function stripHtml(input: string): string {
   return input

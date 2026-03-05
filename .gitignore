@@ -62,7 +62,8 @@ next-env.d.ts
 
 # wrangler
 .wrangler/
+wrangler.json
+wrangler.jsonc
 
 # local secrets
 .dev.vars
-

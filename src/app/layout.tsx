@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { siteConfig } from "@/lib/site-config";
+import { AIChatBox } from "@/components/ai-chat-box";
+import { AIChatProvider } from "@/components/ai-chat-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ThemeColorMeta } from "@/components/theme-color-meta";
@@ -14,21 +16,7 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.title}`,
   },
   description: siteConfig.description,
-  keywords: [
-    "罗磊",
-    "ZUOLUOTV",
-    "独立博客",
-    "全栈开发",
-    "前端",
-    "AI",
-    "出海",
-    "数码科技",
-    "摄影",
-    "旅行",
-    "马拉松",
-    "跑步",
-    "Shopify",
-  ],
+  keywords: siteConfig.keywords,
   alternates: {
     canonical: siteConfig.siteUrl,
     types: {
@@ -86,6 +74,29 @@ export const viewport: Viewport = {
   userScalable: true,
 };
 
+const themeScript = `(function(){try{var t=localStorage.getItem('theme');var m=localStorage.getItem('theme_manual_override')==='1';var p=window.matchMedia('(prefers-color-scheme:dark)').matches;var d=(m&&(t==='dark'||t==='light'))?t==='dark':p;document.documentElement.classList.toggle('dark',d)}catch(e){}})()`;
+
+const structuredData = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.title,
+  url: siteConfig.siteUrl,
+  description: siteConfig.description,
+  inLanguage: "zh-CN",
+  author: {
+    "@type": "Person",
+    name: siteConfig.author.name,
+    url: siteConfig.siteUrl,
+    sameAs: [
+      siteConfig.social.github,
+      `https://x.com/${siteConfig.author.twitterUsername}`,
+      siteConfig.social.youtube,
+      siteConfig.social.bilibili,
+      `https://unsplash.com/@${siteConfig.author.unsplash}`,
+    ],
+  },
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -94,43 +105,26 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className="scroll-pt-[60px]">
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');var m=localStorage.getItem('theme_manual_override')==='1';var p=window.matchMedia('(prefers-color-scheme:dark)').matches;var d=(m&&(t==='dark'||t==='light'))?t==='dark':p;document.documentElement.classList.toggle('dark',d)}catch(e){}})()`,
-          }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <link rel="manifest" href="/manifest.json" />
         <ThemeColorMeta />
+        <script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+          async
+          defer
+        />
       </head>
       <body className="flex min-h-screen flex-col antialiased pt-[60px]">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              name: siteConfig.title,
-              url: siteConfig.siteUrl,
-              description: siteConfig.description,
-              inLanguage: "zh-CN",
-              author: {
-                "@type": "Person",
-                name: siteConfig.author.name,
-                url: siteConfig.siteUrl,
-                sameAs: [
-                  siteConfig.social.github,
-                  `https://x.com/${siteConfig.author.twitterUsername}`,
-                  siteConfig.social.youtube,
-                  siteConfig.social.bilibili,
-                  `https://unsplash.com/@${siteConfig.author.unsplash}`,
-                ],
-              },
-            }),
-          }}
+          dangerouslySetInnerHTML={{ __html: structuredData }}
         />
-        <SiteHeader />
-        <div className="flex-1">{children}</div>
-        <SiteFooter />
+        <AIChatProvider>
+          <SiteHeader />
+          <div className="flex-1">{children}</div>
+          <SiteFooter />
+          <AIChatBox />
+        </AIChatProvider>
         <GoogleAnalyticsScript />
         <UmamiScript />
       </body>

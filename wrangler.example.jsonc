@@ -1,0 +1,71 @@
+{
+  // ============================================
+  // Wrangler 配置示例
+  // ============================================
+  // 此文件是 wrangler.jsonc 的模板。
+  // 复制为 wrangler.jsonc 并填入真实值。
+  //
+  // 变量说明:
+  //   vars 中的变量在 Worker 运行时自动注入 process.env
+  //   这些是线上 Cloudflare Worker 的运行时配置
+  //   本地开发使用 .env 文件中的同名变量
+  //
+  // ⚠️ 运行时变量 (AI_*, TELEGRAM_*, TURNSTILE_*) 同时需在 .env 中配置
+  //    以保证本地开发和线上行为一致
+  // ============================================
+
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "luoleiorg-x",
+  "compatibility_date": "2026-02-25",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "./worker/index.ts",
+  "assets": {
+    "directory": "./dist/client",
+    "not_found_handling": "none",
+    "binding": "ASSETS"
+  },
+  "images": {
+    "binding": "IMAGES"
+  },
+  "vars": {
+    // Umami 统计 Website ID
+    "UMAMI_WEBSITE_ID": "your_umami_website_id",
+
+    // AI 对话服务 (OpenAI 兼容 API)
+    // 支持千问、DeepSeek、Gemini 等，与 .env 中的值保持一致
+    "AI_BASE_URL": "https://generativelanguage.googleapis.com/v1beta/openai",
+    "AI_API_KEY": "your_ai_api_key_here",
+    "AI_MODEL": "gemini-2.0-flash",
+
+    // Telegram 对话监控推送
+    "TELEGRAM_BOT_TOKEN": "your_telegram_bot_token_here",
+    "TELEGRAM_CHAT_ID": "your_telegram_chat_id_here",
+
+    // Cloudflare Turnstile 人机验证
+    // Site Key: 前端使用，公开值
+    // Secret Key: 后端验证用
+    "TURNSTILE_SITE_KEY": "your_turnstile_site_key_here",
+    "TURNSTILE_SECRET_KEY": "your_turnstile_secret_key_here"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "CACHE_KV",
+      "id": "your_kv_namespace_id"
+    }
+  ],
+  "observability": {
+    "enabled": false,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": false,
+      "persist": true,
+      "head_sampling_rate": 1
+    }
+  }
+}

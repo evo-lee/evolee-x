@@ -23,9 +23,7 @@ export function UmamiScript() {
       src={scriptUrl}
       data-website-id={websiteId}
       strategy="lazyOnload"
-      // 限制只在 luolei.org 及其子域名上产生统计数据
-      // 本地开发时不会发送统计数据，但页面功能正常
-      data-domains="luolei.org,www.luolei.org"
+      data-domains={siteConfig.domains.join(",")}
     />
   );
 }

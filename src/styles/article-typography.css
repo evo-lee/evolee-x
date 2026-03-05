@@ -1,0 +1,183 @@
+/* ================================================================== */
+/* Typography — headings, paragraphs, lists, blockquotes, hr          */
+/* ================================================================== */
+
+.article-content {
+  font-family: -apple-system, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.article-content h1 {
+  margin: 36px 0 18px;
+  font-size: 1.95rem;
+  font-weight: 700;
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+}
+
+.article-content h2 {
+  border-top: 0 none transparent;
+  margin: 40px 0 16px;
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1.34;
+  letter-spacing: -0.01em;
+}
+
+.article-content h3 {
+  margin: 28px 0 14px;
+  font-size: 1.28rem;
+  font-weight: 600;
+  line-height: 1.42;
+  letter-spacing: -0.005em;
+}
+
+.article-content h4 {
+  margin: 22px 0 10px;
+  font-size: 1.12rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.article-content h5 {
+  margin: 18px 0 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--vp-c-text-2);
+}
+
+.article-content h6 {
+  margin: 14px 0 6px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--vp-c-text-2);
+}
+
+.article-content p {
+  margin: 16px 0;
+  font-weight: 400;
+  line-height: 30px;
+  word-break: break-word;
+}
+
+.article-content p strong {
+  font-weight: bold;
+  box-shadow: inset 0 -0.5px 0 var(--vp-c-brand);
+}
+
+.article-content li strong {
+  font-weight: bold;
+  box-shadow: none;
+}
+
+.article-content li {
+  line-height: 1.72;
+  margin: 7px 0;
+}
+
+.article-content ul,
+.article-content ol {
+  padding-left: 1.55rem;
+  padding-right: 0;
+  margin: 18px 0;
+}
+
+.article-content ul li {
+  list-style-type: disc;
+}
+
+.article-content ol li {
+  list-style-type: decimal;
+}
+
+.article-content li + li {
+  margin: 5px 0;
+  font-weight: 400;
+  line-height: inherit;
+}
+
+.article-content li > ul,
+.article-content li > ol {
+  margin: 8px 0 8px 18px;
+}
+
+.article-content blockquote {
+  margin: 24px 0;
+  padding: 12px 20px;
+  border-left: 4px solid var(--vp-c-brand);
+  background-color: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+  font-style: italic;
+}
+
+.article-content blockquote p {
+  margin: 8px 0;
+}
+
+.article-content hr {
+  margin: 32px 0;
+  border: none;
+  border-top: 1px solid var(--vp-c-divider);
+}
+
+.article-content summary {
+  color: var(--vp-c-brand);
+}
+
+.article-content .custom-block {
+  margin: 28px 0;
+  padding: 0 24px 2px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.3;
+  background-color: #f9f9f9;
+}
+
+.dark .article-content .custom-block {
+  color: var(--vp-c-text-1);
+  background-color: var(--vp-c-bg-alt);
+}
+
+@media (min-width: 960px) {
+  .article-content h1 {
+    font-size: 2.15rem;
+  }
+
+  .article-content h2 {
+    border-top: 0 none transparent;
+    margin: 46px 0 18px;
+    font-size: 1.95rem;
+  }
+
+  .article-content h2:first-child {
+    margin: 0 0 16px;
+  }
+
+  .article-content h3 {
+    font-size: 1.5rem;
+  }
+
+  .article-content h4 {
+    font-size: 1.2rem;
+  }
+
+  .article-content h5 {
+    font-size: 1.05rem;
+  }
+
+  .article-content ul,
+  .article-content ol {
+    padding-left: 2rem;
+    padding-right: 0;
+    margin: 24px 0;
+  }
+
+  .article-content li + li {
+    margin: 6px 0;
+    font-weight: 400;
+    line-height: inherit;
+  }
+}

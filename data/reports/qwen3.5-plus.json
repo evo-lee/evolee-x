@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-03-02T06:24:36.799Z",
+    "lastUpdated": "2026-03-04T03:29:46.680Z",
     "model": "qwen3.5-plus",
     "modelName": "Qwen 3.5 Plus",
     "provider": "Alibaba",
@@ -14,132 +14,132 @@
   "report": {
     "hero": {
       "title": "AI 视角下的罗磊",
-      "summary": "经常看到他在深夜用 AI 快速原型开发，转头又在马拉松赛道或异国街头记录见闻。",
-      "intro": "从他的内容来看，是个边做边公开的创作者，技术教程和生活攻略更新得很勤。除了写代码，经常能看到他出现在马拉松赛道或旅行途中，把折腾工具的经验写成图文分享。"
+      "summary": "一边跑马拉松一边折腾家庭网络，顺手把解决方案开源出来的人。",
+      "intro": "从博客到 X 动态，能看到他频繁分享技术实测和生活攻略。不管是 AI 工具链的搭建，还是海外旅行的路线规划，都习惯把过程拆解成可复用的经验。"
     },
     "identities": [
       {
-        "name": "把 AI 当工具链用",
-        "description": "习惯用 AI 辅助快速原型开发，把想法变成开源工具，减少重复造轮子的时间。",
-        "evidence": "多篇关于 Vibe Coding 开发流程的文章，以及在 X 上同步的 AI 辅助编程进度。",
-        "link": "https://github.com/foru17/neko-master"
+        "name": "AI 当工具链用",
+        "description": "习惯用 AI 辅助写代码和做原型，把复杂功能快速落地，再把过程分享出来。",
+        "evidence": "多篇关于 Vibe Coding 的文章和项目更新，展示了如何利用 AI 缩短开发时间。",
+        "link": "https://luolei.org/neko-master-vibe-coding"
       },
       {
         "name": "把家里网络折腾明白",
-        "description": "研究家庭网络优化，从 OpenWrt 配置到 IPTV 转发都有实测方案。",
-        "evidence": "博客上关于 IPTV 组播转单播、DNS 设置以及网络流量分析面板的开发记录。",
+        "description": "对宽带套餐、IPTV 和 NAS 存储有详细的实测记录，喜欢对比不同运营商的实际表现。",
+        "evidence": "运营商套餐对比和家庭网络测试文章，包含具体的网速和资费数据。",
         "link": "https://luolei.org/chinanet-iptv"
       },
       {
         "name": "旅行也写成攻略",
-        "description": "记录马拉松和旅行经历，提供实用的报名、路线和装备建议，不只是晒图。",
-        "evidence": "京都马拉松全程记录文章，以及多国旅行中的网络、交通实测分享。",
+        "description": "把马拉松参赛和海外自由行经历整理成可参考的路线，涵盖报名、装备和交通细节。",
+        "evidence": "京都马拉松和日本旅行游记，记录了完整的参赛流程和城市探索路线。",
         "link": "https://luolei.org/kyoto-marathon-2025"
       }
     ],
     "strengths": [
       {
-        "title": "技术落地方式",
+        "title": "开发习惯",
         "points": [
-          "快速原型验证",
-          "开源工具复用",
-          "文档写得详细"
+          "AI 辅助编程",
+          "开源项目驱动",
+          "快速迭代原型"
         ]
       },
       {
-        "title": "生活决策习惯",
+        "title": "内容习惯",
         "points": [
-          "消费决策拉表对比",
-          "实地体验后分享",
-          "路线规划具体"
+          "参数对比详细",
+          "真实场景测试",
+          "更新频率稳定"
         ]
       }
     ],
     "styles": [
       {
         "trait": "进度条体质",
-        "description": "做着做着就顺手发个更新，经常在 X 上直播开发进度或测试结果，不像是在憋大招。"
+        "description": "做着做着就顺手发个更新，经常在 X 上同步项目进展或遇到的坑。"
       },
       {
         "trait": "对比党",
-        "description": "买东西或选方案都要拉表、跑测试，连眼镜片或宽带套餐都要把参数列出来对比。"
+        "description": "买东西选方案都要拉表、跑测试，连宽带套餐和眼镜镜片都要实测对比。"
       },
       {
-        "trait": "图文并行",
-        "description": "旅行照片常配上具体的拍摄参数和路线，技术文章也会放大量截图和流程图，阅读负担小。"
+        "trait": "生活技术化",
+        "description": "遇到小麻烦喜欢做成插件或脚本，比如把书签管理和短链服务集成到工具栏。"
       }
     ],
     "proofs": {
       "posts": [
         {
+          "title": "2026 年，我把自己做成了一个 AI",
+          "url": "https://luolei.org/luolei-ai",
+          "reason": "记录了他如何用 AI 重构个人知识库，把多年内容变成可查询的索引。",
+          "date": "2026-03-03"
+        },
+        {
           "title": "Neko Master: 从 0 到 1K+ Star 的 Vibe Coding",
           "url": "https://luolei.org/neko-master-vibe-coding",
-          "reason": "记录了如何用 AI 辅助快速开发开源项目，体现了他典型的工作流。",
+          "reason": "分享了开源项目从 0 到 1 的开发过程，展示了 AI 辅助编程的实际效果。",
           "date": "2026-03-01"
         },
         {
           "title": "实现 AI 自由：我为未来准备的 4 个数字通行证",
           "url": "https://luolei.org/ai-2026",
-          "reason": "探讨开发者如何构建自己的 AI 基础设施，思路很务实。",
+          "reason": "探讨了开发者在 AI 时代的数字基建准备，列出了具体的服务和建议。",
           "date": "2026-02-04"
         },
         {
           "title": "京都马拉松：第一次去日本跑马",
           "url": "https://luolei.org/kyoto-marathon-2025",
-          "reason": "详细记录了参赛全过程，涵盖报名、领物到比赛日，像篇实用攻略。",
+          "reason": "详细记录了海外参赛的报名和行程细节，像攻略一样可参考。",
           "date": "2025-02-28"
-        },
-        {
-          "title": "Cloudflare 创业扶持计划申请经验",
-          "url": "https://luolei.org/cloudflare-for-startups",
-          "reason": "拆解了申请流程和准备材料，对想申请类似计划的人有参考价值。",
-          "date": "2025-01-12"
         },
         {
           "title": "我的新电脑：2025 年 MATX 小主机",
           "url": "https://luolei.org/pc-2025",
-          "reason": "记录了装机选型和配置过程，体现了他对比参数和实测的习惯。",
+          "reason": "展示了 DIY 电脑时的硬件选型和对比思路，有具体的配置单。",
           "date": "2025-05-25"
         }
       ],
       "tweets": [
         {
-          "title": "中国联通香港 CUniq 月神卡套餐分析",
+          "title": "中国联通香港 CUniq 月神卡应该算是目前手机卡套餐里一个真正的 Bug 级存在",
           "url": "https://x.com/luoleiorg/status/1993296964684071429",
-          "reason": "分析了手机卡套餐的性价比，是他常做的通讯服务测评类型。",
+          "reason": "分享了手机套餐的实际使用体验和资费细节，是典型的实测反馈。",
           "date": "2025-11-25"
         },
         {
-          "title": "Clash Master 流量可视化工具发布",
-          "url": "https://x.com/luoleiorg/status/2019508580555321508",
-          "reason": "展示了新开发的工具功能，体现了他边做边公开进度的特点。",
-          "date": "2026-02-05"
+          "title": "强烈建议各位 开发者/产品经理 朋友花 15 分钟看看这个文档",
+          "url": "https://x.com/luoleiorg/status/1972928152507978196",
+          "reason": "推荐了开发者使用 AI 工具的具体提示词文档，体现了对工具链的关注。",
+          "date": "2025-09-30"
         },
         {
-          "title": "推荐开发者查看 Lovable 官方 Prompt 文档",
-          "url": "https://x.com/luoleiorg/status/1972928152507978196",
-          "reason": "分享对 AI 开发工具的看法，经常给同好推荐实用资源。",
-          "date": "2025-09-30"
+          "title": "昨晚随手 Vibe 的一个项目 Clash Master，不到 24 小时，收获 GitHub 400+ Stars",
+          "url": "https://x.com/luoleiorg/status/2019758733983912111",
+          "reason": "同步了开源项目的进度和获取的反馈，展示了快速开发的能力。",
+          "date": "2026-02-06"
         }
       ],
       "projects": [
         {
           "title": "Neko Master",
           "url": "https://github.com/foru17/neko-master",
-          "reason": "开源的家庭网络流量分析面板，是他技术实力的代表作之一。"
+          "reason": "家庭网络流量分析工具，获得了社区关注，体现了对网络可视化的投入。"
         },
         {
-          "title": "Raycast Plugins",
+          "title": "Raycast 插件",
           "url": "https://github.com/foru17",
-          "reason": "开发了多个效率插件，优化了书签和短链管理工作流。"
+          "reason": "个人主页仓库，包含多个生产力插件，展示了解决小麻烦的工具化思路。"
         },
         {
           "title": "luoleiorg-x",
           "url": "https://github.com/foru17/luoleiorg-x",
-          "reason": "个人博客的重建项目，整合了 AI 摘要和 SEO 能力。"
+          "reason": "个人博客的技术重构版本，反映了对网站性能和架构的持续优化。"
         }
       ]
     },
-    "disclaimer": "本内容基于公开数据由 AI 生成，仅供参考，不代表作者本人观点。"
+    "disclaimer": "本内容基于公开数据生成，仅供参考，不代表作者本人观点。"
   }
 }

@@ -23,4 +23,11 @@ export default defineConfig({
       "react/jsx-dev-runtime",
     ],
   },
+  environments: {
+    rsc: {
+      optimizeDeps: {
+        exclude: ["@ai-sdk/react", "swr"],
+      },
+    },
+  },
 });

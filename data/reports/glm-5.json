@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-03-02T06:28:26.787Z",
+    "lastUpdated": "2026-03-04T03:32:06.645Z",
     "model": "glm-5",
     "modelName": "GLM 5.0 ",
     "provider": "Zhipu",
@@ -14,138 +14,138 @@
   "report": {
     "hero": {
       "title": "AI 视角下的罗磊",
-      "summary": "一边用 AI 快速做出开源项目，一边在 X 上同步进度，顺手还能把马拉松跑进 4 个半小时的那种开发者。",
-      "intro": "从 2012 年开始写博客，技术、旅行、摄影什么都聊。看他的内容，会发现他把 AI 当日常工具来用，把家里的网络设备折腾得明明白白，还会把每次旅行的攻略和心得整理成文。他的摄影作品在 Unsplash 上累计获得了超过 1500 万次浏览。"
+      "summary": "一个会把「折腾」写成教程的人，刚用 AI 快速搭完流量分析面板，转头又去研究怎么省下每个月的手机套餐费。",
+      "intro": "从他的内容来看，技术不是目的而是手段——无论是用 AI 辅助开发开源工具，还是把家庭网络调到顺手，最后大多会变成一篇可复用的经验帖。除了代码和网络，马拉松和旅行摄影也占据了不少篇幅，看得出来是那种会把生活体验也认真对待的人。"
     },
     "identities": [
       {
         "name": "AI 当工具链用",
-        "description": "经常用 Claude、Kimi 等 AI 工具快速搭建原型项目，并在博客和 X 上分享完整过程。他称之为「Vibe Coding」，能把一个想法在几小时内变成可用的开源产品。",
-        "evidence": "Neko Master 项目从 0 到 1000+ Star 的经历被他完整记录成文，多篇博客和推文展示了如何用 AI 辅助开发、提升效率的具体方法。",
-        "link": "https://luolei.org/neko-master-vibe-coding"
+        "description": "他把 AI 当成日常开发的加速器，经常用 Claude、Kimi 等模型快速搭建原型，然后把过程和成果公开分享。最近的一个网络流量分析工具，就是用「Vibe Coding」方式在短时间内拿到了 1000+ Star。",
+        "evidence": "2026 年的文章详细记录了他如何用 AI 把自己多年积累的博客、社交动态、代码库变成个人知识语义索引；推文里也频繁出现「用 Kimi 几分钟 Vibe 了一个项目」之类的实时进展。",
+        "link": "https://luolei.org/luolei-ai"
       },
       {
         "name": "把家里网络折腾明白",
-        "description": "对家庭网络、NAS、IPTV 有深入研究，经常分享 OpenWrt 配置、运营商套餐对比、Cloudflare 部署等实操内容。",
-        "evidence": "写过广东电信 IPTV 组播转单播的技术测试、宽带套餐对比、家庭弱电装修笔记等文章，推文中也频繁出现 Homelab 相关话题。",
+        "description": "家庭网络是他长期投入的方向，从宽带套餐对比、IPTV 组播转单播，到用 OpenWrt 和自建面板监控流量，基本把家用网络玩出了专业水准。",
+        "evidence": "有专门的文章拆解广东电信 IPTV 的极限测试方案，也有手机套餐和宽带的年度对比盘点；开源项目 Neko Master 和 Clash Master 都是围绕家庭网络流量可视化展开的。",
         "link": "https://luolei.org/chinanet-iptv"
       },
       {
         "name": "旅行也写成攻略",
-        "description": "去日本跑马拉松、去美国自驾、骑行川藏线，每次出行都会整理成详细的记录和攻略分享出来。",
-        "evidence": "京都马拉松参赛记录、美西自驾游记、川藏骑行经历等文章都配有路线规划和实用信息，摄影作品也在 Unsplash 获得大量关注。",
+        "description": "去过十几个国家和地区，西藏骑过 2200 公里，跑过 10 多场全程马拉松。每次出行基本都会留下详细的行程记录和实用建议。",
+        "evidence": "京都马拉松的参赛记录从报名费、领物流程到比赛当天的细节一应俱全；日本、美国、菲律宾的旅行文章也都带着路线规划和实用信息。",
         "link": "https://luolei.org/kyoto-marathon-2025"
       },
       {
         "name": "把小麻烦做成插件",
-        "description": "遇到效率问题就会顺手做个工具解决，开发了多个 Raycast 插件用于短链管理和书签同步。",
-        "evidence": "Raycast Sink 短链管理插件和 Raycast Hoarder 书签插件都是他自己动手的产物，并在博客上写了完整的开发介绍。",
+        "description": "遇到重复性高的操作，经常会顺手写个工具解决，然后开源出来。书签管理、短链跳转这些日常需求，都变成了 Raycast 插件。",
+        "evidence": "Raycast Sink 和 Raycast Hoarder 两个插件，分别解决了短链管理和 AI 书签分类的问题，文章里把开发思路和使用场景都写得很清楚。",
         "link": "https://luolei.org/raycast-sink"
       }
     ],
     "strengths": [
       {
-        "title": "边做边记录",
+        "title": "实测对比型做事风格",
         "points": [
-          "项目刚有进展就会发推文同步，经常能看到「昨晚随手 Vibe 的一个项目」这类更新",
-          "新工具刚上手就会写体验文章，比如 Cloudflare 创业扶持计划的申请经验",
-          "开源项目从想法到发布的全过程都有文档留存"
+          "选手机套餐、宽带服务商要拉表对比优缺点",
+          "买显示器、装机要写清楚选择理由和实测数据",
+          "遇到问题习惯先自己跑一遍测试再给结论"
         ]
       },
       {
-        "title": "喜欢实测对比",
+        "title": "边做边分享的节奏",
         "points": [
-          "宽带套餐要拉表对比深圳联通、东莞电信的优劣势",
-          "手机卡、随身 WiFi 会实际测试网速和资费",
-          "显示器、电脑配置会从使用者角度写详细评测"
+          "项目开发过程中频繁在 X 同步进展，经常出现「刚做完就发更新」的情况",
+          "开源项目从 0 到 1000+ Star 的过程有完整记录",
+          "技术方案验证完基本都会配套一篇教程文章"
         ]
       }
     ],
     "styles": [
       {
         "trait": "进度条体质",
-        "description": "做着做着就顺手发个更新，项目刚上线就会在 X 上预告「今晚搞定了什么功能」，让关注他的人像追剧一样看项目进展。"
+        "description": "做着做着就顺手发个推文更新进展，Clash Master 项目从 idea 到上线到 GitHub 400+ Star，全过程都能在 X 上看到实时动态。"
       },
       {
-        "trait": "实用主义写法",
-        "description": "文章里少讲大道理，多放「怎么操作」「花了多少钱」「踩了什么坑」，像朋友在饭桌上分享经验而不是写教科书。"
+        "trait": "对比党",
+        "description": "选东西要拉表，选方案要跑测试——从宽带运营商到显示器比例，任何涉及选择的事情都愿意花时间做横向对比。"
       },
       {
-        "trait": "技术生活不分家",
-        "description": "同一篇博客里可能既有代码片段也有旅行照片，X 时间线上刚发完 AI 开发心得，紧接着就是马拉松完赛记录。"
+        "trait": "教程型输出",
+        "description": "解决完一个问题，基本都会留下可复用的内容：Cloudflare 创业扶持计划怎么申请、香港银行开户流程、甚至验光就诊经验都写成了完整攻略。"
       }
     ],
     "proofs": {
       "posts": [
         {
+          "title": "2026 年，我把自己做成了一个 AI",
+          "url": "https://luolei.org/luolei-ai",
+          "reason": "展示了他如何把多年积累的内容变成可交互的知识库，是 AI 工具链思路的典型代表",
+          "date": "2026-03-03"
+        },
+        {
           "title": "Neko Master: 从 0 到 1K+ Star 的 Vibe Coding",
           "url": "https://luolei.org/neko-master-vibe-coding",
-          "reason": "完整展示了他如何用 AI 快速开发开源项目并积累社区关注的真实案例",
+          "reason": "完整记录了一个开源项目如何用 AI 辅助开发快速获得社区认可",
           "date": "2026-03-01"
         },
         {
           "title": "京都马拉松: 第一次去日本跑马",
           "url": "https://luolei.org/kyoto-marathon-2025",
-          "reason": "典型的旅行+跑步记录，有完整的行程规划和参赛体验",
+          "reason": "旅行+跑步的结合，攻略细节丰富，是他生活内容风格的典型样本",
           "date": "2025-02-28"
-        },
-        {
-          "title": "Cloudflare 创业扶持计划申请经验",
-          "url": "https://luolei.org/cloudflare-for-startups",
-          "reason": "实用的申请指南，分享了自己成功申请的具体步骤",
-          "date": "2025-01-12"
         },
         {
           "title": "Raycast Hoarder: 开源 AI 书签管理插件",
           "url": "https://luolei.org/raycast-hoarder",
-          "reason": "展示了他遇到需求就顺手做工具的习惯",
+          "reason": "把日常需求做成开源工具的例子，展示了他「遇到问题就顺手解决」的习惯",
           "date": "2024-11-24"
         },
         {
-          "title": "2024年: 我用的手机和宽带套餐",
-          "url": "https://luolei.org/cellphone-plans-2024",
-          "reason": "典型的对比实测风格，把不同运营商的套餐拉出来逐项分析",
-          "date": "2024-12-01"
+          "title": "广东电信 IPTV 组播转单播极限测试",
+          "url": "https://luolei.org/chinanet-iptv",
+          "reason": "家庭网络折腾的专业程度，技术方案拆解得很细",
+          "date": "2024-12-27"
         }
       ],
       "tweets": [
         {
-          "title": "中国联通香港月神卡推荐",
-          "url": "https://x.com/luoleiorg/status/1993296964684071429",
-          "reason": "高互动推文，展示了他在手机卡套餐领域的影响力和实用分享风格",
-          "date": "2025-11-25"
+          "title": "Clash Master 项目上线 24 小时内获得 400+ Star",
+          "url": "https://x.com/luoleiorg/status/2019758733983912111",
+          "reason": "展示了他边做边公开进度的习惯，项目从想法到社区反馈的全过程",
+          "date": "2026-02-06"
         },
         {
-          "title": "Lovable 提示词文档推荐",
+          "title": "推荐 Lovable 官方 Prompting 文档",
           "url": "https://x.com/luoleiorg/status/1972928152507978196",
-          "reason": "典型的开发者向分享，把自己觉得有价值的资源推荐给同行",
+          "reason": "看到好用的资料会主动分享给开发者社区",
           "date": "2025-09-30"
         },
         {
-          "title": "Clash Master 项目发布预告",
-          "url": "https://x.com/luoleiorg/status/2019508580555321508",
-          "reason": "新项目上线时的预告推文，展示了边做边公开进度的风格",
-          "date": "2026-02-05"
+          "title": "中国联通香港 CUniq 月神卡套餐分析",
+          "url": "https://x.com/luoleiorg/status/1993296964684071429",
+          "reason": "手机卡套餐对比是他长期关注的实用方向，这条获得了 2600+ 点赞",
+          "date": "2025-11-25"
         }
       ],
       "projects": [
         {
           "title": "Neko Master",
           "url": "https://github.com/foru17/neko-master",
-          "reason": "网络流量分析面板，用 AI 辅助开发并在短时间内获得社区认可"
+          "reason": "家庭网络流量分析仪表板，用 AI 辅助开发快速获得社区认可，是他技术栈和开发风格的集中体现"
         },
         {
           "title": "Raycast Sink",
           "url": "https://github.com/foru17",
-          "reason": "短链管理插件，解决自己需求的同时开源给其他人用"
+          "reason": "短链管理插件，把日常重复操作变成顺手工具的典型例子"
         },
         {
           "title": "Raycast Hoarder",
           "url": "https://github.com/foru17",
-          "reason": "AI 书签管理插件，把小麻烦变成了实用工具"
+          "reason": "AI 书签管理插件，结合了 AI 能力和效率工具两个方向"
         }
       ]
     },
-    "disclaimer": "以上内容由 AI 基于公开博客、社交媒体和开源项目数据分析生成，仅供参考。"
+    "disclaimer": "以上内容由 AI 基于公开博客、X 动态和 GitHub 项目生成，仅供参考。"
   }
 }

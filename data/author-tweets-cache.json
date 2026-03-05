@@ -1,19 +1,174 @@
 {
   "meta": {
-    "lastUpdated": "2026-03-01T18:12:24.285Z",
+    "lastUpdated": "2026-03-03T14:10:16.734Z",
     "username": "luoleiorg",
     "fetchedCount": 300,
-    "requestCount": 4,
+    "requestCount": 1,
     "includeReplies": false
   },
   "user": {
-    "username": "luoleiorg",
-    "profile_image_url": "https://pbs.twimg.com/profile_images/1550157622300786688/672YmCpB_normal.jpg",
-    "description": "💻 Full-Stack Developer / 📖 Lifetime Learner / 🚧 Building & Sharing / 🎬 YouTuber https://t.co/7g47VdNMnN / 📝 https://t.co/6ucNiJ2gyg / 👨‍🚀 More https://t.co/smbFyIb6Hc",
+    "id": "52468378",
     "name": "luolei",
-    "id": "52468378"
+    "username": "luoleiorg",
+    "description": "💻 Full-Stack Developer / 📖 Lifetime Learner / 🚧 Building & Sharing / 🎬 YouTuber https://t.co/7g47VdNMnN / 📝 https://t.co/6ucNiJ2gyg / 👨‍🚀 More https://t.co/smbFyIb6Hc",
+    "profile_image_url": "https://pbs.twimg.com/profile_images/1550157622300786688/672YmCpB_normal.jpg"
   },
   "tweets": [
+    {
+      "id": "2028742833025544607",
+      "text": "还是我们中国电信安全，不小心点了高风险网站都会发短信提醒  👍 https://t.co/O1HFMITNA6",
+      "created_at": "2026-03-03T08:02:38.000Z",
+      "public_metrics": {
+        "retweet_count": 0,
+        "reply_count": 7,
+        "like_count": 13,
+        "quote_count": 0,
+        "bookmark_count": 1,
+        "impression_count": 11071
+      },
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCeK2jBbwAAb7vH.jpg",
+          "width": 946,
+          "height": 2048
+        }
+      ],
+      "conversation_id": "2028742833025544607",
+      "referenced_tweets": []
+    },
+    {
+      "id": "2028708022521102371",
+      "text": "这两天做了一件挺有意思的事。\n把自己过去十多年的公开内容全部结构化，做成一个可以聊天的「AI 版的我」。\n多模型画像、加权 RAG、强反幻觉规则、三级限流与安全校验。\n写了篇博客，把完整架构和设计流程梳理了一遍。\n🔗 https://t.co/rtl6NDkr7O",
+      "created_at": "2026-03-03T05:44:18.000Z",
+      "public_metrics": {
+        "retweet_count": 2,
+        "reply_count": 3,
+        "like_count": 14,
+        "quote_count": 1,
+        "bookmark_count": 13,
+        "impression_count": 4306
+      },
+      "media": [],
+      "conversation_id": "2028708022521102371",
+      "referenced_tweets": []
+    },
+    {
+      "id": "2028667842875580795",
+      "text": "过去七八年，去了惠州应该有二十多次了，如果你年轻没小孩，每个月 remote 或者网赚，每个月能有个大几千到小几万，在惠州生活不要太爽。配套齐全，海景公寓房，每个月 1000 多房租，其实是房东养你，最好再有个车，闲了就开车去深圳和香港也不远。 https://t.co/UdSXsXqjxH",
+      "created_at": "2026-03-03T03:04:39.000Z",
+      "public_metrics": {
+        "retweet_count": 91,
+        "reply_count": 201,
+        "like_count": 1214,
+        "quote_count": 16,
+        "bookmark_count": 422,
+        "impression_count": 266098
+      },
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCdGpYMaYAAztgG.jpg",
+          "width": 1536,
+          "height": 2048
+        },
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCdGpYJbcAAuDjH.jpg",
+          "width": 2048,
+          "height": 1536
+        },
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCdGpYIaEAAfLfH.jpg",
+          "width": 1534,
+          "height": 2048
+        }
+      ],
+      "conversation_id": "2028667842875580795",
+      "referenced_tweets": []
+    },
+    {
+      "id": "2028389734377250984",
+      "text": "🔗 https://t.co/UIJ5qWQSvr\n我把过去 10 多年 300+ 篇博客、推文、GitHub 内容全部做了 Embedding 向量化，构建了一个基于 RAG 的个人知识系统 🧠\n刚刚又花了 1 个小时，让这个「AI 罗磊」接入新的 Vinext 博客。\n现在可以直接在博客和我的数字分身聊天 🤖\n和自己聊天的感觉，还挺奇妙的。 https://t.co/TFRstiw6Zt",
+      "created_at": "2026-03-02T08:39:32.000Z",
+      "public_metrics": {
+        "retweet_count": 3,
+        "reply_count": 6,
+        "like_count": 45,
+        "quote_count": 1,
+        "bookmark_count": 49,
+        "impression_count": 8563
+      },
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCZGhtsbYAAE7Rr.jpg",
+          "width": 2838,
+          "height": 1578
+        },
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCZGiE5awAAIoyw.jpg",
+          "width": 2594,
+          "height": 1578
+        },
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCZJjyTboAAxIA8.jpg",
+          "width": 1440,
+          "height": 1130
+        }
+      ],
+      "conversation_id": "2028389734377250984",
+      "referenced_tweets": []
+    },
+    {
+      "id": "2028334415479451848",
+      "text": "做 AI 花的钱又多了一笔 🥹 https://t.co/FTcMNrOdYe",
+      "created_at": "2026-03-02T04:59:43.000Z",
+      "public_metrics": {
+        "retweet_count": 0,
+        "reply_count": 10,
+        "like_count": 11,
+        "quote_count": 0,
+        "bookmark_count": 3,
+        "impression_count": 12826
+      },
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCYXZe2b0AArrqL.jpg",
+          "width": 945,
+          "height": 2048
+        }
+      ],
+      "conversation_id": "2028334415479451848",
+      "referenced_tweets": []
+    },
+    {
+      "id": "2028182053637021878",
+      "text": "我让 5 个 AI 读了我的博客、推文和 GitHub，写出各自眼里的「AI 视角下的罗磊」。\n同一份数据，不同模型，像 5 个旁观者给出的作者介绍。\n📡 https://t.co/J71SuFwgJp https://t.co/pXyllrio8T",
+      "created_at": "2026-03-01T18:54:18.000Z",
+      "public_metrics": {
+        "retweet_count": 0,
+        "reply_count": 2,
+        "like_count": 14,
+        "quote_count": 0,
+        "bookmark_count": 16,
+        "impression_count": 5938
+      },
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCWMI5ObQAAsf6R.jpg",
+          "width": 3642,
+          "height": 2756
+        }
+      ],
+      "conversation_id": "2028182053637021878",
+      "referenced_tweets": []
+    },
     {
       "id": "2028042968205234199",
       "text": "在厨房做饭，听外网新闻，突然意识到一个事实：2026年，五常中的四常已实际发起或卷入战争。\n反观剩下的这一常，爱好和平的民族此刻具象化了 🤣",
@@ -7669,168 +7824,6 @@
         }
       ],
       "conversation_id": "1904895731108123090",
-      "referenced_tweets": []
-    },
-    {
-      "id": "1904863845270905109",
-      "text": "红红火火，好事多磨 🤪 https://t.co/Gsc5BK4h0P",
-      "created_at": "2025-03-26T11:51:46.000Z",
-      "public_metrics": {
-        "retweet_count": 0,
-        "reply_count": 2,
-        "like_count": 5,
-        "quote_count": 0,
-        "bookmark_count": 0,
-        "impression_count": 4019
-      },
-      "media": [
-        {
-          "type": "photo",
-          "url": "https://pbs.twimg.com/media/Gm9vkK-bYAA5DI3.jpg",
-          "width": 1536,
-          "height": 2048
-        }
-      ],
-      "conversation_id": "1904863845270905109",
-      "referenced_tweets": []
-    },
-    {
-      "id": "1904558066403799173",
-      "text": "这应该是今年最成功的广告了 😂 https://t.co/jM8fEirv6Q",
-      "created_at": "2025-03-25T15:36:42.000Z",
-      "public_metrics": {
-        "retweet_count": 1,
-        "reply_count": 6,
-        "like_count": 9,
-        "quote_count": 0,
-        "bookmark_count": 6,
-        "impression_count": 10684
-      },
-      "media": [
-        {
-          "type": "photo",
-          "url": "https://pbs.twimg.com/media/Gm5Zdyga4AArBJN.jpg",
-          "width": 945,
-          "height": 2048
-        },
-        {
-          "type": "photo",
-          "url": "https://pbs.twimg.com/media/Gm5ZdylaUAARJhH.jpg",
-          "width": 2048,
-          "height": 944
-        }
-      ],
-      "conversation_id": "1904558066403799173",
-      "referenced_tweets": []
-    },
-    {
-      "id": "1904206736002830588",
-      "text": "算法为啥要给我推这个呀，我大大的良民呀 🥹 https://t.co/kXpwQjgXjy",
-      "created_at": "2025-03-24T16:20:38.000Z",
-      "public_metrics": {
-        "retweet_count": 0,
-        "reply_count": 2,
-        "like_count": 5,
-        "quote_count": 0,
-        "bookmark_count": 2,
-        "impression_count": 6322
-      },
-      "media": [
-        {
-          "type": "photo",
-          "url": "https://pbs.twimg.com/media/Gm0Z7ptbMAA2Ou6.jpg",
-          "width": 945,
-          "height": 2048
-        }
-      ],
-      "conversation_id": "1904206736002830588",
-      "referenced_tweets": []
-    },
-    {
-      "id": "1903448548349514075",
-      "text": "实在受不了意大利的披萨了，赶上最后一班空客 A787，连夜回国，落地广州，直奔佛山，今晚吃鸡，没想到这家这么多人🥹 https://t.co/nydFuzN18D",
-      "created_at": "2025-03-22T14:07:52.000Z",
-      "public_metrics": {
-        "retweet_count": 2,
-        "reply_count": 8,
-        "like_count": 54,
-        "quote_count": 0,
-        "bookmark_count": 8,
-        "impression_count": 16988
-      },
-      "media": [
-        {
-          "type": "photo",
-          "url": "https://pbs.twimg.com/media/GmpoW84bgAAxh-q.jpg",
-          "width": 1536,
-          "height": 2048
-        },
-        {
-          "type": "photo",
-          "url": "https://pbs.twimg.com/media/GmpoW83aEAAGa8B.jpg",
-          "width": 1536,
-          "height": 2048
-        },
-        {
-          "type": "photo",
-          "url": "https://pbs.twimg.com/media/GmpoW85bcAAatCM.jpg",
-          "width": 1536,
-          "height": 2048
-        }
-      ],
-      "conversation_id": "1903448548349514075",
-      "referenced_tweets": []
-    },
-    {
-      "id": "1903343038342087118",
-      "text": "人在飞机，刚到意大利，佛山伦萨真的太好玩辣 😊 https://t.co/LnuGTdQkda",
-      "created_at": "2025-03-22T07:08:37.000Z",
-      "public_metrics": {
-        "retweet_count": 0,
-        "reply_count": 15,
-        "like_count": 143,
-        "quote_count": 0,
-        "bookmark_count": 11,
-        "impression_count": 36224
-      },
-      "media": [
-        {
-          "type": "photo",
-          "url": "https://pbs.twimg.com/media/GmoIZXAaEAER-a9.jpg",
-          "width": 1536,
-          "height": 2048
-        }
-      ],
-      "conversation_id": "1903343038342087118",
-      "referenced_tweets": []
-    },
-    {
-      "id": "1901999469828415784",
-      "text": "刚刚发现 Telegram 客户端的新功能: 展示其他陌生用户的手机号国别、注册时间、验证状态，刚刚瞄了一眼最近添加我好友的几个用户，好家伙，这么多+86 的🥲 https://t.co/9rOUbf2SCo",
-      "created_at": "2025-03-18T14:09:45.000Z",
-      "public_metrics": {
-        "retweet_count": 1,
-        "reply_count": 3,
-        "like_count": 14,
-        "quote_count": 0,
-        "bookmark_count": 12,
-        "impression_count": 10349
-      },
-      "media": [
-        {
-          "type": "photo",
-          "url": "https://pbs.twimg.com/media/GmVCb6Ea8AAftE0.jpg",
-          "width": 945,
-          "height": 2048
-        },
-        {
-          "type": "photo",
-          "url": "https://pbs.twimg.com/media/GmVCb6Aa0AAzlXc.jpg",
-          "width": 945,
-          "height": 2048
-        }
-      ],
-      "conversation_id": "1901999469828415784",
       "referenced_tweets": []
     }
   ]

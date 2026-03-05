@@ -46,7 +46,13 @@
       "Bash(pnpm typecheck:*)",
       "Bash(pnpm next:*)",
       "Bash(pnpm node:*)",
-      "mcp__plugin_serena_serena__replace_content"
+      "mcp__plugin_serena_serena__replace_content",
+      "Bash(git checkout:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(xxd:*)",
+      "Bash(LC_ALL=C sed:*)",
+      "Bash(npx esbuild:*)",
+      "Bash(npx vite:*)"
     ]
   }
 }

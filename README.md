@@ -1,4 +1,4 @@
-# luoleiorg-x (罗磊的独立博客)
+# luoleiorg-x
 
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare%20Workers-Deployed-F38020?style=flat-square&logo=cloudflare&logoColor=white)](https://luolei.org)
 [![Vinext](https://img.shields.io/badge/Vinext-Vite%20+%20Next.js%20API-orange?style=flat-square)](https://github.com/cloudflare/vinext)
@@ -6,116 +6,327 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.0-06B6D4?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-> 🚀 运行在 Cloudflare 边缘节点，基于 **React 19 + Vinext** 构建的极速前沿独立博客。
+> 运行在 Cloudflare 边缘节点，基于 **React 19 + Vinext** 构建的开源独立博客。
 
 [English](./README_EN.md) | 简体中文
 
-这是 **[罗磊的独立博客](https://luolei.org)** 的 Vinext 重构版本源码。从传统的静态站点（VitePress）全面拥抱前沿的 Serverless Edge 架构，它不仅是一个博客，更是一个现代边缘计算框架的实践范例。
+基于 Cloudflare [Vinext](https://github.com/cloudflare/vinext)（Vite 构建体系下的 Next.js App Router 兼容层）开发。SSR 渲染、API 请求、图片优化全部托管在 Cloudflare Workers 全球边缘网络。
 
-## 🌟 项目介绍 (Introduction)
+## 核心特性
 
-本项目基于 Cloudflare 全新发布的 [Vinext](https://github.com/cloudflare/vinext)（运行在 Vite 构建体系下的 Next.js App Router 兼容层）开发。
+- **边缘部署** — 基于 Cloudflare Workers，全球 Serverless，无 Node.js 容器依赖
+- **服务端组件** — React Server Components + 构建期 Markdown 预编译（`import.meta.glob`）
+- **边缘缓存** — Cloudflare KV 分布式缓存，高频 API 请求由缓存拦截
+- **图片优化** — Cloudflare Images API 自适应 WebP + 边缘裁剪
+- **AI 对话** — 首页内置博主 AI 分身，基于 OpenAI 兼容 API 流式对话
+- **全文搜索** — Pagefind 本地搜索 + API 在线兜底
+- **内容流水线** — AI 自动生成摘要/SEO、推文抓取、图片尺寸预取
 
-在这个项目中，我们践行了「让计算离用户尽可能的近」的原则，核心的 SSR 渲染、API 请求调度、图片压缩优化全部托管在 **Cloudflare Workers** 全球边缘网络，实现了极致的首屏加载与动态交互体验。
+## 个性化配置
 
-## ✨ 核心特性 (Features)
+所有个人信息集中在 `src/lib/site-config.ts` 一个文件中。Fork 后只需修改此文件即可完成个性化：
 
-*   ⚡️ **极致的边缘部署 (Edge Native)**: 完全抛弃传统的 Node.js 容器。基于 Cloudflare Workers 部署，真正的 Global Serverless。
-*   🖥️ **服务端组件直出 (RSC)**: 完美融合 Next.js 的 React Server Components。通过构建期的 Markdown 预编译（`import.meta.glob`），免去了对传统文件系统 IO 的依赖。
-*   🚄 **全站边缘缓存 (KV Caching)**: 利用 Cloudflare KV Namespace 构建分布式一致性缓存。Umami 统计接口等高频 API 请求完全由缓存拦截，抗并发压力的同时保障了底层数据库的安全。
-*   🖼️ **动态图片优化 (CF Images)**: 内置一套无缝整合 Cloudflare Images API 的管道。利用 Worker 绑定原生下发自适应的 WebP 并在边缘裁剪。
-*   🎨 **现代美学设计**: 结合 Tailwind CSS 4 提供极致丝滑的深浅色切换、全局响应式 PWA，以及定制化的原子设计 Tokens。
-*   🔍 **原生智能搜索**: Pagefind 全文本地聚合搜索，辅以 API 在线引擎兜底。
+```typescript
+export const siteConfig = {
+  title: "你的博客标题",
+  siteUrl: "https://yourdomain.com",
+  brand: "你的品牌名",
+  author: {
+    name: "你的名字",
+    email: "you@example.com",
+    github: "your-github",
+    twitterUsername: "your-twitter",
+  },
+  ai: {
+    welcomeText: "自定义欢迎语",
+    topics: ["你的", "话题", "列表"],
+    placeholders: ["自定义占位文案"],
+    // ...
+  },
+  // ...
+};
+```
 
-## 🏗 架构与数据流向 (Architecture)
+## 目录结构
 
-> 详细的节点交互、Worker 分发示意图以及边缘隔离区的介绍，请阅读我们专门补充的：
-> � **[架构设计大纲与 Mermaid 集成图](./docs/architecture.md)**
+```
+.
+├── content/posts/          # Markdown 博客文章（frontmatter + 正文）
+├── data/                   # 自动生成的数据文件（AI 摘要、推文缓存等）
+├── scripts/                # 构建与内容处理脚本
+├── worker/index.ts         # Cloudflare Worker 入口（路由分发）
+├── src/
+│   ├── app/                # 路由、页面、API Routes
+│   ├── components/         # UI 组件
+│   ├── lib/
+│   │   ├── site-config.ts  # 站点配置（个人信息唯一入口）
+│   │   ├── ai/             # AI 任务（摘要、SEO、聊天）
+│   │   └── chat-prompts/   # AI 对话 Prompt 模板
+│   └── styles/             # Tailwind 设计 Tokens
+├── packages/search-core/   # Monorepo 搜索模块
+├── wrangler.jsonc          # Cloudflare Workers 配置
+└── .env.example            # 环境变量模板
+```
 
-简略来说，全应用划分为以下核心体系：
-*   **路由解析器 (CF Worker Entry)**: 承接并分发给静态 Asset、Image Optimizer 或是 SSR 渲染引擎。
-*   **数据结构同秘钥管理 (Edge Secrets)**: 利用 `wrangler secret` 进行注入。并在本地借助 `.dev.vars` 无感开发。
-*   **同构的解析器**: Markdown 与 AST (rehype/remark) 的无侵入动态渲染。
+## 快速开始
 
-## 🛠 技术栈 (Tech Stack)
+### 环境要求
 
-*   **框架**: [vinext](https://github.com/cloudflare/vinext) (CF 官方出品), React 19 App Router
-*   **语言和样式**: TypeScript 5, Tailwind CSS 4.0
-*   **内容流水线**: `gray-matter`, `unified`, `remark`, `rehype` (完全剥离 Node API 依赖)
-*   **数据中心**: Umami Analytics (独立私有化部署), Cloudflare KV Namespace
+- Node.js >= 18
+- pnpm
 
-## 🚀 部署与运行 (Deploy & Run)
-
-推荐使用现代包管理器 `pnpm`。
-
-### 1. 本地环境准备
+### 安装与开发
 
 ```bash
-# 安装项目依赖
+# 安装依赖
 pnpm install
 
-# (可选) 复制常规环境变量，并填入开发环境专属变量
+# 复制环境变量模板
 cp .env.example .env
+# 编辑 .env，填入你的 API Token（参考 .env.example 中的注释）
 
-# (重要) 对于 Cloudflare 本地调试使用的机密 Token，需另建 .dev.vars (已被 gitignore 排除)
-# .dev.vars 文件中写入：
-# UMAMI_API_TOKEN=your_token_here
+# 同步文章 + 生成搜索索引 + 启动开发服务器
+pnpm sync:content
+pnpm dev
 ```
 
-### 2. 构建与运行
+### 构建与部署
 
 ```bash
-# 同步文章并建立搜索索引
-pnpm sync:content
-pnpm search:index
+# 生产构建
+pnpm build
 
-# 启动包括 Edge 模拟和端口扫描的开发服务器
+# 部署到 Cloudflare Workers
+pnpm deploy:vinext
+
+# 预览部署（不影响生产环境）
+pnpm deploy:vinext:preview
+```
+
+Cloudflare Worker 运行时需要的密钥通过 `wrangler secret` 注入：
+
+```bash
+npx wrangler secret put UMAMI_API_TOKEN
+```
+
+## 内容管理
+
+### 文章格式
+
+文章存放在 `content/posts/` 目录，使用标准 Markdown + YAML frontmatter：
+
+```markdown
+---
+title: "文章标题"
+date: "2024-01-01"
+cover: https://example.com/cover.jpg
+categories:
+  - code
+tags:
+  - javascript
+  - react
+---
+
+正文内容...
+```
+
+支持的分类（categories）：`code` / `tech` / `travel` / `lifestyle` / `photography` / `run` / `zuoluotv`
+
+### 从旧版 VitePress 同步文章
+
+如果你有旧版 [VitePress 博客](https://github.com/foru17/luoleiorg) 的本地仓库：
+
+```bash
+# 从 ../luoleiorg/docs/ 复制文章和静态资源到当前项目
+pnpm sync:content
+```
+
+该脚本会将 `../luoleiorg/docs/` 中的 Markdown 文件复制到 `content/posts/`，公共资源复制到 `public/legacy/`。
+
+### 发布新文章的完整流程
+
+```bash
+# 1. 在 content/posts/ 下创建 Markdown 文件（文件名即 slug）
+
+# 2. 一键预处理（推荐）—— 自动完成：推文抓取 → AI 摘要/SEO → 搜索索引
+pnpm pre-publish
+
+# 或者只处理指定文章
+pnpm pre-publish --slug=my-new-article
+
+# 3. 本地预览
 pnpm dev
 
-# 生产环境预构建
-pnpm build
-```
-
-### 3. 上线至 Cloudflare
-
-你可以直接在一台有完整环境与 `wrangler` 认证的本地机器上统一部署：
-
-```bash
-# 一次性强制写入关键部署秘钥至 Cloudflare
-npx wrangler secret put UMAMI_API_TOKEN
-
-# Cloudflare 发布流程
+# 4. 部署
 pnpm deploy:vinext
 ```
 
-我们极度推荐配置 CI / CD。相关 GitHub Action 配置说明请参考常规的 Wrangler Action。
+`pre-publish` 支持的参数：
 
-## 📁 目录结构摘要 (Directory Structure)
+| 参数 | 说明 |
+|------|------|
+| `--slug=SLUG` | 只处理指定文章 |
+| `--skip-tweets` | 跳过推文抓取 |
+| `--skip-ai` | 跳过 AI 处理 |
+| `--skip-search` | 跳过搜索索引生成 |
+| `--force` | 强制重新处理已缓存的文章 |
+| `--dry-run` | 预览模式，不实际执行 |
 
-我们遵循了现代 Next.js / React 结合 Cloudflare 生态的极佳工程化布局，兼顾业务与边缘兼容极具拓展性：
+## 脚本详解
 
+### 搜索索引
+
+```bash
+# 生成完整搜索索引（JSON + Pagefind），dev/build 时自动执行
+pnpm search:index
+
+# 单独生成 JSON 索引（public/search-index.json）
+pnpm search:json
+
+# 单独生成 Pagefind 索引（public/pagefind/）
+pnpm search:pagefind
 ```
-├── .dev.vars               # 🔒 本地 Worker 机密数据 (不需提交至 Git 库)
-├── wrangler.jsonc          # ☁️ Cloudflare Edge 线上全局无感配置
-├── content/posts/          # 📝 Markdown 博客数据源
-├── docs/                   # 📚 项目说明文档与架构图
-├── src/                    
-│   ├── app/                # 🚦 路由、服务端页面与 Metadata
-│   ├── components/         # 🧱 通用 UI 组件与插槽
-│   ├── lib/                # 🔧 业务抽象：Umami 分析、KV 缓存重构
-│   └── styles/             # 🎨 设计系统：Tokens, 布局, 版式样式
-├── worker/index.ts         # ⚡️ CF Worker 原生拦截与分发网关
-└── packages/search-core/   # 🔎 Monorepo 体系下的搜索支撑
+
+### 推文数据
+
+文章中引用的推文（通过 `tweetId="xxx"` 标记）和作者时间线推文会被抓取并缓存到本地 JSON 文件，渲染时直接读取，无需实时调用 Twitter API。
+
+**需要环境变量：** `TWITTER_BEARER_TOKEN`
+
+```bash
+# 抓取文章中引用的推文 → data/tweets-cache.json
+pnpm fetch:tweets
+
+# 抓取作者时间线推文 → data/author-tweets-cache.json
+pnpm fetch:tweets:author
+
+# 指定用户名和数量
+pnpm fetch:tweets:author -- --username=luoleiorg --max=300
+
+# 强制全量刷新（忽略增量缓存）
+pnpm fetch:tweets:author -- --force
 ```
 
-## 🔗 相关链接
+### 图片尺寸预取
 
-- **线上演示站点**: [https://luolei.org](https://luolei.org)
-- **旧版（VitePress）**: [foru17/luoleiorg](https://github.com/foru17/luoleiorg)
-- **Vinext 官方支持**: [cloudflare/vinext](https://github.com/cloudflare/vinext)
+扫描文章中的图片 URL，请求远程图片获取宽高尺寸，用于防止页面布局偏移（CLS）。结果缓存到 `data/image-dimensions.json`。
 
-## 📝 许可协议 (License)
+```bash
+pnpm fetch:images
+```
 
-本项目采用 [MIT License](LICENSE)。
+### AI 处理
 
-> 📧 关于本项目的问题或建议，欢迎通过 [GitHub Issues](https://github.com/foru17/luoleiorg-x/issues) 交流。
+对文章批量生成 AI 摘要和 SEO 元数据。支持任何 OpenAI 兼容 API（阿里云千问、DeepSeek、OpenAI、Gemini 等）。
+
+**需要环境变量：** `AI_BASE_URL`、`AI_API_KEY`、`AI_MODEL`
+
+```bash
+# 处理所有文章（跳过已缓存 + skip list 中的）
+pnpm ai:process
+
+# 强制重新处理所有文章
+pnpm ai:process -- --force
+
+# 只处理指定文章
+pnpm ai:process -- --slug=my-article
+
+# 只跑摘要任务（不跑 SEO）
+pnpm ai:process -- --task=summary
+
+# 只处理最近 10 篇文章
+pnpm ai:process -- --recent=10
+
+# 只处理没有缓存结果的新文章
+pnpm ai:process -- --new-only
+
+# 预览模式
+pnpm ai:process -- --dry-run
+
+# 调整并发数（默认 10）
+pnpm ai:process -- --concurrency=5
+
+# 清除失败跳过列表后重试
+pnpm ai:process -- --clear-skip
+```
+
+**生成的数据文件：**
+
+| 文件 | 说明 |
+|------|------|
+| `data/ai-summaries.json` | 文章摘要、关键要点、标签、阅读时间 |
+| `data/ai-seo.json` | SEO 元描述、关键词、OG 描述 |
+| `data/ai-skip-list.json` | 处理失败的文章跳过列表 |
+
+### 作者简介生成
+
+用于 About 页面和 AI 对话上下文。分两步：先聚合原始数据，再用 AI 生成结构化简介。
+
+```bash
+# 第一步：聚合作者上下文（博客文章 + 推文 + GitHub 简历）
+pnpm profile:context
+# → data/author-context.json
+
+# 第二步：用 AI 生成简介报告
+pnpm profile:generate
+# → data/reports/{model-id}.json
+
+# 一键执行以上两步
+pnpm profile:all
+
+# 强制重新生成（覆盖已有 AI 报告）
+pnpm profile:force
+
+# 不使用 AI，用规则模板生成（离线兜底）
+pnpm profile:generate -- --no-ai
+```
+
+`profile:context` 会从以下数据源聚合：
+- `content/posts/` — 博客文章（结合 Umami 阅读量排序热门文章）
+- `data/author-tweets-cache.json` — 作者推文
+- GitHub 公开 README / RESUME 文件（自动从 GitHub 拉取）
+
+另有一个旧版一体化脚本（同时生成上下文和报告）：
+
+```bash
+pnpm ai:profile           # 使用 AI
+pnpm ai:profile -- --no-ai  # 规则模板
+```
+
+## 环境变量
+
+复制 `.env.example` 为 `.env` 并填入你的值。以下是各变量的用途说明：
+
+| 变量 | 用途 | 需要场景 |
+|------|------|---------|
+| `TWITTER_BEARER_TOKEN` | Twitter API v2 | `fetch:tweets` / `fetch:tweets:author` |
+| `AI_BASE_URL` | AI API 地址 | `ai:process` / `ai:profile` / 线上对话 |
+| `AI_API_KEY` | AI API 密钥 | 同上 |
+| `AI_MODEL` | AI 模型名 | 同上 |
+| `UMAMI_API_TOKEN` | Umami 统计 API | 线上阅读量展示 / `profile:context` |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare 部署 | `deploy:vinext` |
+| `GA4_PROPERTY_ID` / `GA4_CLIENT_EMAIL` / `GA4_PRIVATE_KEY` | Google Analytics 4 | 历史阅读量迁移（可选） |
+| `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` | Telegram 推送 | AI 对话监控（可选） |
+| `TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile | AI 聊天人机验证（可选） |
+
+> **注意：** `AI_*`、`TELEGRAM_*`、`TURNSTILE_*` 变量在 `.env`（本地开发）和 `wrangler.jsonc`（线上 Worker）中需保持同步。
+
+## 技术栈
+
+- **框架：** [vinext](https://github.com/cloudflare/vinext)（Cloudflare 官方），React 19 App Router
+- **语言和样式：** TypeScript 5，Tailwind CSS 4
+- **内容处理：** gray-matter，unified，remark，rehype
+- **搜索：** Pagefind（本地）+ 自建 API
+- **数据：** Cloudflare KV，Umami Analytics（自托管）
+- **AI：** OpenAI 兼容 API（ai-sdk）
+
+## 相关链接
+
+- **线上站点：** [https://luolei.org](https://luolei.org)
+- **旧版（VitePress）：** [foru17/luoleiorg](https://github.com/foru17/luoleiorg)
+- **Vinext：** [cloudflare/vinext](https://github.com/cloudflare/vinext)
+- **架构设计文档：** [docs/architecture.md](./docs/architecture.md)
+
+## License
+
+[MIT](LICENSE)
