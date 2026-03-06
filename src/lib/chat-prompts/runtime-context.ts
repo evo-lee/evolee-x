@@ -214,6 +214,7 @@ function formatArticleSection(articles: ArticleContext[], maxCount: number): str
 
   const selected = articles.slice(0, maxCount);
   const omitted = Math.max(0, articles.length - selected.length);
+  const totalLine = `检索命中：共 ${articles.length} 篇，当前展示 ${selected.length} 篇。`;
   const lines = selected.map((article, index) => {
     const summary = truncateText(article.summary, MAX_ARTICLE_SUMMARY_LENGTH);
     const keyPoints = article.keyPoints
@@ -235,7 +236,7 @@ function formatArticleSection(articles: ArticleContext[], maxCount: number): str
     lines.push(`（另有 ${omitted} 篇已省略）`);
   }
 
-  return lines.join("\n");
+  return [totalLine, ...lines].join("\n");
 }
 
 function formatTweetSection(tweets: TweetContext[], maxCount: number): string {
@@ -245,6 +246,7 @@ function formatTweetSection(tweets: TweetContext[], maxCount: number): string {
 
   const selected = tweets.slice(0, maxCount);
   const omitted = Math.max(0, tweets.length - selected.length);
+  const totalLine = `检索命中：共 ${tweets.length} 条，当前展示 ${selected.length} 条。`;
   const lines = selected.map((tweet, index) => {
     const content = truncateText(tweet.text, MAX_TWEET_TEXT_LENGTH);
     return [
@@ -258,7 +260,7 @@ function formatTweetSection(tweets: TweetContext[], maxCount: number): string {
     lines.push(`（另有 ${omitted} 条已省略）`);
   }
 
-  return lines.join("\n");
+  return [totalLine, ...lines].join("\n");
 }
 
 export function buildRuntimeContext(params: {

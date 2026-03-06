@@ -1,19 +1,128 @@
 {
   "meta": {
-    "lastUpdated": "2026-03-03T14:10:16.734Z",
+    "lastUpdated": "2026-03-05T13:08:34.638Z",
     "username": "luoleiorg",
-    "fetchedCount": 300,
+    "fetchedCount": 304,
     "requestCount": 1,
     "includeReplies": false
   },
   "user": {
-    "id": "52468378",
-    "name": "luolei",
     "username": "luoleiorg",
-    "description": "💻 Full-Stack Developer / 📖 Lifetime Learner / 🚧 Building & Sharing / 🎬 YouTuber https://t.co/7g47VdNMnN / 📝 https://t.co/6ucNiJ2gyg / 👨‍🚀 More https://t.co/smbFyIb6Hc",
-    "profile_image_url": "https://pbs.twimg.com/profile_images/1550157622300786688/672YmCpB_normal.jpg"
+    "name": "luolei",
+    "profile_image_url": "https://pbs.twimg.com/profile_images/1550157622300786688/672YmCpB_normal.jpg",
+    "id": "52468378",
+    "description": "💻 Full-Stack Developer / 📖 Lifetime Learner / 🚧 Building & Sharing / 🎬 YouTuber https://t.co/7g47VdNMnN / 📝 https://t.co/6ucNiJ2gyg / 👨‍🚀 More https://t.co/smbFyIb6Hc"
   },
   "tweets": [
+    {
+      "id": "2029495607497490864",
+      "text": "反贼: 美军夺回了霍尔木兹海峡的控制权，全球五大贸易命脉都被美帝把握了，某大💊\n专家:美军夺回海峡控制权，保护了某大最重要的航路通畅，是真爱❤️",
+      "created_at": "2026-03-05T09:53:53.000Z",
+      "public_metrics": {
+        "retweet_count": 0,
+        "reply_count": 1,
+        "like_count": 9,
+        "quote_count": 0,
+        "bookmark_count": 0,
+        "impression_count": 2155
+      },
+      "media": [],
+      "conversation_id": "2029495607497490864",
+      "referenced_tweets": []
+    },
+    {
+      "id": "2029119663632957483",
+      "text": "调教得差不多了🤣 https://t.co/o7mTAU1BgD",
+      "created_at": "2026-03-04T09:00:01.000Z",
+      "public_metrics": {
+        "retweet_count": 0,
+        "reply_count": 3,
+        "like_count": 10,
+        "quote_count": 0,
+        "bookmark_count": 3,
+        "impression_count": 9183
+      },
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCjhk4Ab0AA5NFZ.jpg",
+          "width": 922,
+          "height": 2048
+        }
+      ],
+      "conversation_id": "2029119663632957483",
+      "referenced_tweets": []
+    },
+    {
+      "id": "2029109382450204720",
+      "text": "2 月以来 Vibe Coding 工作量剧增，Tokens 消耗也跟着暴涨 🚀\n我原本的 ChatGPT、Claude、Antigravity、Cursor、Warp 原厂额度基本都用光了。\n最近又补了几个 Tokens 渠道备用：\n\n1️⃣ Kimi Code Allegretto ¥199/月（国内版）\n比国际版便宜，跟老婆一起用，Tokens 基本用不完，速度也挺快，适合普通 https://t.co/MWIyMnOMWe",
+      "created_at": "2026-03-04T08:19:10.000Z",
+      "public_metrics": {
+        "retweet_count": 16,
+        "reply_count": 18,
+        "like_count": 139,
+        "quote_count": 2,
+        "bookmark_count": 215,
+        "impression_count": 29105
+      },
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCjXCgAa8AAzPJB.jpg",
+          "width": 2430,
+          "height": 1918
+        },
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCjXM8jasAAcLfa.jpg",
+          "width": 2630,
+          "height": 1440
+        },
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCjXY0KawAABt8u.jpg",
+          "width": 2782,
+          "height": 2786
+        }
+      ],
+      "conversation_id": "2029109382450204720",
+      "referenced_tweets": []
+    },
+    {
+      "id": "2028889761172332564",
+      "text": "进一步优化了我的 AI 分身，增多了数据，优化了提示词，接口改为流式输出模式，现在对话看起来更敏捷了。\n感觉可以针对不同场景做角色优化，可以做「面试」「商务」几个分身，以后有合作啥的，可以让我的 AI 分身 24小时接待 😂 https://t.co/fuagOPclZU",
+      "created_at": "2026-03-03T17:46:28.000Z",
+      "public_metrics": {
+        "retweet_count": 0,
+        "reply_count": 3,
+        "like_count": 6,
+        "quote_count": 0,
+        "bookmark_count": 4,
+        "impression_count": 3182
+      },
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCgQe44a8AAu52D.jpg",
+          "width": 945,
+          "height": 2048
+        },
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCgQe4-awAIEiYQ.jpg",
+          "width": 945,
+          "height": 2048
+        },
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HCgQe45awAQSNRx.jpg",
+          "width": 945,
+          "height": 2048
+        }
+      ],
+      "conversation_id": "2028889761172332564",
+      "referenced_tweets": []
+    },
     {
       "id": "2028742833025544607",
       "text": "还是我们中国电信安全，不小心点了高风险网站都会发短信提醒  👍 https://t.co/O1HFMITNA6",

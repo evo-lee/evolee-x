@@ -24,6 +24,13 @@ test("buildSearchQuery should normalize conjunctions and punctuation", () => {
   assert.ok(tokenSet.has("马拉松"));
 });
 
+test("extractSearchTokens should keep topic entities in counting questions", () => {
+  const tokens = extractSearchTokens("你去过几次日本，写过多少篇日本文章？");
+  const tokenSet = new Set(tokens);
+
+  assert.ok(tokenSet.has("日本"));
+});
+
 test("hasNewSignificantTokens should detect topic shifts", () => {
   assert.equal(hasNewSignificantTokens("长沙 珠海 马拉松", "跑步 马拉松"), true);
   assert.equal(hasNewSignificantTokens("马拉松 跑步", "跑步 马拉松"), false);

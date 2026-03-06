@@ -43,11 +43,31 @@ export const dynamic = "force-dynamic";
 
 const MAX_HISTORY_MESSAGES = 20;
 const MAX_INPUT_LENGTH = 500;
-const ARTICLE_SEARCH_LIMIT = 6;
-const TWEET_SEARCH_LIMIT = 6;
+const ARTICLE_SEARCH_LIMIT = parsePositiveIntEnv(process.env.ARTICLE_SEARCH_LIMIT, 12);
+const ARTICLE_SEARCH_LIMIT_BROAD = parsePositiveIntEnv(process.env.ARTICLE_SEARCH_LIMIT_BROAD, 24);
+const TWEET_SEARCH_LIMIT = parsePositiveIntEnv(process.env.TWEET_SEARCH_LIMIT, 8);
+const TWEET_SEARCH_LIMIT_BROAD = parsePositiveIntEnv(process.env.TWEET_SEARCH_LIMIT_BROAD, 18);
+const SEARCH_TERM_BROAD_QUERY_MAX = parsePositiveIntEnv(process.env.SEARCH_TERM_BROAD_QUERY_MAX, 2);
+const SEARCH_RELATIVE_SCORE_THRESHOLD = parsePositiveFloatEnv(
+  process.env.SEARCH_RELATIVE_SCORE_THRESHOLD,
+  0.35,
+);
+const SEARCH_MIN_ABSOLUTE_SCORE = parsePositiveFloatEnv(
+  process.env.SEARCH_MIN_ABSOLUTE_SCORE,
+  2,
+);
+const ENABLE_FIRST_TURN_KEYWORD_EXTRACTION = parseBooleanEnv(
+  process.env.ENABLE_FIRST_TURN_KEYWORD_EXTRACTION,
+  true,
+);
+const SEARCH_ANCHOR_TERM_MAX = parsePositiveIntEnv(process.env.SEARCH_ANCHOR_TERM_MAX, 2);
+const SEARCH_MIN_ANCHOR_TERM_LENGTH = parsePositiveIntEnv(
+  process.env.SEARCH_MIN_ANCHOR_TERM_LENGTH,
+  2,
+);
 const KEYWORD_EXTRACTION_TIMEOUT_MS = 3500;
 const KEYWORD_EXTRACTION_RECENT_MESSAGES = 4;
-const KEYWORD_EXTRACTION_MAX_OUTPUT_TOKENS = 48;
+const KEYWORD_EXTRACTION_MAX_OUTPUT_TOKENS = 96;
 const KEYWORD_EXTRACTION_MIN_TERMS = 3;
 const REUSE_INTENT_CHECK_TIMEOUT_MS = 1500;
 const REUSE_INTENT_CHECK_MAX_OUTPUT_TOKENS = 8;
@@ -72,6 +92,24 @@ interface CachedSearchContext {
 }
 
 const searchContextCache = new Map<string, CachedSearchContext>();
+
+function parsePositiveIntEnv(value: string | undefined, fallback: number): number {
+  const parsed = Number.parseInt(value ?? "", 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function parsePositiveFloatEnv(value: string | undefined, fallback: number): number {
+  const parsed = Number.parseFloat(value ?? "");
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function parseBooleanEnv(value: string | undefined, fallback: boolean): boolean {
+  if (!value) return fallback;
+  const normalized = value.trim().toLowerCase();
+  if (["1", "true", "yes", "on"].includes(normalized)) return true;
+  if (["0", "false", "no", "off"].includes(normalized)) return false;
+  return fallback;
+}
 
 function hasUsageNumber(value: number | undefined): value is number {
   return typeof value === "number" && Number.isFinite(value);
@@ -181,7 +219,7 @@ function shouldRunKeywordExtractionModel(
     (count, message) => (message.role === "user" ? count + 1 : count),
     0,
   );
-  if (userTurnCount <= 1) return false;
+  if (userTurnCount <= 1) return ENABLE_FIRST_TURN_KEYWORD_EXTRACTION;
 
   const localTermCount = localQuery
     .split(/\s+/)
@@ -213,10 +251,139 @@ function loadSearchData() {
   return { postIndex, tweetIndex };
 }
 
+function resolveSearchLimit(query: string, narrowLimit: number, broadLimit: number): number {
+  const terms = getNormalizedQueryTerms(query);
+  if (terms.length <= SEARCH_TERM_BROAD_QUERY_MAX) {
+    return broadLimit;
+  }
+  return narrowLimit;
+}
+
+function normalizeSearchText(value: string): string {
+  return value.toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+function dedupeTermsByContainment(terms: string[]): string[] {
+  const unique = Array.from(new Set(terms));
+  const kept: string[] = [];
+  for (const term of unique.sort((a, b) => b.length - a.length)) {
+    if (kept.some((existing) => existing.includes(term))) continue;
+    kept.push(term);
+  }
+  return kept;
+}
+
+function getNormalizedQueryTerms(query: string): string[] {
+  const rawTerms = query
+    .split(/\s+/)
+    .map((term) => normalizeSearchText(term))
+    .filter(Boolean);
+  return dedupeTermsByContainment(rawTerms);
+}
+
+function pickAnchorTerms<T>(params: {
+  query: string;
+  candidates: T[];
+  matchesTerm: (candidate: T, term: string) => boolean;
+}): string[] {
+  const { query, candidates, matchesTerm } = params;
+  const terms = getNormalizedQueryTerms(query).filter(
+    (term) => term.length >= SEARCH_MIN_ANCHOR_TERM_LENGTH,
+  );
+  if (terms.length <= SEARCH_ANCHOR_TERM_MAX) {
+    return terms.slice(0, SEARCH_ANCHOR_TERM_MAX);
+  }
+  if (candidates.length === 0) {
+    return terms.slice(0, SEARCH_ANCHOR_TERM_MAX);
+  }
+
+  const scored = terms.map((term) => {
+    let hitCount = 0;
+    for (const candidate of candidates) {
+      if (matchesTerm(candidate, term)) {
+        hitCount += 1;
+      }
+    }
+
+    if (hitCount <= 0) {
+      return { term, hitCount, score: Number.NEGATIVE_INFINITY };
+    }
+
+    const coverage = hitCount / candidates.length;
+    const specificity = 1 - coverage;
+    const lengthScore = Math.min(term.length, 8) / 8;
+
+    return {
+      term,
+      hitCount,
+      score: specificity * 2 + lengthScore,
+    };
+  });
+
+  const ranked = scored
+    .filter((item) => Number.isFinite(item.score))
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        a.hitCount - b.hitCount ||
+        b.term.length - a.term.length,
+    )
+    .map((item) => item.term);
+
+  if (ranked.length > 0) {
+    return ranked.slice(0, SEARCH_ANCHOR_TERM_MAX);
+  }
+  return terms.slice(0, SEARCH_ANCHOR_TERM_MAX);
+}
+
+function filterLowRelevanceResults<T extends { score: number }>(results: T[]): T[] {
+  if (results.length <= 3) return results;
+
+  const topScore = results[0]?.score ?? 0;
+  if (topScore <= 0) return results;
+
+  const threshold = Math.max(
+    SEARCH_MIN_ABSOLUTE_SCORE,
+    topScore * SEARCH_RELATIVE_SCORE_THRESHOLD,
+  );
+
+  return results.filter((item, index) => index < 3 || item.score >= threshold);
+}
+
 function searchRelatedArticles(query: string, enableDeepContent = false): ArticleContext[] {
   if (!query.trim()) return [];
   const { postIndex } = loadSearchData();
-  const results = searchDocuments(postIndex, query, ARTICLE_SEARCH_LIMIT);
+  const limit = resolveSearchLimit(query, ARTICLE_SEARCH_LIMIT, ARTICLE_SEARCH_LIMIT_BROAD);
+  const rawResults = searchDocuments(postIndex, query, Math.max(limit, 3) * 2);
+  const queryTerms = getNormalizedQueryTerms(query);
+  const shouldApplyAnchorFilter =
+    queryTerms.length > 0 && queryTerms.length <= SEARCH_TERM_BROAD_QUERY_MAX;
+  const anchorTerms = shouldApplyAnchorFilter
+    ? pickAnchorTerms({
+        query,
+        candidates: rawResults,
+        matchesTerm: (item, term) => {
+          if (normalizeSearchText(item.title).includes(term)) return true;
+          if (item.categories.some((category) => normalizeSearchText(category).includes(term))) {
+            return true;
+          }
+          return (item.keyPoints ?? []).some((point) => normalizeSearchText(point).includes(term));
+        },
+      })
+    : [];
+  const strictMatches = shouldApplyAnchorFilter && anchorTerms.length > 0
+    ? rawResults.filter((item) => {
+        return anchorTerms.some((term) => {
+          if (normalizeSearchText(item.title).includes(term)) return true;
+          if (item.categories.some((category) => normalizeSearchText(category).includes(term))) {
+            return true;
+          }
+          return (item.keyPoints ?? []).some((point) => normalizeSearchText(point).includes(term));
+        });
+      })
+    : rawResults;
+  const candidates = strictMatches.length > 0 ? strictMatches : rawResults;
+  const results = filterLowRelevanceResults(candidates).slice(0, limit);
 
   const topScore = results[0]?.score ?? 0;
   const secondScore = results[1]?.score ?? 0;
@@ -252,7 +419,31 @@ function formatTweetDate(dateTime: number): string {
 function searchRelatedTweets(query: string): TweetContext[] {
   if (!query.trim()) return [];
   const { tweetIndex } = loadSearchData();
-  const results = searchDocuments(tweetIndex, query, TWEET_SEARCH_LIMIT);
+  const limit = resolveSearchLimit(query, TWEET_SEARCH_LIMIT, TWEET_SEARCH_LIMIT_BROAD);
+  const rawResults = searchDocuments(tweetIndex, query, Math.max(limit, 3) * 2);
+  const queryTerms = getNormalizedQueryTerms(query);
+  const shouldApplyAnchorFilter =
+    queryTerms.length > 0 && queryTerms.length <= SEARCH_TERM_BROAD_QUERY_MAX;
+  const anchorTerms = shouldApplyAnchorFilter
+    ? pickAnchorTerms({
+        query,
+        candidates: rawResults,
+        matchesTerm: (item, term) => {
+          if (normalizeSearchText(item.title).includes(term)) return true;
+          return normalizeSearchText(item.excerpt || item.content).includes(term);
+        },
+      })
+    : [];
+  const strictMatches = shouldApplyAnchorFilter && anchorTerms.length > 0
+    ? rawResults.filter((item) => {
+        return anchorTerms.some((term) => {
+          if (normalizeSearchText(item.title).includes(term)) return true;
+          return normalizeSearchText(item.excerpt || item.content).includes(term);
+        });
+      })
+    : rawResults;
+  const candidates = strictMatches.length > 0 ? strictMatches : rawResults;
+  const results = filterLowRelevanceResults(candidates).slice(0, limit);
 
   return results.map((r) => ({
     title: r.title,
@@ -330,14 +521,84 @@ function normalizeRepairedTail(rawText: string): string {
 
 const KEYWORD_EXTRACTION_PROMPT = `你是一个搜索关键词提取器。根据用户与博主的对话上下文，提取用于在博客文章库和 X 动态库中搜索的关键词。
 
+输出要求（必须严格遵守）：
+- 只输出 JSON，不要 Markdown，不要解释，不要多余文本
+- JSON 结构：
+  {
+    "primaryTerms": ["..."],
+    "relatedTerms": ["..."],
+    "query": "term1 term2 term3"
+  }
+- primaryTerms：2-6 个核心主题实体词（优先级最高）
+- relatedTerms：0-6 个扩展词（同义词/上下位词/地名/技术栈）
+- query：把 primaryTerms 和 relatedTerms 合并后的搜索词串（空格分隔）
+
 规则：
-- 输出 5-10 个最相关的搜索关键词，用空格分隔
+- 总关键词数控制在 5-10 个
 - 关键词应涵盖：核心话题、相关地名/人名、同义词、上下位词
+- 关键词优先使用“主题实体词/领域词”，避免输出功能词、语气词、问句词和数量词
+- 禁止输出这类词：写过、去过、跑过、多少、几次、几篇、是不是、有没有、推荐几篇
 - 例如用户问"去过哪些国家"→ 输出"旅行 游记 国家 出国 自驾 签证"
 - 例如用户问"日本相关文章"→ 输出"日本 东京 京都 大阪 仙台 旅行 游记"
 - 例如用户问"你跑过马拉松吗"→ 输出"马拉松 跑步 跑马 运动 赛事 训练"
 - 结合上下文理解指代（如"推荐几篇"指的是之前聊的话题）
-- 只输出关键词，不要任何解释或标点`;
+- 严禁输出无关字段`;
+
+function extractJsonPayload(text: string): Record<string, unknown> | null {
+  const trimmed = text.trim();
+  const candidates: string[] = [];
+  if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
+    candidates.push(trimmed);
+  }
+
+  const fencedMatch = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fencedMatch?.[1]) {
+    candidates.push(fencedMatch[1].trim());
+  }
+
+  const firstBrace = trimmed.indexOf("{");
+  const lastBrace = trimmed.lastIndexOf("}");
+  if (firstBrace >= 0 && lastBrace > firstBrace) {
+    candidates.push(trimmed.slice(firstBrace, lastBrace + 1));
+  }
+
+  for (const candidate of candidates) {
+    try {
+      const parsed = JSON.parse(candidate) as unknown;
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        return parsed as Record<string, unknown>;
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  return null;
+}
+
+function toStringList(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => (typeof item === "string" ? item.trim() : ""))
+    .filter(Boolean);
+}
+
+function buildKeywordQueryFromModelOutput(text: string): string {
+  const payload = extractJsonPayload(text);
+  if (payload) {
+    const terms = [
+      ...toStringList(payload.primaryTerms),
+      ...toStringList(payload.relatedTerms),
+    ];
+    if (typeof payload.query === "string") {
+      terms.push(payload.query);
+    }
+    const normalized = buildSearchQuery(terms.join(" "));
+    if (normalized) return normalized;
+  }
+
+  return buildSearchQuery(text.trim().replace(/[，,、;；。.]/g, " "));
+}
 
 const REUSE_INTENT_CHECK_PROMPT = `你是检索上下文复用判定器。请判断“最新用户问题”是否和“上一条用户问题”属于同一检索意图。
 
@@ -384,12 +645,12 @@ async function extractSearchKeywords(
       abortSignal,
     });
     return {
-      query: text.trim().replace(/[，,、;；。.]/g, " "),
+      query: buildKeywordQueryFromModelOutput(text),
       usage: toTokenUsageStats(totalUsage),
     };
   } catch {
     const latest = getMessageText(recentMessages[recentMessages.length - 1]);
-    return { query: latest };
+    return { query: buildSearchQuery(latest) };
   }
 }
 

@@ -202,11 +202,11 @@ function truncateText(text: string, maxLength = 220): string {
   return `${text.slice(0, maxLength - 1)}…`;
 }
 
-const MAX_ARTICLES_IN_PROMPT = 5;
+const MAX_ARTICLES_IN_PROMPT = 8;
 const MAX_ARTICLE_SUMMARY_LENGTH = 200;
 const MAX_ARTICLE_KEYPOINTS = 5;
 const MAX_ARTICLE_KEYPOINT_LENGTH = 36;
-const MAX_TWEETS_IN_PROMPT = 4;
+const MAX_TWEETS_IN_PROMPT = 6;
 const MAX_TWEET_TEXT_LENGTH = 220;
 
 export function buildSystemPromptV1(
@@ -217,6 +217,7 @@ export function buildSystemPromptV1(
   if (articles.length > 0) {
     const selectedArticles = articles.slice(0, MAX_ARTICLES_IN_PROMPT);
     const omittedCount = Math.max(0, articles.length - selectedArticles.length);
+    const totalLine = `检索命中：共 ${articles.length} 篇，当前展示 ${selectedArticles.length} 篇。`;
     const list = selectedArticles
       .map(
         (a, i) =>
@@ -225,7 +226,7 @@ export function buildSystemPromptV1(
       .join("\n");
     const omittedLine =
       omittedCount > 0 ? `\n（另有 ${omittedCount} 篇相关文章已省略，请优先引用更相关的前几篇。）` : "";
-    articleSection = `以下是从博客中搜索到的相关文章，你只能引用这些文章：\n${list}${omittedLine}`;
+    articleSection = `以下是从博客中搜索到的相关文章，你只能引用这些文章：\n${totalLine}\n${list}${omittedLine}`;
   } else {
     articleSection = "（当前搜索未找到直接相关的博客文章。）";
   }
@@ -234,6 +235,7 @@ export function buildSystemPromptV1(
   if (tweets.length > 0) {
     const selectedTweets = tweets.slice(0, MAX_TWEETS_IN_PROMPT);
     const omittedCount = Math.max(0, tweets.length - selectedTweets.length);
+    const totalLine = `检索命中：共 ${tweets.length} 条，当前展示 ${selectedTweets.length} 条。`;
     const list = selectedTweets
       .map(
         (t, i) =>
@@ -242,7 +244,7 @@ export function buildSystemPromptV1(
       .join("\n");
     const omittedLine =
       omittedCount > 0 ? `\n（另有 ${omittedCount} 条相关动态已省略，请优先引用更相关的前几条。）` : "";
-    tweetSection = `以下是从 X 中搜索到的相关动态，你只能引用这些动态：\n${list}${omittedLine}`;
+    tweetSection = `以下是从 X 中搜索到的相关动态，你只能引用这些动态：\n${totalLine}\n${list}${omittedLine}`;
   } else {
     tweetSection = "（当前搜索未找到直接相关的 X 动态。）";
   }
@@ -282,6 +284,7 @@ ${authorBio}
 ### 事实型回答契约（必须执行）
 - 对"是否/有没有/在哪/何时/多少/是不是"等事实问题，回答顺序固定为：结论 → 依据 → 不确定性。
 - **对涉及数字的问题（多少、几、排名、成绩等），如果相关文章摘要中没有明确写出该数字，简洁承认没有记录，不要猜测或编造**。每次措辞要自然变化，不要整轮对话都用同一句"记不太清了"。如果「相关文章」里其实有提到相关信息，优先直接引用。
+- **如果上下文写了“检索命中总量”或“另有 X 篇/条已省略”，回答“写过几篇/去过几次”这类数量问题时优先用这些总量信息，不要只按展示列表粗略估计。**
 - 依据只能引用当前 prompt 里可见的信息，通过自然的文章链接来标注来源。
 - 如果找不到直接证据，明确说「我不确定」或「我没在博客里写到这个细节」，不要补全推理链。
 - 不要把"看起来合理"的推断当成事实说出来。
