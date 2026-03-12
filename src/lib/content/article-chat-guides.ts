@@ -1,6 +1,6 @@
 import type { ArticleSummary } from "@/lib/ai/types";
 import type { ArticleChatContext } from "@/lib/ai/chat-context";
-import { buildArticleChatGuideContent } from "./article-chat-guide-utils.js";
+import { buildArticleChatGuideContent } from "./article-chat-guide-utils";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore generated JSON loaded at build time

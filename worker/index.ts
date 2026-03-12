@@ -19,7 +19,7 @@ interface Env {
   UMAMI_API_TOKEN?: string;
 }
 
-export default {
+const worker = {
   async fetch(request: Request, env: Env): Promise<Response> {
     // Inject Cloudflare secrets into process.env and globalThis so server-side code can access them.
     // In Workers, secrets are only available via the env parameter, not process.env.
@@ -59,3 +59,5 @@ export default {
     return handler.fetch(request);
   },
 };
+
+export default worker;

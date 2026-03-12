@@ -25,7 +25,7 @@ import {
   normalizeGuideOpeningLine,
   normalizeGuideQuestions,
   normalizeGuideTopics,
-} from "../src/lib/content/article-chat-guide-utils.js";
+} from "./utils/article-chat-guide-utils.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.join(__dirname, "..");

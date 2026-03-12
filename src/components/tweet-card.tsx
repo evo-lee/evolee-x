@@ -1,115 +1,18 @@
-import tweetsCache from "@/../data/tweets-cache.json";
+import Image from "next/image";
+import { TweetCardFooter } from "@/components/tweet-card-footer";
+import { TweetMediaGrid } from "@/components/tweet-card-media-grid";
+import { getTweetCardById } from "@/lib/content/tweet-card-cache";
 import { getPreviewImage } from "@/lib/content/utils";
 import { siteConfig } from "@/lib/site-config";
-import { formatTweetDateTime, formatNumber } from "@/lib/tweet-utils";
-
-interface TweetData {
-  id: string;
-  text: string;
-  created_at: string;
-  author: {
-    name: string;
-    username: string;
-    profile_image_url: string;
-  };
-  public_metrics: {
-    retweet_count: number;
-    reply_count: number;
-    like_count: number;
-    quote_count: number;
-    bookmark_count: number;
-    impression_count: number;
-  };
-  media?: Array<{
-    type: string;
-    url: string;
-    preview_image_url: string;
-  }>;
-}
 
 interface TweetCardProps {
   tweetId: string;
 }
 
-function TweetMediaGrid({
-  images,
-  tweetUrl,
-}: {
-  images: string[];
-  tweetUrl: string;
-}) {
-  const count = images.length;
-
-  const renderImage = (src: string, className: string) => (
-    <img
-      src={src}
-      alt="Tweet media"
-      className={`h-full w-full border-0 object-cover transition-transform hover:scale-[1.02] ${className}`}
-      loading="lazy"
-    />
-  );
-
-  const wrapLink = (children: React.ReactNode, className?: string) => (
-    <a
-      href={tweetUrl}
-      target="_blank"
-      rel="noreferrer"
-      className={`block overflow-hidden rounded-xl ${className ?? ""}`}
-    >
-      {children}
-    </a>
-  );
-
-  // Single image - full width, natural aspect
-  if (count === 1) {
-    return wrapLink(
-      renderImage(images[0], "h-auto w-full"),
-    );
-  }
-
-  // 2 images - side by side
-  if (count === 2) {
-    return wrapLink(
-      <div className="grid grid-cols-2 gap-0.5">
-        {renderImage(images[0], "aspect-[4/3]")}
-        {renderImage(images[1], "aspect-[4/3]")}
-      </div>,
-    );
-  }
-
-  // 3 images - left large, right 2 stacked
-  if (count === 3) {
-    return wrapLink(
-      <div className="grid grid-cols-2 gap-0.5" style={{ aspectRatio: "16/9" }}>
-        <div className="row-span-2 overflow-hidden">
-          {renderImage(images[0], "")}
-        </div>
-        <div className="overflow-hidden">
-          {renderImage(images[1], "")}
-        </div>
-        <div className="overflow-hidden">
-          {renderImage(images[2], "")}
-        </div>
-      </div>,
-    );
-  }
-
-  // 4 images - 2x2 grid
-  return wrapLink(
-    <div className="grid grid-cols-2 gap-0.5">
-      {images.slice(0, 4).map((src, i) => (
-        <div key={i} className="overflow-hidden">
-          {renderImage(src, "aspect-[4/3]")}
-        </div>
-      ))}
-    </div>,
-  );
-}
-
 export function TweetCard({ tweetId }: TweetCardProps) {
-  const tweet = (tweetsCache.tweets as unknown as Record<string, TweetData | undefined>)[tweetId];
+  const tweet = getTweetCardById(tweetId);
 
-  if (!tweet) {
+  if (!tweet?.text || !tweet.created_at) {
     return (
       <div className="my-8 px-2">
         <a
@@ -126,12 +29,16 @@ export function TweetCard({ tweetId }: TweetCardProps) {
   }
 
   const { author, text, created_at, public_metrics, media } = tweet;
+  const authorName = author?.name?.trim() || siteConfig.author.name;
+  const authorUsername =
+    author?.username?.trim() || siteConfig.author.twitterUsername;
   const images = media
     ?.filter((m) => m.type === "photo")
     .map((m) => m.preview_image_url || m.url)
     .map((url) => getPreviewImage(url))
     .filter(Boolean) ?? [];
-  const authorAvatar = getPreviewImage(author.profile_image_url);
+  const authorAvatar = getPreviewImage(author?.profile_image_url);
+  const tweetUrl = `https://x.com/${authorUsername}/status/${tweetId}`;
 
   return (
     <div className="my-8 px-2">
@@ -140,33 +47,40 @@ export function TweetCard({ tweetId }: TweetCardProps) {
         <div className="flex flex-row items-center justify-between">
           <div className="flex items-center space-x-3">
             <a
-              href={`https://x.com/${author.username}`}
+              href={`https://x.com/${authorUsername}`}
               target="_blank"
               rel="noreferrer"
               className="shrink-0"
             >
-              <img
-                src={authorAvatar}
-                alt={author.name}
-                width={48}
-                height={48}
-                className="rounded-full border border-gray-200 dark:border-zinc-600"
-              />
+              {authorAvatar ? (
+                <Image
+                  src={authorAvatar}
+                  alt={authorName}
+                  width={48}
+                  height={48}
+                  sizes="48px"
+                  className="rounded-full border border-gray-200 dark:border-zinc-600"
+                />
+              ) : (
+                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-gray-100 text-sm font-semibold text-gray-700 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-100">
+                  {authorName.slice(0, 1)}
+                </div>
+              )}
             </a>
             <div>
               <a
-                href={`https://x.com/${author.username}`}
+                href={`https://x.com/${authorUsername}`}
                 target="_blank"
                 rel="noreferrer"
                 className="block font-semibold text-gray-900 hover:underline dark:text-slate-200"
               >
-                {author.name}
+                {authorName}
               </a>
-              <div className="text-sm text-gray-500">@{author.username}</div>
+              <div className="text-sm text-gray-500">@{authorUsername}</div>
             </div>
           </div>
           <a
-            href={`https://x.com/${author.username}/status/${tweetId}`}
+            href={tweetUrl}
             target="_blank"
             rel="noreferrer"
             className="text-2xl text-gray-900 transition-opacity hover:opacity-70 dark:text-slate-200"
@@ -185,29 +99,15 @@ export function TweetCard({ tweetId }: TweetCardProps) {
         {images.length > 0 && (
           <TweetMediaGrid
             images={images}
-            tweetUrl={`https://x.com/${author.username}/status/${tweetId}`}
+            tweetUrl={tweetUrl}
           />
         )}
 
-        {/* Footer */}
-        <div className="flex items-center justify-between border-t border-gray-100 pt-3 text-sm text-gray-500 dark:border-zinc-700 dark:text-slate-400"
-        >
-          <span>{formatTweetDateTime(created_at)}</span>
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1" title="回复">
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
-              {formatNumber(public_metrics.reply_count)}
-            </span>
-            <span className="flex items-center gap-1" title="点赞">
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              {formatNumber(public_metrics.like_count)}
-            </span>
-          </div>
-        </div>
+        <TweetCardFooter
+          createdAt={created_at}
+          likeCount={Number(public_metrics?.like_count ?? 0)}
+          replyCount={Number(public_metrics?.reply_count ?? 0)}
+        />
       </div>
     </div>
   );

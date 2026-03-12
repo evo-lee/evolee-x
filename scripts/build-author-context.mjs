@@ -845,7 +845,12 @@ async function collectBlogDigest(siteUrl) {
 }
 
 function toPublicPosts(posts) {
-  return posts.map(({ slug, analysisText, ...post }) => post);
+  return posts.map((post) => {
+    const publicPost = { ...post };
+    delete publicPost.slug;
+    delete publicPost.analysisText;
+    return publicPost;
+  });
 }
 
 // ─── 推文数据 ────────────────────────────────────────────────

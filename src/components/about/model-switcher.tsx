@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
+import Image from "next/image";
 import type { ModelEntry } from "@/lib/content/author-profile";
+import { getFaviconUrlForSite } from "@/lib/favicon";
 
 interface ModelSwitcherProps {
   models: ModelEntry[];
@@ -50,16 +52,6 @@ function getModelColors(icon: string) {
   };
 }
 
-function getFaviconUrl(providerSite: string): string | null {
-  if (!providerSite) return null;
-  try {
-    const domain = new URL(providerSite).hostname;
-    return `https://img.is26.com/static.is26.com/favicon/${domain}`;
-  } catch {
-    return null;
-  }
-}
-
 export function ModelSwitcher({
   models,
   activeModelId,
@@ -70,7 +62,7 @@ export function ModelSwitcher({
       {models.map((model) => {
         const isActive = model.id === activeModelId;
         const colors = getModelColors(model.icon);
-        const faviconUrl = getFaviconUrl(model.providerSite);
+        const faviconUrl = getFaviconUrlForSite(model.providerSite);
 
         return (
           <button
@@ -84,7 +76,7 @@ export function ModelSwitcher({
             }`}
             aria-pressed={isActive}
           >
-            <ProviderFavicon url={faviconUrl} name={model.name} />
+            <ProviderFavicon url={faviconUrl} />
             <span>{model.name}</span>
             {model.generatedBy === "ai" && (
               <span className="ml-0.5 text-[10px] opacity-60">AI</span>
@@ -98,72 +90,36 @@ export function ModelSwitcher({
 
 // ─── Provider Favicon (uses the same API as article external links) ───
 
-function ProviderFavicon({ url, name }: { url: string | null; name: string }) {
-  if (!url) {
+function ProviderFavicon({ url }: { url: string | null }) {
+  const [failed, setFailed] = useState(false);
+
+  if (!url || failed) {
     return <FallbackIcon />;
   }
 
   return (
-    <img
+    <Image
       src={url}
-      alt={name}
+      alt=""
       width={16}
       height={16}
-      loading="lazy"
+      sizes="16px"
       className="h-4 w-4 shrink-0 rounded-sm object-contain"
-      onError={(e) => {
-        // Hide broken image, show nothing rather than a broken icon
-        (e.target as HTMLImageElement).style.display = "none";
-      }}
+      onError={() => setFailed(true)}
     />
   );
 }
 
 function FallbackIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <svg
+      viewBox="0 0 24 24"
+      className="h-4 w-4 shrink-0"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    >
       <circle cx="12" cy="12" r="10" />
     </svg>
-  );
-}
-
-// ─── About Client Wrapper ────────────────────────────────────
-// This wraps all about sections and manages model switching state
-
-interface AboutClientProps {
-  defaultModelId: string;
-  models: ModelEntry[];
-  children: (activeModelId: string) => React.ReactNode;
-}
-
-export function AboutClient({ defaultModelId, models, children }: AboutClientProps) {
-  const [activeModelId, setActiveModelId] = useState(defaultModelId);
-
-  const handleModelChange = useCallback((modelId: string) => {
-    setActiveModelId(modelId);
-    // Update URL without page reload
-    const url = new URL(window.location.href);
-    if (modelId === defaultModelId) {
-      url.searchParams.delete("model");
-    } else {
-      url.searchParams.set("model", modelId);
-    }
-    window.history.replaceState(null, "", url.toString());
-  }, [defaultModelId]);
-
-  return (
-    <>
-      <div className="mt-5">
-        <p className="mb-2 text-xs text-zinc-500 dark:text-zinc-500">
-          切换 AI 模型视角
-        </p>
-        <ModelSwitcher
-          models={models}
-          activeModelId={activeModelId}
-          onModelChange={handleModelChange}
-        />
-      </div>
-      {children(activeModelId)}
-    </>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { IconX } from "@/components/icons";
 import { parseXUrl, extractTweetIdFromUrl, parseBlogUrl } from "@/lib/url-utils";
 import { getCachedTweet, fetchTweetLookup } from "./chat-tweet";
@@ -57,9 +58,11 @@ function InlineBlogLink({
       rel="noopener noreferrer"
       className="inline-flex items-baseline gap-1 text-zinc-900 underline decoration-zinc-300 underline-offset-2 transition-colors hover:decoration-zinc-500 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-400"
     >
-      <img
+      <Image
         src="/legacy/favicon.png"
         alt=""
+        width={14}
+        height={14}
         className="relative top-[0.15em] h-3.5 w-3.5 shrink-0 rounded-[2px]"
       />
       <span>{label}</span>

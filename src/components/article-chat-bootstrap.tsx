@@ -3,18 +3,12 @@
 import { useEffect } from "react";
 import type { ArticleChatContext } from "@/lib/ai/chat-context";
 import { hasArticleChatAutoOpened, isArticleChatDismissed, markArticleChatAutoOpened } from "@/lib/ai/article-chat-state";
+import { getPageScrollProgress } from "@/lib/browser/scroll-progress";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { useAIChat } from "./ai-chat-provider";
 
 const DESKTOP_AUTO_OPEN_MEDIA = "(min-width: 1280px)";
 const MIN_SCROLL_PROGRESS = 0.12;
-
-function getScrollProgress(): number {
-  const documentElement = document.documentElement;
-  const scrollTop = window.scrollY || documentElement.scrollTop || 0;
-  const scrollableHeight = documentElement.scrollHeight - window.innerHeight;
-  if (scrollableHeight <= 0) return 0;
-  return scrollTop / scrollableHeight;
-}
 
 interface ArticleChatBootstrapProps {
   guide: ArticleChatContext;
@@ -28,6 +22,7 @@ export function ArticleChatBootstrap({ guide }: ArticleChatBootstrapProps) {
     resetEntryContext,
     hasUserInteracted,
   } = useAIChat();
+  const isDesktopViewport = useMediaQuery(DESKTOP_AUTO_OPEN_MEDIA);
 
   useEffect(() => {
     setEntryContext({ scope: "article", article: guide });
@@ -44,14 +39,12 @@ export function ArticleChatBootstrap({ guide }: ArticleChatBootstrapProps) {
     if (!guide.autoOpenEnabled) return;
     if (!guide.slug) return;
     if (open || hasUserInteracted) return;
+    if (!isDesktopViewport) return;
     if (isArticleChatDismissed(guide.slug) || hasArticleChatAutoOpened(guide.slug)) return;
-
-    const mediaQuery = window.matchMedia(DESKTOP_AUTO_OPEN_MEDIA);
-    if (!mediaQuery.matches) return;
 
     let disposed = false;
     let delayReady = false;
-    let progressReady = getScrollProgress() >= MIN_SCROLL_PROGRESS;
+    let progressReady = getPageScrollProgress() >= MIN_SCROLL_PROGRESS;
 
     const tryOpen = () => {
       if (disposed || open || hasUserInteracted) return;
@@ -64,7 +57,7 @@ export function ArticleChatBootstrap({ guide }: ArticleChatBootstrapProps) {
     };
 
     const handleScroll = () => {
-      progressReady = getScrollProgress() >= MIN_SCROLL_PROGRESS;
+      progressReady = getPageScrollProgress() >= MIN_SCROLL_PROGRESS;
       tryOpen();
     };
 
@@ -81,7 +74,15 @@ export function ArticleChatBootstrap({ guide }: ArticleChatBootstrapProps) {
       window.clearTimeout(timerId);
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [guide.autoOpenDelayMs, guide.autoOpenEnabled, guide.slug, hasUserInteracted, open, setOpen]);
+  }, [
+    guide.autoOpenDelayMs,
+    guide.autoOpenEnabled,
+    guide.slug,
+    hasUserInteracted,
+    isDesktopViewport,
+    open,
+    setOpen,
+  ]);
 
   return null;
 }

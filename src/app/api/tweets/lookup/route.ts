@@ -1,17 +1,12 @@
 import authorTweetsCache from "@/../data/author-tweets-cache.json";
-import tweetsCache from "@/../data/tweets-cache.json";
+import {
+  getAllTweetCardEntries,
+  type TweetMetrics,
+} from "@/lib/content/tweet-card-cache";
 import { getProxiedImage } from "@/lib/image-proxy";
 import { siteConfig } from "@/lib/site-config";
 
 export const dynamic = "force-dynamic";
-
-interface TweetMetrics {
-  retweet_count?: number;
-  reply_count?: number;
-  like_count?: number;
-  quote_count?: number;
-  bookmark_count?: number;
-}
 
 interface TweetLookupItem {
   id: string;
@@ -52,27 +47,6 @@ interface AuthorTweetsCache {
     profile_image_url?: string;
   };
   tweets?: AuthorTweet[];
-}
-
-interface TweetCardTweet {
-  id: string;
-  text?: string;
-  created_at?: string;
-  author?: {
-    username?: string;
-    name?: string;
-    profile_image_url?: string;
-  };
-  public_metrics?: TweetMetrics | null;
-  media?: Array<{
-    type?: string;
-    url?: string;
-    preview_image_url?: string;
-  }>;
-}
-
-interface TweetCardCache {
-  tweets?: Record<string, TweetCardTweet | undefined>;
 }
 
 let cachedLookup: Map<string, TweetLookupItem> | null = null;
@@ -128,9 +102,8 @@ function buildLookupMap(): Map<string, TweetLookupItem> {
     });
   }
 
-  const cardCache = tweetsCache as TweetCardCache;
-  for (const tweet of Object.values(cardCache.tweets ?? {})) {
-    if (!tweet?.id || !tweet.text || !tweet.created_at) continue;
+  for (const tweet of getAllTweetCardEntries()) {
+    if (!tweet.text || !tweet.created_at) continue;
     if (map.has(tweet.id)) continue;
     const cardUsername = tweet.author?.username ?? username;
     map.set(tweet.id, {

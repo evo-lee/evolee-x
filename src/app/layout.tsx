@@ -8,6 +8,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { ThemeColorMeta } from "@/components/theme-color-meta";
 import { UmamiScript } from "@/components/umami-script";
 import { GoogleAnalyticsScript } from "@/components/google-analytics-script";
+import { getThemeBootstrapScript } from "@/lib/theme";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
@@ -74,7 +75,7 @@ export const viewport: Viewport = {
   userScalable: true,
 };
 
-const themeScript = `(function(){try{var t=localStorage.getItem('theme');var m=localStorage.getItem('theme_manual_override')==='1';var p=window.matchMedia('(prefers-color-scheme:dark)').matches;var d=(m&&(t==='dark'||t==='light'))?t==='dark':p;document.documentElement.classList.toggle('dark',d)}catch(e){}})()`;
+const themeScript = getThemeBootstrapScript();
 
 const structuredData = JSON.stringify({
   "@context": "https://schema.org",

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildArticleChatGuideContent } from "../article-chat-guide-utils.js";
+import { buildArticleChatGuideContent } from "../article-chat-guide-utils.ts";
 
 test("should prefer AI-generated reader questions and normalize formatting", () => {
   const guide = buildArticleChatGuideContent(

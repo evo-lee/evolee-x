@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import NextImage from "next/image";
 import Link from "next/link";
 import {
   IconCalendar,
@@ -28,32 +29,46 @@ export function ArticleCard({
   const imageUrl = getPreviewImage(post.cover);
   const isVideo = post.categories.includes("zuoluotv");
   const isHot = hits > hotArticleViews;
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [loadedImageUrl, setLoadedImageUrl] = useState<string | null>(() =>
+    imageUrl ? null : "",
+  );
+  const isLoaded = !imageUrl || loadedImageUrl === imageUrl;
 
   useEffect(() => {
-    if (!imageUrl) {
-      setHasError(true);
-      return;
+    if (!imageUrl || loadedImageUrl === imageUrl) return;
+
+    let active = true;
+    const img = new window.Image();
+    const markLoaded = () => {
+      if (active) {
+        setLoadedImageUrl(imageUrl);
+      }
+    };
+
+    if (priority) {
+      img.fetchPriority = "high";
     }
 
-    const img = new Image();
-    img.onload = () => setIsLoaded(true);
-    img.onerror = () => {
-      setHasError(true);
-      setIsLoaded(true);
-    };
+    img.onload = markLoaded;
+    img.onerror = markLoaded;
     img.src = imageUrl;
 
     if (img.complete) {
-      setIsLoaded(true);
+      const timeoutId = window.setTimeout(markLoaded, 0);
+      return () => {
+        active = false;
+        window.clearTimeout(timeoutId);
+        img.onload = null;
+        img.onerror = null;
+      };
     }
 
     return () => {
+      active = false;
       img.onload = null;
       img.onerror = null;
     };
-  }, [imageUrl]);
+  }, [imageUrl, loadedImageUrl, priority]);
 
   return (
     <article className="group flex h-full flex-col rounded-lg bg-white dark:bg-zinc-800 shadow-lg overflow-hidden">
@@ -77,9 +92,11 @@ export function ArticleCard({
         )}
 
         {isVideo && (
-          <img
+          <NextImage
             src="/icons/youtube.svg"
             alt="YouTube"
+            width={28}
+            height={28}
             className="absolute bottom-2 left-6 h-7 w-7 md:h-5 md:w-5 z-10"
           />
         )}

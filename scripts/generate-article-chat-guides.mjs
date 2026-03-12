@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import crypto from "node:crypto";
-import { buildArticleChatGuideContent } from "../src/lib/content/article-chat-guide-utils.js";
+import { buildArticleChatGuideContent } from "./utils/article-chat-guide-utils.mjs";
 
 const postsDir = path.resolve(process.cwd(), "content/posts");
 const aiSummariesFile = path.resolve(process.cwd(), "data/ai-summaries.json");

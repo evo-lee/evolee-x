@@ -139,7 +139,6 @@ export function usePageHits(slug: string, enabled: boolean = true) {
   useEffect(() => {
     // 如果禁用，不发起请求
     if (!enabled) {
-      setLoading(false);
       return;
     }
 
@@ -175,5 +174,5 @@ export function usePageHits(slug: string, enabled: boolean = true) {
     };
   }, [slug, updateHits, enabled]);
 
-  return { loading, hits };
+  return { loading: enabled ? loading : false, hits };
 }

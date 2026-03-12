@@ -1,188 +1,36 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, Sparkles } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { IconGitHub, IconX } from "@/components/icons";
-import { AuthorAvatar } from "./ai-chat-box";
+import { AuthorAvatar } from "@/components/chat/chat-avatar";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { useScrollThreshold } from "@/hooks/use-scroll-threshold";
 import { useAIChat } from "./ai-chat-provider";
 import { SearchCommand } from "./search-command";
+import { SiteHeaderAboutLink } from "./site-header-about-link";
+import { SiteHeaderMobileMenu } from "./site-header-mobile-menu";
 import { ThemeToggle } from "./theme-toggle";
-
-function NavAboutLink({ mobile = false }: { mobile?: boolean }) {
-  const pathname = usePathname();
-  const [pulse, setPulse] = useState(false);
-
-  useEffect(() => {
-    if (pathname === "/about") {
-      localStorage.setItem("about_visited", "1");
-      return;
-    }
-    if (!localStorage.getItem("about_visited")) {
-      setPulse(true);
-      const id = setTimeout(() => setPulse(false), 8000);
-      return () => clearTimeout(id);
-    }
-  }, [pathname]);
-
-  if (mobile) {
-    return (
-      <Link
-        href="/about"
-        className="flex items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
-      >
-        <span className="flex items-center gap-1.5">
-          <Sparkles
-            className={`h-3 w-3 text-violet-500 dark:text-violet-400${pulse ? " animate-[about-sparkle_1.5s_ease-in-out_4]" : ""}`}
-          />
-          关于
-        </span>
-        <span className="text-[10px] font-medium tracking-wider text-violet-500/60 dark:text-violet-400/60">
-          AI
-        </span>
-      </Link>
-    );
-  }
-
-  return (
-    <Link
-      href="/about"
-      className={`group relative inline-flex items-center gap-1 rounded-full border border-violet-200/50 bg-linear-to-r from-violet-50/80 to-indigo-50/80 px-2.5 py-0.5 text-sm text-zinc-600 transition-all duration-300 hover:border-violet-300/60 hover:from-violet-100 hover:to-indigo-100 hover:text-violet-700 hover:shadow-[0_0_12px_rgba(139,92,246,0.15)] dark:border-violet-500/20 dark:from-violet-500/10 dark:to-indigo-500/10 dark:text-zinc-300 dark:hover:border-violet-400/40 dark:hover:from-violet-500/20 dark:hover:to-indigo-500/20 dark:hover:text-violet-300 dark:hover:shadow-[0_0_12px_rgba(139,92,246,0.2)]${pulse ? " animate-[about-glow_2s_ease-in-out_3]" : ""}`}
-    >
-      <Sparkles
-        className={`h-3 w-3 text-violet-500 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110 dark:text-violet-400${pulse ? " animate-[about-sparkle_1.5s_ease-in-out_4]" : ""}`}
-      />
-      <span>关于</span>
-    </Link>
-  );
-}
-
-function MobileMenu() {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  const close = useCallback(() => setOpen(false), []);
-
-  useEffect(() => {
-    if (!open) return;
-    const onClick = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        close();
-      }
-    };
-    document.addEventListener("click", onClick, true);
-    return () => document.removeEventListener("click", onClick, true);
-  }, [open, close]);
-
-  return (
-    <div ref={ref} className="relative">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-transparent bg-transparent text-zinc-600 transition-all duration-150 hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-300 dark:border-transparent dark:bg-transparent dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:focus-visible:ring-zinc-700"
-        aria-label="打开顶部菜单"
-        title="菜单"
-      >
-        <Menu className="h-4 w-4" />
-      </button>
-
-      {open && (
-        <div className="absolute right-0 top-10 z-40 w-44 rounded-lg border border-zinc-200 bg-white p-1.5 shadow-xl dark:border-zinc-700 dark:bg-zinc-900">
-          <a
-            href={siteConfig.social.youtube}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={close}
-            className="flex items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
-          >
-            <span>{siteConfig.brand}</span>
-          </a>
-          <a
-            href="/rss.xml"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={close}
-            className="flex items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
-          >
-            <span>RSS</span>
-          </a>
-          <NavAboutLink mobile />
-          <a
-            href={siteConfig.social.twitter}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={close}
-            className="flex items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
-          >
-            <span>X</span>
-            <IconX className="h-4 w-4" />
-          </a>
-          <a
-            href={siteConfig.social.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={close}
-            className="flex items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
-          >
-            <span>GitHub</span>
-            <IconGitHub className="h-4 w-4" />
-          </a>
-        </div>
-      )}
-    </div>
-  );
-}
 
 export function SiteHeader() {
   const pathname = usePathname();
   const { toggle: toggleAIChat } = useAIChat();
-  // 文章页：单段路径且非首页/分页/分类
   const isArticlePage =
     pathname !== "/" &&
     !pathname.startsWith("/page/") &&
     !pathname.startsWith("/category/");
+  const isMobileViewport = useMediaQuery("(max-width: 767px)");
+  const scrolled = useScrollThreshold(10);
+  const passedMobileHideThreshold = useScrollThreshold(20);
+  const mobileHidden = isArticlePage && isMobileViewport && passedMobileHideThreshold;
 
-  // SSR 和客户端首次渲染都使用相同逻辑，避免 hydration mismatch
-  // 滚动效果通过 CSS 和 data 属性实现
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileHidden, setMobileHidden] = useState(false);
-
-  useEffect(() => {
-    const mobileMedia = window.matchMedia("(max-width: 767px)");
-
-    const onScroll = () => {
-      const currentY = window.scrollY;
-      setScrolled(currentY > 10);
-
-      // 移动端文章阅读模式：离开顶部后固定隐藏顶栏，回到顶部再显示
-      if (!mobileMedia.matches || !isArticlePage) {
-        setMobileHidden(false);
-        return;
-      }
-
-      setMobileHidden(currentY > 20);
-    };
-
-    onScroll(); // 初始检查
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, [isArticlePage]);
-
-  // 基础样式（SSR 和客户端一致）
   const baseClasses = "fixed left-0 right-0 top-0 z-50 bg-[color:var(--vp-c-bg)]/95 backdrop-blur-sm transition-[border-color,box-shadow,transform] duration-300 ease-out dark:bg-[color:var(--vp-c-bg)]/90";
-  // 文章页总是有边框
   const articleClasses = "border-b border-zinc-200/80 shadow-sm dark:border-zinc-800/80";
-  // 非文章页默认无边框，滚动后通过 CSS 处理
   const homeClasses = "border-b border-transparent";
   const hiddenClasses =
-    mobileHidden && isArticlePage
+    mobileHidden
       ? "-translate-y-full pointer-events-none md:pointer-events-auto"
       : "translate-y-0";
 
@@ -225,7 +73,7 @@ export function SiteHeader() {
               >
                 RSS
               </a>
-              <NavAboutLink />
+              <SiteHeaderAboutLink />
             </div>
 
             <span className="mx-3 h-5 w-px bg-zinc-200 dark:bg-zinc-700" />
@@ -281,7 +129,7 @@ export function SiteHeader() {
             <SearchCommand />
             <ThemeToggle />
 
-            <MobileMenu />
+            <SiteHeaderMobileMenu />
           </div>
         </nav>
       </div>

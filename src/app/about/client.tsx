@@ -6,7 +6,7 @@ import type {
   ProfileMeta,
   ProfileReport,
 } from "@/lib/content/author-profile";
-import { AboutClient } from "@/components/about/model-switcher";
+import { AboutModelClient } from "@/components/about/about-model-client";
 import { AboutHero } from "@/components/about/about-hero";
 import { AboutTags } from "@/components/about/about-tags";
 import { AboutStyles } from "@/components/about/about-styles";
@@ -37,26 +37,16 @@ export function AboutPageClient({ manifest, reports, postCovers }: AboutPageClie
     return map;
   }, [reports]);
 
-  // 确定默认模型（支持 URL 参数）
-  const defaultModelId = useMemo(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const urlModel = params.get("model");
-      if (urlModel && reportMap.has(urlModel)) {
-        return urlModel;
-      }
-    }
-    return manifest.defaultModel;
-  }, [manifest.defaultModel, reportMap]);
-
   return (
-    <AboutClient
-      defaultModelId={defaultModelId}
+    <AboutModelClient
+      defaultModelId={manifest.defaultModel}
       models={manifest.models}
     >
       {(activeModelId) => {
         const activeReport =
-          reportMap.get(activeModelId) ?? reports[0];
+          reportMap.get(activeModelId) ??
+          reportMap.get(manifest.defaultModel) ??
+          reports[0];
         if (!activeReport) return null;
 
         const { meta, report } = activeReport;
@@ -91,6 +81,6 @@ export function AboutPageClient({ manifest, reports, postCovers }: AboutPageClie
           </div>
         );
       }}
-    </AboutClient>
+    </AboutModelClient>
   );
 }

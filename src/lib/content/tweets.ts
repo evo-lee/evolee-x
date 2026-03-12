@@ -1,18 +1,13 @@
 import { cache } from "react";
 import type { SearchDocument } from "@luoleiorg/search-core";
 import authorTweetsCache from "@/../data/author-tweets-cache.json";
-import tweetsCache from "@/../data/tweets-cache.json";
+import {
+  getAllTweetCardEntries,
+  type TweetMetrics,
+} from "@/lib/content/tweet-card-cache";
 
 const DEFAULT_USERNAME = "luoleiorg";
 const MAX_SEARCHABLE_TWEET_LENGTH = 1600;
-
-interface TweetMetrics {
-  retweet_count?: number;
-  reply_count?: number;
-  like_count?: number;
-  quote_count?: number;
-  bookmark_count?: number;
-}
 
 interface AuthorTimelineTweet {
   id: string;
@@ -29,20 +24,6 @@ interface AuthorTimelineCache {
     username?: string;
   };
   tweets?: AuthorTimelineTweet[];
-}
-
-interface TweetCardTweet {
-  id: string;
-  text?: string;
-  created_at?: string;
-  author?: {
-    username?: string;
-  };
-  public_metrics?: TweetMetrics | null;
-}
-
-interface TweetCardCache {
-  tweets?: Record<string, TweetCardTweet | undefined>;
 }
 
 function normalizeTweetText(text: string): string {
@@ -132,13 +113,12 @@ function getAuthorTimelineDocuments(): SearchDocument[] {
 }
 
 function getTweetCardDocuments(existingIds: Set<string>): SearchDocument[] {
-  const cache = tweetsCache as TweetCardCache;
   const primaryUsername = getPrimaryUsername().toLowerCase();
-  const entries = Object.values(cache.tweets ?? {});
+  const entries = getAllTweetCardEntries();
 
   const docs: SearchDocument[] = [];
   for (const tweet of entries) {
-    if (!tweet?.id || existingIds.has(tweet.id)) continue;
+    if (existingIds.has(tweet.id)) continue;
     const username = (tweet.author?.username ?? primaryUsername).toLowerCase();
     if (username !== primaryUsername) continue;
 

@@ -1,15 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-
-const LIGHT_COLOR = "#ffffff";
-const DARK_COLOR = "#1e1e20";
+import { getThemeColor, readThemeFromDom } from "@/lib/theme";
 
 export function ThemeColorMeta() {
   useEffect(() => {
     const updateThemeColor = () => {
-      const isDark = document.documentElement.classList.contains("dark");
-      const color = isDark ? DARK_COLOR : LIGHT_COLOR;
+      const color = getThemeColor(readThemeFromDom());
 
       // Remove any media-query theme-color metas (from SSR/framework)
       document

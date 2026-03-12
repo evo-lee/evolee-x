@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { ProofItem } from "@/lib/content/author-profile";
 import { siteConfig } from "@/lib/site-config";
 
@@ -56,14 +57,12 @@ function PostProofSection({
                 {/* Thumbnail */}
                 {coverUrl ? (
                   <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800 sm:h-20 sm:w-32">
-                    <img
+                    <Image
                       src={coverUrl}
                       alt=""
-                      loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).parentElement!.style.display = "none";
-                      }}
+                      fill
+                      sizes="(min-width: 640px) 128px, 96px"
+                      className="object-cover"
                     />
                   </div>
                 ) : null}

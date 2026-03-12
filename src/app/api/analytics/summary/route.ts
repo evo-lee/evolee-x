@@ -106,7 +106,7 @@ export async function GET() {
             },
           });
         }
-      } catch (err) {}
+      } catch {}
     }
 
     // 无缓存时返回空数据

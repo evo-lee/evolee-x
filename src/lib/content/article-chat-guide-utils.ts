@@ -1,18 +1,28 @@
-/**
- * @typedef {{
- *   title: string;
- *   categories?: string[];
- *   summary?: string;
- *   abstract?: string;
- *   keyPoints?: string[];
- * }} ArticleChatGuideInput
- */
-
-function uniqueStrings(values) {
-  return [...new Set((values ?? []).map((value) => String(value || "").trim()).filter(Boolean))];
+export interface ArticleChatGuideInput {
+  title: string;
+  categories?: string[];
+  summary?: string;
+  abstract?: string;
+  keyPoints?: string[];
 }
 
-function toGuideCandidateArray(value) {
+export interface GeneratedArticleChatGuide {
+  openingLine?: unknown;
+  focusQuestions?: unknown;
+  extensionTopics?: unknown;
+}
+
+export interface ArticleChatGuideContent {
+  openingLine: string;
+  focusQuestions: string[];
+  extensionTopics: string[];
+}
+
+function uniqueStrings(values: string[]): string[] {
+  return [...new Set(values.map((value) => value.trim()).filter(Boolean))];
+}
+
+function toGuideCandidateArray(value: unknown): string[] {
   if (Array.isArray(value)) {
     return value.map((item) => String(item ?? "").trim()).filter(Boolean);
   }
@@ -29,7 +39,7 @@ function toGuideCandidateArray(value) {
     .filter(Boolean);
 }
 
-function normalizeLine(value) {
+function normalizeLine(value: unknown): string {
   return String(value ?? "")
     .replace(/^\s*[-*•]\s*/u, "")
     .replace(/^\s*\d+[.)、]\s*/u, "")
@@ -38,12 +48,12 @@ function normalizeLine(value) {
     .trim();
 }
 
-function ensureSentence(value) {
+function ensureSentence(value: unknown): string {
   const cleaned = normalizeLine(value).replace(/[。！？!?]+$/u, "").trim();
   return cleaned ? `${cleaned}。` : "";
 }
 
-function ensureQuestion(value) {
+function ensureQuestion(value: unknown): string {
   const cleaned = normalizeLine(value)
     .replace(/^(建议问题|推荐问题|问题|追问|延伸问题|延伸话题)[:：]\s*/u, "")
     .replace(/[。！!；;]+$/u, "")
@@ -53,7 +63,7 @@ function ensureQuestion(value) {
   return /[？?]$/u.test(cleaned) ? cleaned : `${cleaned}？`;
 }
 
-export function normalizeGuideOpeningLine(value) {
+export function normalizeGuideOpeningLine(value: unknown): string {
   const sentence = ensureSentence(value);
   if (!sentence) return "";
   if (sentence.length > 36) return "";
@@ -61,21 +71,24 @@ export function normalizeGuideOpeningLine(value) {
   return sentence;
 }
 
-export function normalizeGuideQuestions(values, limit = 3) {
+export function normalizeGuideQuestions(values: unknown, limit = 3): string[] {
   return uniqueStrings(toGuideCandidateArray(values).map(ensureQuestion).filter(Boolean)).slice(
     0,
     limit,
   );
 }
 
-export function normalizeGuideTopics(values, limit = 2) {
+export function normalizeGuideTopics(values: unknown, limit = 2): string[] {
   return uniqueStrings(toGuideCandidateArray(values).map(ensureQuestion).filter(Boolean)).slice(
     0,
     limit,
   );
 }
 
-export function buildArticleChatGuideContent(_input, generated) {
+export function buildArticleChatGuideContent(
+  _input: ArticleChatGuideInput,
+  generated?: GeneratedArticleChatGuide,
+): ArticleChatGuideContent {
   const fallbackFocusQuestions = [
     "这篇文章最值得先抓住的重点是什么？",
     "文里最值得继续展开的细节是哪一块？",
@@ -86,8 +99,14 @@ export function buildArticleChatGuideContent(_input, generated) {
     "如果想顺着这篇继续聊，还能展开什么？",
   ];
 
-  const normalizedFocusQuestions = normalizeGuideQuestions(generated?.focusQuestions ?? [], 3);
-  const normalizedExtensionTopics = normalizeGuideTopics(generated?.extensionTopics ?? [], 2);
+  const normalizedFocusQuestions = normalizeGuideQuestions(
+    generated?.focusQuestions ?? [],
+    3,
+  );
+  const normalizedExtensionTopics = normalizeGuideTopics(
+    generated?.extensionTopics ?? [],
+    2,
+  );
 
   return {
     openingLine:
