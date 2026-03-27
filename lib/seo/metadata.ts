@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import type { Page, Post, PostSummary } from '@/lib/content/types';
+import { getImageUrl } from '@/lib/cloudflare/images';
 import { seoConfig } from './constants';
 import { buildOpenGraph } from './og';
 
@@ -31,13 +32,13 @@ export function buildSiteMetadata(): Metadata {
       title: seoConfig.siteTitle,
       description: seoConfig.siteDescription,
       url: seoConfig.baseUrl,
-      image: seoConfig.defaultOgImage,
+      image: getImageUrl(seoConfig.defaultOgImage, 'og-cover', { absolute: true }),
     }),
     twitter: {
       card: 'summary_large_image',
       title: seoConfig.siteTitle,
       description: seoConfig.siteDescription,
-      images: [seoConfig.defaultOgImage],
+      images: [getImageUrl(seoConfig.defaultOgImage, 'og-cover', { absolute: true })],
     },
     authors: [{ name: seoConfig.author.name, url: seoConfig.author.url }],
   };
@@ -62,13 +63,13 @@ export function buildPageMetadata({
       title,
       description,
       url,
-      image,
+      image: getImageUrl(image || seoConfig.defaultOgImage, 'og-cover', { absolute: true }),
     }),
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [image || seoConfig.defaultOgImage],
+      images: [getImageUrl(image || seoConfig.defaultOgImage, 'og-cover', { absolute: true })],
     },
     robots: noIndex
       ? {
@@ -94,7 +95,9 @@ export function buildPostMetadata(post: Post | PostSummary): Metadata {
       title,
       description,
       url,
-      image: post.ogImage || post.cover || post.coverImage.src,
+      image: getImageUrl(post.ogImage || post.cover || post.coverImage.src, 'og-cover', {
+        absolute: true,
+      }),
       type: 'article',
       publishedTime: post.date.toISOString(),
       modifiedTime: (post.updated || post.date).toISOString(),
@@ -104,7 +107,11 @@ export function buildPostMetadata(post: Post | PostSummary): Metadata {
       card: 'summary_large_image',
       title,
       description,
-      images: [post.ogImage || post.cover || seoConfig.defaultOgImage],
+      images: [
+        getImageUrl(post.ogImage || post.cover || post.coverImage.src, 'og-cover', {
+          absolute: true,
+        }),
+      ],
     },
     authors: post.author ? [{ name: post.author }] : [{ name: seoConfig.author.name }],
     category: post.category,
@@ -126,4 +133,3 @@ export function buildPageContentMetadata(page: Page): Metadata {
     noIndex: page.draft,
   });
 }
-

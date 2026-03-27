@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ArticleImage } from '@/components/ui/ArticleImage';
 import { formatDate } from '@/lib/format';
 import type { PostSummary } from '@/lib/content/types';
 
@@ -27,6 +28,14 @@ export function PostList({
             ) : null}
           </div>
           <div className="post-list__body">
+            <Link className="post-list__cover" href={post.url} aria-hidden="true" tabIndex={-1}>
+              <ArticleImage
+                alt={post.coverImage.alt}
+                priority={post.featured}
+                src={post.coverImage.src}
+                variant="thumb-md"
+              />
+            </Link>
             <h2>
               <Link href={post.url}>{post.title}</Link>
             </h2>

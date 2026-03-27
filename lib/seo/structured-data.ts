@@ -1,4 +1,5 @@
 import type { Page, Post } from '@/lib/content/types';
+import { getImageUrl } from '@/lib/cloudflare/images';
 import { seoConfig } from './constants';
 
 function absoluteUrl(path: string): string {
@@ -83,9 +84,7 @@ export function buildBlogPostingStructuredData(post: Post) {
     url: post.canonical || absoluteUrl(post.url),
     keywords: post.tags.join(', '),
     articleSection: post.category,
-    image:
-      post.ogImage ||
-      (post.cover && !post.cover.startsWith('data:') ? absoluteUrl(post.cover) : seoConfig.defaultOgImage),
+    image: getImageUrl(post.ogImage || post.cover || post.coverImage.src, 'og-cover', { absolute: true }),
     author: {
       '@type': 'Person',
       name: post.author || seoConfig.author.name,

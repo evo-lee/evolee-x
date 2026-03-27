@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Desk setup</title>
+  <desc id="desc">A quiet desk setup illustration used inside the sample post.</desc>
+  <rect width="1200" height="675" fill="#efe7da"/>
+  <rect x="148" y="112" width="904" height="451" rx="30" fill="#fcfaf5"/>
+  <rect x="212" y="178" width="776" height="319" rx="24" fill="#dae6de"/>
+  <rect x="312" y="248" width="268" height="170" rx="18" fill="#23424d"/>
+  <rect x="644" y="248" width="244" height="28" rx="14" fill="#23424d"/>
+  <rect x="644" y="304" width="208" height="18" rx="9" fill="#56756c"/>
+  <rect x="644" y="348" width="230" height="18" rx="9" fill="#56756c"/>
+  <rect x="644" y="392" width="180" height="18" rx="9" fill="#56756c"/>
+</svg>

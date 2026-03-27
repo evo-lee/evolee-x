@@ -2,6 +2,7 @@ import { toHtml } from 'hast-util-to-html';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
+import { getImageUrl } from '@/lib/cloudflare/images';
 import remarkGfm from 'remark-gfm';
 import remarkMdx from 'remark-mdx';
 import remarkParse from 'remark-parse';
@@ -42,7 +43,21 @@ function extractHeadings(html: string): Heading[] {
   }));
 }
 
-export async function processMarkdown(source: string): Promise<ProcessedContent> {
+function rewriteImageSources(html: string): string {
+  return html.replace(/<img([^>]*?)src="([^"]+)"([^>]*)>/g, (match, beforeSrc, src, afterSrc) => {
+    if (src.startsWith('/image/')) {
+      return match;
+    }
+
+    return `<img${beforeSrc}src="${getImageUrl(src, 'cover-md')}"${afterSrc}>`;
+  });
+}
+
+export interface ProcessedMarkdown extends ProcessedContent {
+  rawHtml: string;
+}
+
+export async function processMarkdown(source: string): Promise<ProcessedMarkdown> {
   const processor = unified()
     .use(remarkParse)
     .use(remarkMdx)
@@ -54,13 +69,15 @@ export async function processMarkdown(source: string): Promise<ProcessedContent>
 
   const tree = processor.parse(source);
   const htmlTree = await processor.run(tree);
-  const html = toHtml(htmlTree).trim();
-  const text = stripTags(html);
+  const rawHtml = toHtml(htmlTree).trim();
+  const html = rewriteImageSources(rawHtml);
+  const text = stripTags(rawHtml);
 
   return {
     html,
+    rawHtml,
     text,
     excerpt: buildExcerpt(text),
-    headings: extractHeadings(html),
+    headings: extractHeadings(rawHtml),
   };
 }

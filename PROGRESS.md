@@ -19,7 +19,7 @@
 | 1 | 内容层与数据模型 / Content Layer & Data Model | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-1-content-layer.md) |
 | 2 | 应用骨架与核心页面 / Application Shell & Core Pages | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-2-core-pages.md) |
 | 3 | SEO 系统 / SEO System | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-3-seo.md) |
-| 4 | 图片分发系统 / Image Delivery System | ⬜ | — | [查看 / View](docs/phases/phase-4-image-delivery.md) |
+| 4 | 图片分发系统 / Image Delivery System | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-4-image-delivery.md) |
 | 5 | UI 组件库 / UI Component Library | ⬜ | — | [查看 / View](docs/phases/phase-5-ui-components.md) |
 | 6 | 中文排版系统 / Chinese Typography System | ⬜ | — | [查看 / View](docs/phases/phase-6-typography.md) |
 | 7 | 分析系统 / Analytics System | ⬜ | — | [查看 / View](docs/phases/phase-7-analytics.md) |
@@ -124,10 +124,19 @@
 
 ### 交付物清单 / Deliverable Checklist
 
-- [ ] `lib/cloudflare/images.ts`
-- [ ] `lib/cloudflare/loader.ts`
-- [ ] `components/ui/ArticleImage.tsx`
-- [ ] `components/ui/CoverImage.tsx`
+- [x] `lib/cloudflare/images.ts`
+- [x] `lib/cloudflare/loader.ts`
+- [x] `components/ui/ArticleImage.tsx`
+- [x] `components/ui/CoverImage.tsx`
+- [x] `app/image/[variant]/[token]/route.ts`
+- [x] `public/images/default-cover.svg`
+- [x] `public/images/hello-world-cover.svg`
+- [x] `public/images/hello-world-inline.svg`
+- [x] 文章列表页使用 `thumb-md` 变体
+- [x] 文章详情页使用 `cover-lg`，正文图片重写为 `cover-md`
+- [x] Open Graph / Twitter / `BlogPosting` 使用 `og-cover`
+- [x] 原始源图 URL 不出现在公开渲染的 HTML 中
+- [x] `cover-resolver.ts` 三级回退单元测试
 
 ---
 

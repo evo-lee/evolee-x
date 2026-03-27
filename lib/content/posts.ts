@@ -17,10 +17,10 @@ async function loadPostFromFile(filePath: string): Promise<Post> {
   const source = await readUtf8(filePath);
   const { body, frontmatter } = parsePostSource(source, filePath);
   const slug = pathToSlug(POSTS_DIR, filePath);
-  const processed = await processMarkdown(body);
+  const { rawHtml, ...processed } = await processMarkdown(body);
   const coverImage = await resolveCoverImage({
     slug,
-    html: processed.html,
+    html: rawHtml,
     cover: frontmatter.cover,
     coverAlt: frontmatter.coverAlt,
   });

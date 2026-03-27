@@ -8,11 +8,9 @@ const __dirname = dirname(__filename);
 const nextConfig: NextConfig = {
   outputFileTracingRoot: __dirname,
 
-  // Use a custom loader for Cloudflare Images (configured in Phase 4).
-  // For now, 'unoptimized' allows the build to succeed without a loader file.
-  // Switch to loader: 'custom' + loaderFile in Phase 4.
   images: {
-    unoptimized: true,
+    loader: 'custom',
+    loaderFile: './lib/cloudflare/loader.ts',
   },
 
   // Ensure Next.js does not produce a standalone output.

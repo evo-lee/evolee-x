@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { RichContent } from '@/components/site/RichContent';
+import { CoverImage } from '@/components/ui/CoverImage';
 import { formatDate } from '@/lib/format';
 import { getRuntimePostBySlug, getRuntimePosts } from '@/lib/content/runtime';
 import { buildPostMetadata } from '@/lib/seo/metadata';
@@ -59,6 +60,7 @@ export default async function PostPage({ params }: PageProps) {
           ))}
         </ul>
       </header>
+      <CoverImage alt={post.coverImage.alt} priority src={post.coverImage.src} />
       <RichContent html={post.html} headings={post.headings} />
     </section>
   );

@@ -4,16 +4,7 @@ import { GENERATED_COVERS_DIR } from './files';
 import type { CoverResolution } from './types';
 
 const DEFAULT_COVER_ALT = 'Default blog cover';
-const DEFAULT_COVER_SVG = encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">' +
-    '<rect width="1200" height="630" fill="#f4efe7"/>' +
-    '<rect x="72" y="72" width="1056" height="486" rx="32" fill="#143642"/>' +
-    '<text x="120" y="260" fill="#f4efe7" font-size="88" font-family="Georgia, serif">evolee</text>' +
-    '<text x="120" y="360" fill="#d9c6a5" font-size="36" font-family="Georgia, serif">Personal blog</text>' +
-    '</svg>'
-);
-
-const DEFAULT_COVER_SRC = `data:image/svg+xml;charset=utf-8,${DEFAULT_COVER_SVG}`;
+const DEFAULT_COVER_SRC = '/images/default-cover.svg';
 
 function getFirstImageFromHtml(html: string): { src: string; alt: string } | null {
   const match = html.match(/<img[^>]+src="([^"]+)"[^>]*alt="([^"]*)"[^>]*>/i);

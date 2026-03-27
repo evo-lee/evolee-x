@@ -16,7 +16,10 @@ async function loadPageFromFile(filePath: string): Promise<Page> {
 
   return {
     ...frontmatter,
-    ...processed,
+    html: processed.html,
+    excerpt: processed.excerpt,
+    text: processed.text,
+    headings: processed.headings,
     slug,
     url: `/${slug}`,
     sourcePath: path.relative(process.cwd(), filePath),
