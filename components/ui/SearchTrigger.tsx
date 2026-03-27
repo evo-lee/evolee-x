@@ -1,21 +1,17 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { trackEvent } from '@/lib/analytics/track';
+import { openSearchModal } from '@/components/search/SearchModal';
 
 export function SearchTrigger() {
-  const router = useRouter();
-
   return (
     <button
       type="button"
       className="control-button"
       aria-haspopup="dialog"
       onClick={() => {
-        trackEvent('open_search', { destination: '/posts', source: 'header' });
-        router.push('/posts');
+        openSearchModal();
       }}
-      title="Search UI arrives in Phase 8. Opening the post index for now."
+      title="Open search"
     >
       Search
     </button>

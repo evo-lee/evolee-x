@@ -543,6 +543,111 @@ img {
   cursor: pointer;
 }
 
+.search-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: start center;
+  padding: clamp(1rem, 4vw, 3rem) 1rem;
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.search-modal__panel {
+  width: min(100%, 42rem);
+  display: grid;
+  gap: 1rem;
+  padding: 1.15rem;
+  border: 1px solid var(--line);
+  border-radius: 1.4rem;
+  background: color-mix(in srgb, var(--surface) 95%, transparent);
+  box-shadow: 0 1.5rem 3.5rem color-mix(in srgb, var(--bg) 50%, transparent);
+}
+
+.search-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.search-modal__eyebrow {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.search-modal__input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--surface-strong) 76%, transparent);
+  color: var(--text);
+  padding: 0.95rem 1rem;
+  font: inherit;
+  font-size: 1rem;
+}
+
+.search-modal__input::placeholder {
+  color: var(--text-soft);
+}
+
+.search-results {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.search-results__item a {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+}
+
+.search-results__item a:hover,
+.search-results__item a:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+}
+
+.search-results__item h3,
+.search-results__item p {
+  margin: 0;
+}
+
+.search-results__item h3 {
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+.search-results__item p {
+  color: var(--text-soft);
+}
+
+.search-results__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  color: var(--text-soft);
+  font-size: 0.88rem;
+}
+
+.search-empty {
+  padding: 0.5rem 0.1rem 0.2rem;
+  color: var(--text-soft);
+}
+
+.search-empty p {
+  margin: 0;
+}
+
 .error-panel,
 .loading-panel {
   width: min(calc(100% - 2rem), 42rem);
@@ -586,5 +691,14 @@ img {
 
   .site-main {
     padding-top: 1rem;
+  }
+
+  .search-modal {
+    padding-inline: 0.65rem;
+  }
+
+  .search-modal__panel {
+    padding: 0.9rem;
+    border-radius: 1.15rem;
   }
 }

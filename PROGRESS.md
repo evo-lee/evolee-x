@@ -23,7 +23,7 @@
 | 5 | UI 组件库 / UI Component Library | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-5-ui-components.md) |
 | 6 | 中文排版系统 / Chinese Typography System | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-6-typography.md) |
 | 7 | 分析系统 / Analytics System | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-7-analytics.md) |
-| 8 | 搜索功能 / Search | ⬜ | — | [查看 / View](docs/phases/phase-8-search.md) |
+| 8 | 搜索功能 / Search | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-8-search.md) |
 | 9 | AI 编辑工具链 / AI Editorial Tooling | ⬜ | — | [查看 / View](docs/phases/phase-9-ai-tooling.md) |
 | 10 | 部署流水线 / Deployment Pipeline | ⬜ | — | [查看 / View](docs/phases/phase-10-deployment.md) |
 | 11 | 可观测与运维 / Observability & Operations | ⬜ | — | [查看 / View](docs/phases/phase-11-observability.md) |
@@ -189,12 +189,12 @@
 
 ### 交付物清单 / Deliverable Checklist
 
-- [ ] `scripts/content/build-search-index.ts`
-- [ ] `lib/search/types.ts`
-- [ ] `lib/search/client.ts`
-- [ ] `components/search/SearchModal.tsx`
-- [ ] `components/search/SearchResults.tsx`
-- [ ] `package.json` build 脚本更新
+- [x] `scripts/content/build-search-index.ts`
+- [x] `lib/search/types.ts`
+- [x] `lib/search/client.ts`
+- [x] `components/search/SearchModal.tsx`
+- [x] `components/search/SearchResults.tsx`
+- [x] `package.json` build 脚本更新
 
 ---
 

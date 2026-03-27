@@ -3,16 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node --import tsx scripts/content/build-runtime-data.ts && next dev --turbopack",
-    "build": "node --import tsx scripts/content/build-runtime-data.ts && next build",
+    "dev": "node --import tsx scripts/content/build-runtime-data.ts && node --import tsx scripts/content/build-search-index.ts && next dev --turbopack",
+    "build": "node --import tsx scripts/content/build-runtime-data.ts && node --import tsx scripts/content/build-search-index.ts && next build",
     "start": "next start",
     "cf:build": "opennextjs-cloudflare build",
-    "cf:preview": "node --import tsx scripts/content/build-runtime-data.ts && opennextjs-cloudflare preview",
+    "cf:preview": "node --import tsx scripts/content/build-runtime-data.ts && node --import tsx scripts/content/build-search-index.ts && opennextjs-cloudflare preview",
     "cf:deploy": "opennextjs-cloudflare deploy",
     "lint": "eslint .",
     "test": "node --import tsx --test tests/**/*.test.ts",
     "lint:content": "tsx scripts/ci/lint-content.ts",
-    "type-check": "node --import tsx scripts/content/build-runtime-data.ts && next build && tsc --noEmit",
+    "type-check": "node --import tsx scripts/content/build-runtime-data.ts && node --import tsx scripts/content/build-search-index.ts && next build && tsc --noEmit",
     "prepare": "husky"
   },
   "dependencies": {
