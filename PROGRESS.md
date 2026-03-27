@@ -25,7 +25,7 @@
 | 7 | 分析系统 / Analytics System | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-7-analytics.md) |
 | 8 | 搜索功能 / Search | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-8-search.md) |
 | 9 | AI 编辑工具链 / AI Editorial Tooling | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-9-ai-tooling.md) |
-| 10 | 部署流水线 / Deployment Pipeline | ⬜ | — | [查看 / View](docs/phases/phase-10-deployment.md) |
+| 10 | 部署流水线 / Deployment Pipeline | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-10-deployment.md) |
 | 11 | 可观测与运维 / Observability & Operations | ⬜ | — | [查看 / View](docs/phases/phase-11-observability.md) |
 
 ---
@@ -222,8 +222,8 @@
 
 ### 交付物清单 / Deliverable Checklist
 
-- [ ] `.github/workflows/deploy.yml`
-- [ ] `.github/workflows/ai-content-check.yml`
+- [x] `.github/workflows/deploy.yml`
+- [x] `.github/workflows/ai-content-check.yml`
 
 ---
 

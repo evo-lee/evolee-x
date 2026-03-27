@@ -1,0 +1,61 @@
+name: AI Content Check
+
+on:
+  pull_request:
+    paths:
+      - 'content/**'
+      - 'prompts/**'
+      - 'scripts/ai/**'
+      - 'config/typography/**'
+
+jobs:
+  ai-content-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Proofread Changed Files
+        id: proofread
+        continue-on-error: true
+        run: npm run ai:proofread -- --changed-files
+
+      - name: Review Typography
+        id: typography
+        continue-on-error: true
+        run: npm run ai:typography-review -- --changed-files
+
+      - name: Upload AI Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-content-reports
+          path: reports/ai/
+          if-no-files-found: warn
+
+      - name: Workflow Summary
+        if: always()
+        run: |
+          echo "## AI Content Check" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Proofread: ${{ steps.proofread.outcome }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Typography review: ${{ steps.typography.outcome }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "AI failures are advisory and do not block the PR." >> "$GITHUB_STEP_SUMMARY"
