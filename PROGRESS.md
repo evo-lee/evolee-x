@@ -26,7 +26,7 @@
 | 8 | 搜索功能 / Search | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-8-search.md) |
 | 9 | AI 编辑工具链 / AI Editorial Tooling | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-9-ai-tooling.md) |
 | 10 | 部署流水线 / Deployment Pipeline | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-10-deployment.md) |
-| 11 | 可观测与运维 / Observability & Operations | ⬜ | — | [查看 / View](docs/phases/phase-11-observability.md) |
+| 11 | 可观测与运维 / Observability & Operations | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-11-observability.md) |
 
 ---
 
@@ -231,6 +231,6 @@
 
 ### 交付物清单 / Deliverable Checklist
 
-- [ ] `scripts/ci/build-report.ts`
-- [ ] `config/ops/monitoring.md`
-- [ ] `config/ops/runbook.md`
+- [x] `scripts/ci/build-report.ts`
+- [x] `config/ops/monitoring.md`
+- [x] `config/ops/runbook.md`

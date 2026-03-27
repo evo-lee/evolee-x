@@ -50,6 +50,17 @@ jobs:
       - name: Build Next App
         run: npm run build
 
+      - name: Generate Build Report
+        run: node --import tsx scripts/ci/build-report.ts
+
+      - name: Upload Build Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-report
+          path: reports/build/
+          if-no-files-found: error
+
       - name: Build Cloudflare Worker
         run: npm run cf:build
 
