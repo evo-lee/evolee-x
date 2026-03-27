@@ -18,7 +18,7 @@
 | 0 | 脚手架与配置基线 / Scaffolding & Config Baseline | ✅ | 2026-03-26 | [查看 / View](docs/phases/phase-0-scaffolding.md) |
 | 1 | 内容层与数据模型 / Content Layer & Data Model | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-1-content-layer.md) |
 | 2 | 应用骨架与核心页面 / Application Shell & Core Pages | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-2-core-pages.md) |
-| 3 | SEO 系统 / SEO System | ⬜ | — | [查看 / View](docs/phases/phase-3-seo.md) |
+| 3 | SEO 系统 / SEO System | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-3-seo.md) |
 | 4 | 图片分发系统 / Image Delivery System | ⬜ | — | [查看 / View](docs/phases/phase-4-image-delivery.md) |
 | 5 | UI 组件库 / UI Component Library | ⬜ | — | [查看 / View](docs/phases/phase-5-ui-components.md) |
 | 6 | 中文排版系统 / Chinese Typography System | ⬜ | — | [查看 / View](docs/phases/phase-6-typography.md) |
@@ -107,10 +107,16 @@
 
 ### 交付物清单 / Deliverable Checklist
 
-- [ ] `lib/seo/constants.ts`
-- [ ] `lib/seo/metadata.ts`
-- [ ] `lib/seo/structured-data.ts`
-- [ ] `lib/seo/og.ts`
+- [x] `lib/seo/constants.ts`
+- [x] `lib/seo/metadata.ts`
+- [x] `lib/seo/structured-data.ts`
+- [x] `lib/seo/og.ts`
+- [x] `components/seo/StructuredData.tsx`
+- [x] `public/og-default.svg`
+- [x] 文章详情页 `generateMetadata` 接入统一 builder
+- [x] 首页、列表页、归档页、标签页、分类页、About、Projects 接入 canonical + OG + description
+- [x] 文章页输出 `BlogPosting` + `BreadcrumbList` JSON-LD
+- [x] 根布局输出 `Person` JSON-LD，首页输出 `WebSite` JSON-LD
 
 ---
 

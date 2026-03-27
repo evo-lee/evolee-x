@@ -1,18 +1,29 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { StructuredData } from '@/components/seo/StructuredData';
 import { getRuntimeArchives } from '@/lib/content/runtime';
 import { formatDate, formatMonth } from '@/lib/format';
+import { buildPageMetadata } from '@/lib/seo/metadata';
+import { buildCollectionPageStructuredData } from '@/lib/seo/structured-data';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: '/archives',
   title: 'Archives',
   description: 'Browse posts by month.',
-};
+});
 
 export default async function ArchivesPage() {
   const groups = getRuntimeArchives();
 
   return (
     <section className="page-grid">
+      <StructuredData
+        data={buildCollectionPageStructuredData({
+          title: 'Archives',
+          description: 'Browse posts by month.',
+          path: '/archives',
+        })}
+      />
       <header className="page-header">
         <p className="meta-note">Archives</p>
         <h1>Monthly index</h1>

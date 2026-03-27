@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">evolee</title>
+  <desc id="desc">Default Open Graph image for the evolee blog.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f4efe7"/>
+      <stop offset="100%" stop-color="#dbe7df"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="72" y="72" width="1056" height="486" rx="32" fill="#173742"/>
+  <text x="126" y="250" fill="#f6f1e9" font-family="Georgia, 'Times New Roman', serif" font-size="94">
+    evolee
+  </text>
+  <text x="126" y="334" fill="#c9d9cf" font-family="Georgia, 'Times New Roman', serif" font-size="34">
+    Programming notes, reading reflections, and personal essays.
+  </text>
+  <line x1="126" y1="392" x2="440" y2="392" stroke="#6eb39a" stroke-width="4"/>
+</svg>

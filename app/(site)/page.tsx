@@ -1,6 +1,16 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+import { StructuredData } from '@/components/seo/StructuredData';
 import { PostList } from '@/components/site/PostList';
 import { getRuntimeCategories, getRuntimePosts, getRuntimeTags } from '@/lib/content/runtime';
+import { buildPageMetadata } from '@/lib/seo/metadata';
+import { buildWebsiteStructuredData } from '@/lib/seo/structured-data';
+
+export const metadata: Metadata = buildPageMetadata({
+  path: '/',
+  title: 'Home',
+  description: 'Programming notes, reading reflections, and personal essays.',
+});
 
 export default async function HomePage() {
   const posts = getRuntimePosts();
@@ -11,6 +21,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <StructuredData data={buildWebsiteStructuredData()} />
       <section className="hero">
         <p className="hero__eyebrow">Personal blog</p>
         <h1>Programming, reading, and quiet notes from an ongoing life.</h1>

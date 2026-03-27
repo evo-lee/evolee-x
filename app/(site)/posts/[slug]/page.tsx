@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { StructuredData } from '@/components/seo/StructuredData';
 import { RichContent } from '@/components/site/RichContent';
 import { formatDate } from '@/lib/format';
 import { getRuntimePostBySlug, getRuntimePosts } from '@/lib/content/runtime';
+import { buildPostMetadata } from '@/lib/seo/metadata';
+import { buildBlogPostingStructuredData, buildBreadcrumbStructuredData } from '@/lib/seo/structured-data';
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -23,10 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  return {
-    title: post.seoTitle || post.title,
-    description: post.seoDescription || post.description,
-  };
+  return buildPostMetadata(post);
 }
 
 export default async function PostPage({ params }: PageProps) {
@@ -39,6 +39,14 @@ export default async function PostPage({ params }: PageProps) {
 
   return (
     <section className="page-grid">
+      <StructuredData data={buildBlogPostingStructuredData(post)} />
+      <StructuredData
+        data={buildBreadcrumbStructuredData([
+          { name: 'Home', path: '/' },
+          { name: 'Posts', path: '/posts' },
+          { name: post.title, path: post.url },
+        ])}
+      />
       <header className="article-header">
         <p className="meta-note">Post</p>
         <h1>{post.title}</h1>
