@@ -1,4 +1,5 @@
 export type ExecutionMode = 'file' | 'glob' | 'changed-files';
+export type AIProvider = 'anthropic' | 'openai';
 
 export type AIReviewTool =
   | 'proofread'

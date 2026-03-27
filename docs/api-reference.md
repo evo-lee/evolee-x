@@ -398,7 +398,7 @@ npm run ai:seo-suggest -- --glob "content/posts/*.mdx"
 - Purpose:
   sends the prompt payload to Anthropic and validates the structured response
 - Error cases:
-  throws if `ANTHROPIC_API_KEY` is missing
+  throws if the provider-specific API key is missing
 
 ## Operations and Reporting APIs
 

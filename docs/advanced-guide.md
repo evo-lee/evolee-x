@@ -1,6 +1,6 @@
-# evolee-x
+# Advanced Guide
 
-English | [简体中文](./README.zh-CN.md)
+English | [简体中文](./advanced-guide.zh-CN.md)
 
 ## Project Overview
 
@@ -38,19 +38,18 @@ This repository follows a strict reading order:
 
 Start here before reading code:
 
-- [README.md](./README.md): project overview, setup, workflow, and examples
-- [README.zh-CN.md](./README.zh-CN.md): Chinese guide with the same scope
-- [docs/getting-started.zh-CN.md](./docs/getting-started.zh-CN.md): beginner-friendly setup and modification guide
-- [docs/api-reference.md](./docs/api-reference.md): function-level reference and design notes
-- [docs/api-reference.zh-CN.md](./docs/api-reference.zh-CN.md): Chinese API reference
-- [docs/content-pipeline.md](./docs/content-pipeline.md): content ingestion and runtime snapshot flow
-- [docs/search-system.md](./docs/search-system.md): search index and query flow
-- [docs/analytics-system.md](./docs/analytics-system.md): analytics ownership and event dispatch
-- [docs/ai-tooling.md](./docs/ai-tooling.md): editorial CLI tools
-- [docs/operations.md](./docs/operations.md): health checks and build reporting
-- [docs/phases/phase-10-deployment.md](./docs/phases/phase-10-deployment.md): deployment workflow details
-- [`docs/phases/`](./docs/phases): implementation records for phases 0 to 11
-- [PROGRESS.md](./PROGRESS.md): current implementation status
+- [README.md](../README.md): beginner-friendly quick start
+- [README.zh-CN.md](../README.zh-CN.md): Chinese beginner guide
+- [docs/api-reference.md](./api-reference.md): function-level reference and design notes
+- [docs/api-reference.zh-CN.md](./api-reference.zh-CN.md): Chinese API reference
+- [docs/content-pipeline.md](./content-pipeline.md): content ingestion and runtime snapshot flow
+- [docs/search-system.md](./search-system.md): search index and query flow
+- [docs/analytics-system.md](./analytics-system.md): analytics ownership and event dispatch
+- [docs/ai-tooling.md](./ai-tooling.md): editorial CLI tools
+- [docs/operations.md](./operations.md): health checks and build reporting
+- [docs/phases/phase-10-deployment.md](./phases/phase-10-deployment.md): deployment workflow details
+- [`docs/phases/`](./phases): implementation records for phases 0 to 11
+- [PROGRESS.md](../PROGRESS.md): current implementation status
 
 ## Code Zone
 
@@ -177,8 +176,8 @@ Required deployment variables:
 
 Deployment references:
 
-- [docs/phases/phase-10-deployment.md](./docs/phases/phase-10-deployment.md)
-- [config/ops/runbook.md](./config/ops/runbook.md)
+- [docs/phases/phase-10-deployment.md](./phases/phase-10-deployment.md)
+- [config/ops/runbook.md](../config/ops/runbook.md)
 
 ## Validation Suite
 
@@ -277,9 +276,9 @@ npm run ai:proofread -- --file content/posts/hello-world.mdx
 
 ## Recommended Reading Order
 
-1. [README.md](./README.md)
-2. [docs/phases](./docs/phases)
-3. [docs/api-reference.md](./docs/api-reference.md)
+1. [README.md](../README.md)
+2. [docs/phases](./phases)
+3. [docs/api-reference.md](./api-reference.md)
 4. `lib/content/*`, `lib/seo/*`, `lib/cloudflare/*`
 5. `app/*` and `components/*`
 6. `scripts/*` and `config/*`

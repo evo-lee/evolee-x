@@ -398,7 +398,7 @@ npm run ai:seo-suggest -- --glob "content/posts/*.mdx"
 - 作用：
   向 Anthropic 发送 prompt payload，并校验结构化返回值
 - 异常情况：
-  `ANTHROPIC_API_KEY` 缺失时直接抛错
+  当前 provider 对应的 API Key 缺失时直接抛错
 
 ## 运维与报告 API
 

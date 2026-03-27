@@ -1,6 +1,6 @@
-# evolee-x
+# 进阶文档
 
-[English](./README.md) | 简体中文
+[English](./advanced-guide.md) | 简体中文
 
 ## 项目整体说明
 
@@ -38,19 +38,18 @@
 
 建议先读这些文档，再读代码：
 
-- [README.md](./README.md)：英文项目说明、安装、运行、示例
-- [README.zh-CN.md](./README.zh-CN.md)：中文项目说明
-- [docs/getting-started.zh-CN.md](./docs/getting-started.zh-CN.md)：新手一步一步上手教程
-- [docs/api-reference.md](./docs/api-reference.md)：英文 API 和核心逻辑说明
-- [docs/api-reference.zh-CN.md](./docs/api-reference.zh-CN.md)：中文 API 参考
-- [docs/content-pipeline.md](./docs/content-pipeline.md)：内容接入与运行时快照链路
-- [docs/search-system.md](./docs/search-system.md)：搜索索引与查询链路
-- [docs/analytics-system.md](./docs/analytics-system.md)：分析事件归属与上报链路
-- [docs/ai-tooling.md](./docs/ai-tooling.md)：AI 编辑辅助 CLI
-- [docs/operations.md](./docs/operations.md)：健康检查与构建报告
-- [docs/phases/phase-10-deployment.md](./docs/phases/phase-10-deployment.md)：部署流水线说明
-- [`docs/phases/`](./docs/phases)：Phase 0 到 Phase 11 的实现记录
-- [PROGRESS.md](./PROGRESS.md)：当前实现进度
+- [README.md](../README.md)：英文新手首页
+- [README.zh-CN.md](../README.zh-CN.md)：中文新手首页
+- [docs/api-reference.md](./api-reference.md)：英文 API 和核心逻辑说明
+- [docs/api-reference.zh-CN.md](./api-reference.zh-CN.md)：中文 API 参考
+- [docs/content-pipeline.md](./content-pipeline.md)：内容接入与运行时快照链路
+- [docs/search-system.md](./search-system.md)：搜索索引与查询链路
+- [docs/analytics-system.md](./analytics-system.md)：分析事件归属与上报链路
+- [docs/ai-tooling.md](./ai-tooling.md)：AI 编辑辅助 CLI
+- [docs/operations.md](./operations.md)：健康检查与构建报告
+- [docs/phases/phase-10-deployment.md](./phases/phase-10-deployment.md)：部署流水线说明
+- [`docs/phases/`](./phases)：Phase 0 到 Phase 11 的实现记录
+- [PROGRESS.md](../PROGRESS.md)：当前实现进度
 
 ## 代码分区
 
@@ -177,8 +176,8 @@ GitHub Actions 自动部署：
 
 部署参考文档：
 
-- [docs/phases/phase-10-deployment.md](./docs/phases/phase-10-deployment.md)
-- [config/ops/runbook.md](./config/ops/runbook.md)
+- [docs/phases/phase-10-deployment.md](./phases/phase-10-deployment.md)
+- [config/ops/runbook.md](../config/ops/runbook.md)
 
 ## 校验步骤
 
@@ -277,9 +276,9 @@ npm run ai:proofread -- --file content/posts/hello-world.mdx
 
 ## 推荐阅读顺序
 
-1. [README.zh-CN.md](./README.zh-CN.md)
-2. [docs/phases](./docs/phases)
-3. [docs/api-reference.zh-CN.md](./docs/api-reference.zh-CN.md)
+1. [README.zh-CN.md](../README.zh-CN.md)
+2. [docs/phases](./phases)
+3. [docs/api-reference.zh-CN.md](./api-reference.zh-CN.md)
 4. `lib/content/*`、`lib/seo/*`、`lib/cloudflare/*`
 5. `app/*` 与 `components/*`
 6. `scripts/*` 与 `config/*`
