@@ -1,7 +1,7 @@
+import { ArticleContent } from '@/components/article/ArticleContent';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ContentPage } from '@/components/site/ContentPage';
-import { RichContent } from '@/components/site/RichContent';
 import { getRuntimePageBySlug } from '@/lib/content/runtime';
 import { buildPageContentMetadata } from '@/lib/seo/metadata';
 import { buildPageStructuredData } from '@/lib/seo/structured-data';
@@ -34,7 +34,7 @@ export default async function AboutPage() {
       structuredData={structuredData}
       title={page.title}
     >
-      <RichContent html={page.html} headings={page.headings} />
+      <ArticleContent headings={page.headings} html={page.html} scope={`page-${page.slug}`} />
     </ContentPage>
   );
 }

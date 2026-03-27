@@ -1,8 +1,5 @@
-import Link from 'next/link';
+import { ArticleCard } from '@/components/article/ArticleCard';
 import { EmptyState } from '@/components/site/EmptyState';
-import { PostMeta } from '@/components/site/PostMeta';
-import { TagList } from '@/components/site/TagList';
-import { ArticleImage } from '@/components/ui/ArticleImage';
 import type { PostSummary } from '@/lib/content/types';
 
 export function PostList({
@@ -19,24 +16,7 @@ export function PostList({
   return (
     <ul className="post-list">
       {posts.map((post) => (
-        <li key={post.slug} className="post-list__item">
-          <PostMeta post={post} />
-          <div className="post-list__body">
-            <Link className="post-list__cover" href={post.url} aria-hidden="true" tabIndex={-1}>
-              <ArticleImage
-                alt={post.coverImage.alt}
-                priority={post.featured}
-                src={post.coverImage.src}
-                variant="thumb-md"
-              />
-            </Link>
-            <h2>
-              <Link href={post.url}>{post.title}</Link>
-            </h2>
-            <p>{post.excerpt}</p>
-            <TagList ariaLabel={`${post.title} tags`} tags={post.tags} />
-          </div>
-        </li>
+        <ArticleCard key={post.slug} post={post} />
       ))}
     </ul>
   );

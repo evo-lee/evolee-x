@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ArticlePage } from '@/components/site/ArticlePage';
-import { getRuntimePostBySlug, getRuntimePosts } from '@/lib/content/runtime';
+import { getRuntimePostBySlug, getRuntimePosts, getRuntimeRelatedPosts } from '@/lib/content/runtime';
 import { buildPostMetadata } from '@/lib/seo/metadata';
 import { buildBlogPostingStructuredData, buildBreadcrumbStructuredData } from '@/lib/seo/structured-data';
 
@@ -36,6 +36,7 @@ export default async function PostPage({ params }: PageProps) {
   }
 
   const articleStructuredData = buildBlogPostingStructuredData(post);
+  const relatedPosts = getRuntimeRelatedPosts(post, 3);
   const breadcrumbStructuredData = buildBreadcrumbStructuredData([
     { name: 'Home', path: '/' },
     { name: 'Posts', path: '/posts' },
@@ -47,6 +48,7 @@ export default async function PostPage({ params }: PageProps) {
       articleStructuredData={articleStructuredData}
       breadcrumbStructuredData={breadcrumbStructuredData}
       post={post}
+      relatedPosts={relatedPosts}
     />
   );
 }

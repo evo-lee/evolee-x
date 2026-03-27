@@ -146,3 +146,40 @@ export function getRuntimeTagCounts(): Record<string, number> {
 export function getRuntimeArchives() {
   return groupPostsByMonth(getRuntimePosts());
 }
+
+/**
+ * Rank related posts for a given article using shared tags and category.
+ *
+ * @param sourcePost Current post or summary.
+ * @param limit Maximum number of related posts.
+ * @returns Sorted related post summaries.
+ */
+export function getRuntimeRelatedPosts(
+  sourcePost: Pick<PostSummary, 'slug' | 'tags' | 'category'>,
+  limit = 3
+): PostSummary[] {
+  const posts = getRuntimePosts();
+
+  return posts
+    .filter((post) => post.slug !== sourcePost.slug)
+    .map((post) => {
+      const sharedTags = post.tags.filter((tag) => sourcePost.tags.includes(tag)).length;
+      const sameCategory =
+        sourcePost.category && post.category === sourcePost.category ? 2 : 0;
+
+      return {
+        post,
+        score: sharedTags * 3 + sameCategory,
+      };
+    })
+    .filter((entry) => entry.score > 0)
+    .sort((left, right) => {
+      if (right.score !== left.score) {
+        return right.score - left.score;
+      }
+
+      return right.post.date.getTime() - left.post.date.getTime();
+    })
+    .slice(0, limit)
+    .map((entry) => entry.post);
+}

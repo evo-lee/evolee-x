@@ -20,8 +20,8 @@
 | 2 | 应用骨架与核心页面 / Application Shell & Core Pages | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-2-core-pages.md) |
 | 3 | SEO 系统 / SEO System | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-3-seo.md) |
 | 4 | 图片分发系统 / Image Delivery System | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-4-image-delivery.md) |
-| 5 | UI 组件库 / UI Component Library | ⬜ | — | [查看 / View](docs/phases/phase-5-ui-components.md) |
-| 6 | 中文排版系统 / Chinese Typography System | ⬜ | — | [查看 / View](docs/phases/phase-6-typography.md) |
+| 5 | UI 组件库 / UI Component Library | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-5-ui-components.md) |
+| 6 | 中文排版系统 / Chinese Typography System | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-6-typography.md) |
 | 7 | 分析系统 / Analytics System | ⬜ | — | [查看 / View](docs/phases/phase-7-analytics.md) |
 | 8 | 搜索功能 / Search | ⬜ | — | [查看 / View](docs/phases/phase-8-search.md) |
 | 9 | AI 编辑工具链 / AI Editorial Tooling | ⬜ | — | [查看 / View](docs/phases/phase-9-ai-tooling.md) |
@@ -144,19 +144,19 @@
 
 ### 交付物清单 / Deliverable Checklist
 
-- [ ] `components/article/ArticleCard.tsx`
-- [ ] `components/article/ArticleHeader.tsx`
-- [ ] `components/article/ArticleContent.tsx`
-- [ ] `components/article/ArticleToc.tsx`
-- [ ] `components/article/RelatedPosts.tsx`
-- [ ] `components/article/CopyCodeButton.tsx`
-- [ ] `components/layout/Header.tsx`
-- [ ] `components/layout/Footer.tsx`
-- [ ] `components/layout/Pagination.tsx`
-- [ ] `components/taxonomy/TagList.tsx`
-- [ ] `components/taxonomy/CategoryBadge.tsx`
-- [ ] `components/ui/ThemeToggle.tsx`
-- [ ] `components/ui/SearchTrigger.tsx`
+- [x] `components/article/ArticleCard.tsx`
+- [x] `components/article/ArticleHeader.tsx`
+- [x] `components/article/ArticleContent.tsx`
+- [x] `components/article/ArticleToc.tsx`
+- [x] `components/article/RelatedPosts.tsx`
+- [x] `components/article/CopyCodeButton.tsx`
+- [x] `components/layout/Header.tsx`
+- [x] `components/layout/Footer.tsx`
+- [x] `components/layout/Pagination.tsx`
+- [x] `components/taxonomy/TagList.tsx`
+- [x] `components/taxonomy/CategoryBadge.tsx`
+- [x] `components/ui/ThemeToggle.tsx`
+- [x] `components/ui/SearchTrigger.tsx`
 
 ---
 
@@ -164,12 +164,12 @@
 
 ### 交付物清单 / Deliverable Checklist
 
-- [ ] `lib/typography/heti-client.ts`
-- [ ] `lib/typography/excluded-selectors.ts`
-- [ ] `lib/typography/policy.ts`
-- [ ] `components/article/ArticleTypography.tsx`
-- [ ] `styles/heti-overrides.css`
-- [ ] `config/typography/chinese-typography.md`
+- [x] `lib/typography/heti-client.ts`
+- [x] `lib/typography/excluded-selectors.ts`
+- [x] `lib/typography/policy.ts`
+- [x] `components/article/ArticleTypography.tsx`
+- [x] `styles/heti-overrides.css`
+- [x] `config/typography/chinese-typography.md`
 
 ---
 

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Pagination } from '@/components/layout/Pagination';
 import { CollectionPage } from '@/components/site/CollectionPage';
 import { PostList } from '@/components/site/PostList';
 import { getRuntimePosts } from '@/lib/content/runtime';
@@ -13,6 +14,7 @@ export const metadata: Metadata = buildPageMetadata({
 
 export default async function PostsPage() {
   const posts = getRuntimePosts();
+  const totalPages = Math.max(1, Math.ceil(posts.length / 10));
   const structuredData = buildCollectionPageStructuredData({
     title: 'Posts',
     description: 'All published posts.',
@@ -27,6 +29,7 @@ export default async function PostsPage() {
       title="All writing"
     >
       <PostList posts={posts} emptyLabel="No published posts yet." />
+      <Pagination basePath="/posts" currentPage={1} totalPages={totalPages} />
     </CollectionPage>
   );
 }

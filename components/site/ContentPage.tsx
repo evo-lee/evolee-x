@@ -19,7 +19,7 @@ export function ContentPage({
     <section className="page-grid">
       <StructuredData data={structuredData} />
       <PageHeader eyebrow={eyebrow} title={title} description={description} />
-      {children}
+      <div className="content-page__body">{children}</div>
     </section>
   );
 }

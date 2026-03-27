@@ -1,0 +1,40 @@
+[data-article-content].heti,
+.heti[data-article-content] {
+  line-height: 1.95;
+  color: var(--text);
+}
+
+[data-article-content].heti :where(p, li, blockquote) {
+  text-wrap: pretty;
+}
+
+[data-article-content].heti :where(h1, h2, h3) {
+  color: var(--text);
+}
+
+[data-article-content].heti :where(a) {
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.16em;
+}
+
+[data-article-content].heti :where(blockquote) {
+  color: color-mix(in srgb, var(--text-soft) 88%, var(--text));
+}
+
+[data-article-content].heti :where(pre, code, table, kbd, samp, math, .heti-skip) {
+  letter-spacing: normal;
+  word-spacing: normal;
+}
+
+[data-article-content].heti heti-spacing {
+  margin-inline: 0.24em;
+}
+
+[data-article-content].heti heti-adjacent {
+  display: inline;
+}
+
+html[data-theme='dark'] [data-article-content].heti,
+html[data-theme='dark'] .heti[data-article-content] {
+  color: color-mix(in srgb, var(--text) 96%, white);
+}
