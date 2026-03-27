@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { StructuredData } from '@/components/seo/StructuredData';
+import { ContentPage } from '@/components/site/ContentPage';
 import { RichContent } from '@/components/site/RichContent';
 import { getRuntimePageBySlug } from '@/lib/content/runtime';
 import { buildPageContentMetadata } from '@/lib/seo/metadata';
@@ -25,15 +25,16 @@ export default async function AboutPage() {
     notFound();
   }
 
+  const structuredData = buildPageStructuredData(page);
+
   return (
-    <section className="page-grid">
-      <StructuredData data={buildPageStructuredData(page)} />
-      <header className="page-header">
-        <p className="meta-note">About</p>
-        <h1>{page.title}</h1>
-        <p>{page.description}</p>
-      </header>
+    <ContentPage
+      description={page.description}
+      eyebrow="About"
+      structuredData={structuredData}
+      title={page.title}
+    >
       <RichContent html={page.html} headings={page.headings} />
-    </section>
+    </ContentPage>
   );
 }

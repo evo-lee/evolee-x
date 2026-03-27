@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { StructuredData } from '@/components/seo/StructuredData';
+import { CollectionPage } from '@/components/site/CollectionPage';
+import { EmptyState } from '@/components/site/EmptyState';
 import { buildPageMetadata } from '@/lib/seo/metadata';
 import { buildCollectionPageStructuredData } from '@/lib/seo/structured-data';
 
@@ -10,26 +11,22 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default function ProjectsPage() {
+  const structuredData = buildCollectionPageStructuredData({
+    title: 'Projects',
+    description: 'Current and upcoming work.',
+    path: '/projects',
+  });
+
   return (
-    <section className="page-grid">
-      <StructuredData
-        data={buildCollectionPageStructuredData({
-          title: 'Projects',
-          description: 'Current and upcoming work.',
-          path: '/projects',
-        })}
-      />
-      <header className="page-header">
-        <p className="meta-note">Projects</p>
-        <h1>Things in progress</h1>
-        <p>A placeholder shelf for experiments, shipped tools, and works still taking shape.</p>
-      </header>
+    <CollectionPage
+      description="A placeholder shelf for experiments, shipped tools, and works still taking shape."
+      eyebrow="Projects"
+      structuredData={structuredData}
+      title="Things in progress"
+    >
       <div className="section">
-        <p className="empty-state">
-          No project entries are published yet. This page is ready for structured content in a later
-          phase.
-        </p>
+        <EmptyState label="No project entries are published yet. This page is ready for structured content in a later phase." />
       </div>
-    </section>
+    </CollectionPage>
   );
 }

@@ -1,6 +1,8 @@
 import Link from 'next/link';
+import { EmptyState } from '@/components/site/EmptyState';
+import { PostMeta } from '@/components/site/PostMeta';
+import { TagList } from '@/components/site/TagList';
 import { ArticleImage } from '@/components/ui/ArticleImage';
-import { formatDate } from '@/lib/format';
 import type { PostSummary } from '@/lib/content/types';
 
 export function PostList({
@@ -11,22 +13,14 @@ export function PostList({
   emptyLabel?: string;
 }) {
   if (posts.length === 0) {
-    return <p className="empty-state">{emptyLabel || 'No posts yet.'}</p>;
+    return <EmptyState label={emptyLabel || 'No posts yet.'} />;
   }
 
   return (
     <ul className="post-list">
       {posts.map((post) => (
         <li key={post.slug} className="post-list__item">
-          <div className="post-list__meta">
-            <time dateTime={post.date.toISOString()}>{formatDate(post.date)}</time>
-            {post.category ? (
-              <>
-                <span className="meta-separator">/</span>
-                <Link href={`/categories/${post.category}`}>{post.category}</Link>
-              </>
-            ) : null}
-          </div>
+          <PostMeta post={post} />
           <div className="post-list__body">
             <Link className="post-list__cover" href={post.url} aria-hidden="true" tabIndex={-1}>
               <ArticleImage
@@ -40,15 +34,7 @@ export function PostList({
               <Link href={post.url}>{post.title}</Link>
             </h2>
             <p>{post.excerpt}</p>
-            {post.tags.length > 0 ? (
-              <ul className="tag-list" aria-label={`${post.title} tags`}>
-                {post.tags.map((tag) => (
-                  <li key={tag}>
-                    <Link href={`/tags/${tag}`}>#{tag}</Link>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
+            <TagList ariaLabel={`${post.title} tags`} tags={post.tags} />
           </div>
         </li>
       ))}

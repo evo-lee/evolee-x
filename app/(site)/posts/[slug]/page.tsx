@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { StructuredData } from '@/components/seo/StructuredData';
-import { RichContent } from '@/components/site/RichContent';
-import { CoverImage } from '@/components/ui/CoverImage';
-import { formatDate } from '@/lib/format';
+import { ArticlePage } from '@/components/site/ArticlePage';
 import { getRuntimePostBySlug, getRuntimePosts } from '@/lib/content/runtime';
 import { buildPostMetadata } from '@/lib/seo/metadata';
 import { buildBlogPostingStructuredData, buildBreadcrumbStructuredData } from '@/lib/seo/structured-data';
@@ -38,30 +35,18 @@ export default async function PostPage({ params }: PageProps) {
     notFound();
   }
 
+  const articleStructuredData = buildBlogPostingStructuredData(post);
+  const breadcrumbStructuredData = buildBreadcrumbStructuredData([
+    { name: 'Home', path: '/' },
+    { name: 'Posts', path: '/posts' },
+    { name: post.title, path: post.url },
+  ]);
+
   return (
-    <section className="page-grid">
-      <StructuredData data={buildBlogPostingStructuredData(post)} />
-      <StructuredData
-        data={buildBreadcrumbStructuredData([
-          { name: 'Home', path: '/' },
-          { name: 'Posts', path: '/posts' },
-          { name: post.title, path: post.url },
-        ])}
-      />
-      <header className="article-header">
-        <p className="meta-note">Post</p>
-        <h1>{post.title}</h1>
-        <p>{post.description}</p>
-        <ul className="page-meta" aria-label="Post metadata">
-          <li>{formatDate(post.date)}</li>
-          {post.category ? <li>{post.category}</li> : null}
-          {post.tags.map((tag) => (
-            <li key={tag}>#{tag}</li>
-          ))}
-        </ul>
-      </header>
-      <CoverImage alt={post.coverImage.alt} priority src={post.coverImage.src} />
-      <RichContent html={post.html} headings={post.headings} />
-    </section>
+    <ArticlePage
+      articleStructuredData={articleStructuredData}
+      breadcrumbStructuredData={breadcrumbStructuredData}
+      post={post}
+    />
   );
 }

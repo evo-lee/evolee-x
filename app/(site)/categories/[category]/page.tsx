@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { StructuredData } from '@/components/seo/StructuredData';
+import { CollectionPage } from '@/components/site/CollectionPage';
 import { PostList } from '@/components/site/PostList';
 import { getRuntimeCategories, getRuntimePostsByCategory } from '@/lib/content/runtime';
 import { buildPageMetadata } from '@/lib/seo/metadata';
@@ -26,22 +26,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function CategoryPage({ params }: PageProps) {
   const { category } = await params;
   const posts = getRuntimePostsByCategory(category);
+  const structuredData = buildCollectionPageStructuredData({
+    title: `Category: ${category}`,
+    description: `Posts filed under ${category}.`,
+    path: `/categories/${category}`,
+  });
 
   return (
-    <section className="page-grid">
-      <StructuredData
-        data={buildCollectionPageStructuredData({
-          title: `Category: ${category}`,
-          description: `Posts filed under ${category}.`,
-          path: `/categories/${category}`,
-        })}
-      />
-      <header className="page-header">
-        <p className="meta-note">Category</p>
-        <h1>{category}</h1>
-        <p>A quiet shelf for related entries.</p>
-      </header>
+    <CollectionPage
+      description="A quiet shelf for related entries."
+      eyebrow="Category"
+      structuredData={structuredData}
+      title={category}
+    >
       <PostList posts={posts} emptyLabel={`No posts in "${category}" yet.`} />
-    </section>
+    </CollectionPage>
   );
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { StructuredData } from '@/components/seo/StructuredData';
+import { CollectionPage } from '@/components/site/CollectionPage';
 import { PostList } from '@/components/site/PostList';
 import { getRuntimePosts } from '@/lib/content/runtime';
 import { buildPageMetadata } from '@/lib/seo/metadata';
@@ -13,22 +13,20 @@ export const metadata: Metadata = buildPageMetadata({
 
 export default async function PostsPage() {
   const posts = getRuntimePosts();
+  const structuredData = buildCollectionPageStructuredData({
+    title: 'Posts',
+    description: 'All published posts.',
+    path: '/posts',
+  });
 
   return (
-    <section className="page-grid">
-      <StructuredData
-        data={buildCollectionPageStructuredData({
-          title: 'Posts',
-          description: 'All published posts.',
-          path: '/posts',
-        })}
-      />
-      <header className="page-header">
-        <p className="meta-note">Posts</p>
-        <h1>All writing</h1>
-        <p>Chronological notes on software, books, and whatever else proved worth keeping.</p>
-      </header>
+    <CollectionPage
+      description="Chronological notes on software, books, and whatever else proved worth keeping."
+      eyebrow="Posts"
+      structuredData={structuredData}
+      title="All writing"
+    >
       <PostList posts={posts} emptyLabel="No published posts yet." />
-    </section>
+    </CollectionPage>
   );
 }
