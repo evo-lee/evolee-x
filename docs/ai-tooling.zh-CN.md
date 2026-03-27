@@ -20,6 +20,7 @@
 
 ## 可用命令
 
+- `npm run ai -- hello-world.mdx`，默认走 `proofread`
 - `npm run ai:proofread`
 - `npm run ai:summarize`
 - `npm run ai:seo-suggest`
@@ -148,10 +149,24 @@ OPENAI_BASE_URL=https://api.openai.com/v1
 npm run ai:proofread -- --file content/posts/hello-world.mdx
 ```
 
+### 默认校对的短命令
+
+```bash
+npm run ai -- hello-world.mdx
+```
+
+这个短命令默认就是 `proofread`。
+
 ### 检查一批文章
 
 ```bash
 npm run ai:seo-suggest -- --glob "content/posts/*.mdx"
+```
+
+### 用短入口切换别的工具
+
+```bash
+npm run ai -- --tool summarize hello-world.mdx
 ```
 
 ### 只试运行，不写报告

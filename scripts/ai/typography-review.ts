@@ -1,13 +1,9 @@
 #!/usr/bin/env node --import tsx
 
 import { runTool } from '@/scripts/ai/shared/run-tool';
+import { AI_TOOL_CONTEXTS } from '@/scripts/ai/shared/tool-contexts';
 
-void runTool({
-  tool: 'typography-review',
-  promptPath: 'prompts/typography-review.md',
-  systemPrompt:
-    'You are reviewing long-form mixed Chinese-English technical writing for paragraph flow, heading hierarchy, punctuation consistency, and readability.',
-}).catch((error) => {
+void runTool(AI_TOOL_CONTEXTS['typography-review']).catch((error) => {
   console.error('[ai:typography-review] Failed');
   console.error(error);
   process.exit(1);

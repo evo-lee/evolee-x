@@ -12,6 +12,7 @@
     "lint": "eslint .",
     "test": "node --import tsx --test tests/**/*.test.ts",
     "lint:content": "tsx scripts/ci/lint-content.ts",
+    "ai": "node --import tsx scripts/ai/index.ts",
     "ai:proofread": "node --import tsx scripts/ai/proofread.ts",
     "ai:summarize": "node --import tsx scripts/ai/summarize.ts",
     "ai:seo-suggest": "node --import tsx scripts/ai/seo-suggest.ts",

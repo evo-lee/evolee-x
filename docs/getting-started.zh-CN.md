@@ -392,6 +392,12 @@ npm run ai:seo-suggest -- --file content/posts/hello-world.mdx
 npm run ai:typography-review -- --file content/posts/hello-world.mdx
 ```
 
+如果你只是想快速校对一篇文章，也可以直接用短命令：
+
+```bash
+npm run ai -- hello-world.mdx
+```
+
 也就是说：
 
 - 你不运行 `npm run ai:*`

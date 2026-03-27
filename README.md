@@ -275,6 +275,12 @@ trackEvent('open_search', {
 npm run ai:proofread -- --file content/posts/hello-world.mdx
 ```
 
+Short form:
+
+```bash
+npm run ai -- hello-world.mdx
+```
+
 ## Recommended Reading Order
 
 1. [README.md](./README.md)

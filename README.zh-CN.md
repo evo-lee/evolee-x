@@ -275,6 +275,12 @@ trackEvent('open_search', {
 npm run ai:proofread -- --file content/posts/hello-world.mdx
 ```
 
+简化写法：
+
+```bash
+npm run ai -- hello-world.mdx
+```
+
 ## 推荐阅读顺序
 
 1. [README.zh-CN.md](./README.zh-CN.md)

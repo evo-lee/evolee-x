@@ -67,6 +67,12 @@ Example:
 npm run ai:proofread -- --file content/posts/hello-world.mdx
 ```
 
+Short form:
+
+```bash
+npm run ai -- hello-world.mdx
+```
+
 ## Suggested Beginner Order
 
 1. Run the project locally.

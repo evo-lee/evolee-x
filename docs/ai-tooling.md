@@ -20,6 +20,7 @@ This document explains the editorial CLI tools added in Phase 9.
 
 ## Available Commands
 
+- `npm run ai -- hello-world.mdx` default shortcut for `proofread`
 - `npm run ai:proofread`
 - `npm run ai:summarize`
 - `npm run ai:seo-suggest`
@@ -146,10 +147,24 @@ It lets you:
 npm run ai:proofread -- --file content/posts/hello-world.mdx
 ```
 
+### Short form for default proofread
+
+```bash
+npm run ai -- hello-world.mdx
+```
+
+This shortcut assumes `proofread` unless you pass `--tool`.
+
 ### Review many articles
 
 ```bash
 npm run ai:seo-suggest -- --glob "content/posts/*.mdx"
+```
+
+### Use another tool with the short entry
+
+```bash
+npm run ai -- --tool summarize hello-world.mdx
 ```
 
 ### Test the flow without writing a report

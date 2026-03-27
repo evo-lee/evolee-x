@@ -4,7 +4,7 @@ import { writeReport, summarizeSuggestions } from '@/scripts/ai/shared/reporter'
 import { requestSuggestions } from '@/scripts/ai/shared/client';
 import type { AIReport, ToolCliOptions, ToolContext } from '@/scripts/ai/shared/types';
 
-function parseArgs(argv: string[]): ToolCliOptions {
+export function parseArgs(argv: string[]): ToolCliOptions {
   const args = argv.slice(2);
   const dryRun = args.includes('--dry-run');
   const fileIndex = args.indexOf('--file');
@@ -39,6 +39,10 @@ function parseArgs(argv: string[]): ToolCliOptions {
 
 export async function runTool(context: ToolContext) {
   const options = parseArgs(process.argv);
+  return runToolWithOptions(context, options);
+}
+
+export async function runToolWithOptions(context: ToolContext, options: ToolCliOptions) {
   const files = await resolveFiles(options.mode, options.value);
 
   if (files.length === 0) {
