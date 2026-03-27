@@ -1,4 +1,5 @@
 import matter from 'gray-matter';
+import path from 'path';
 import { z } from 'zod';
 import type { PageFrontmatter, PostFrontmatter } from './types';
 
@@ -43,6 +44,69 @@ function formatZodError(error: z.ZodError, filePath: string): Error {
   return new Error(`Invalid frontmatter in ${filePath}: ${details}`);
 }
 
+function hasExplicitFrontmatter(source: string): boolean {
+  return source.trimStart().startsWith('---');
+}
+
+function isProjectDocumentPost(filePath: string): boolean {
+  const normalized = filePath.replace(/\\/g, '/');
+
+  return (
+    normalized.includes('/content/posts/docs/') ||
+    normalized.endsWith('/content/posts/PROGRESS.md') ||
+    normalized.endsWith('/content/posts/implementation-plan.md') ||
+    normalized.endsWith('/content/posts/blog_v4.md') ||
+    normalized.endsWith('/content/posts/blog_v_4_nextjs_open_next_cloudflare_workers.md')
+  );
+}
+
+function extractTitleFromBody(source: string, filePath: string): string {
+  const headingMatch = source.match(/^#\s+(.+)$/m);
+  if (headingMatch?.[1]) {
+    return headingMatch[1].trim();
+  }
+
+  return path.basename(filePath, path.extname(filePath)).replace(/[-_]+/g, ' ').trim();
+}
+
+function extractDescriptionFromBody(source: string): string {
+  const lines = source
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
+
+  const visibleLines = lines.filter(
+    (line) => !line.startsWith('#') && !line.startsWith('```') && !line.startsWith('|')
+  );
+
+  const description = visibleLines.find(
+    (line) => !line.startsWith('- ') && !line.startsWith('* ') && !line.startsWith('> ')
+  );
+
+  if (!description) {
+    return 'Development process notes and implementation details.';
+  }
+
+  return description.slice(0, 160);
+}
+
+function buildInferredPostFrontmatter(
+  source: string,
+  filePath: string,
+  fallbackDate: Date
+): PostFrontmatter {
+  return {
+    title: extractTitleFromBody(source, filePath),
+    description: extractDescriptionFromBody(source),
+    date: fallbackDate,
+    tags: ['devlog', 'project-docs'],
+    category: 'Development',
+    draft: false,
+    featured: false,
+    summary: extractDescriptionFromBody(source),
+  };
+}
+
 /**
  * Parse a Markdown or MDX source string with a supplied frontmatter schema.
  *
@@ -75,10 +139,25 @@ function parseSource<T>(schema: z.ZodType<T>, source: string, filePath: string):
  * @returns Normalized post frontmatter and trimmed Markdown body.
  * @throws Error when required fields are missing or malformed.
  */
-export function parsePostSource(source: string, filePath: string): {
+export function parsePostSource(
+  source: string,
+  filePath: string,
+  options?: { fallbackDate?: Date }
+): {
   body: string;
   frontmatter: PostFrontmatter;
 } {
+  if (!hasExplicitFrontmatter(source) && isProjectDocumentPost(filePath)) {
+    return {
+      body: source.trim(),
+      frontmatter: buildInferredPostFrontmatter(
+        source,
+        filePath,
+        options?.fallbackDate || new Date()
+      ),
+    };
+  }
+
   const parsed = parseSource(PostSchema, source, filePath);
   return {
     body: parsed.body,

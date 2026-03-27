@@ -1,3 +1,4 @@
+import { stat } from 'fs/promises';
 import * as path from 'path';
 import { listMarkdownFiles, pathToSlug, POSTS_DIR, readUtf8, slugToFileCandidates } from './files';
 import { parsePostSource } from './frontmatter';
@@ -14,8 +15,11 @@ function comparePosts(a: PostSummary, b: PostSummary): number {
 }
 
 async function loadPostFromFile(filePath: string): Promise<Post> {
+  const fileStats = await stat(filePath);
   const source = await readUtf8(filePath);
-  const { body, frontmatter } = parsePostSource(source, filePath);
+  const { body, frontmatter } = parsePostSource(source, filePath, {
+    fallbackDate: fileStats.mtime,
+  });
   const slug = pathToSlug(POSTS_DIR, filePath);
   const { rawHtml, ...processed } = await processMarkdown(body);
   const coverImage = await resolveCoverImage({

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node --import tsx scripts/content/build-runtime-data.ts && node --import tsx scripts/content/build-search-index.ts && next dev --turbopack",
-    "build": "node --import tsx scripts/content/build-runtime-data.ts && node --import tsx scripts/content/build-search-index.ts && next build",
+    "build": "node --import tsx scripts/content/build-runtime-data.ts && node --import tsx scripts/content/build-search-index.ts && next build && node --import tsx scripts/ci/ensure-next-export-errors.ts",
     "start": "next start",
     "cf:build": "opennextjs-cloudflare build",
     "cf:preview": "node --import tsx scripts/content/build-runtime-data.ts && node --import tsx scripts/content/build-search-index.ts && opennextjs-cloudflare preview",
