@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { Suspense } from 'react';
+import { GoogleAnalytics } from '@next/third-parties/google';
+import Script from 'next/script';
+import { RouteChangeDebug } from '@/lib/analytics/route-change-debug';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { buildSiteMetadata } from '@/lib/seo/metadata';
 import { buildPersonStructuredData } from '@/lib/seo/structured-data';
@@ -16,8 +20,23 @@ export default function RootLayout({
 }: {
   children: ReactNode;
 }) {
+  const enableUmami = process.env.NEXT_PUBLIC_ENABLE_UMAMI === 'true';
+  const enableGA = process.env.NEXT_PUBLIC_ENABLE_GA === 'true';
+  const umamiScriptUrl = process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL;
+  const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
+  const gaId = process.env.NEXT_PUBLIC_GA_ID;
+
   return (
     <html lang={siteConfig.locale} suppressHydrationWarning>
+      <head>
+        {enableUmami && umamiScriptUrl && umamiWebsiteId ? (
+          <Script
+            src={umamiScriptUrl}
+            data-website-id={umamiWebsiteId}
+            strategy="afterInteractive"
+          />
+        ) : null}
+      </head>
       <body>
         <script
           dangerouslySetInnerHTML={{
@@ -26,7 +45,11 @@ export default function RootLayout({
         />
         <StructuredData data={buildPersonStructuredData()} />
         {children}
+        <Suspense fallback={null}>
+          <RouteChangeDebug />
+        </Suspense>
       </body>
+      {enableGA && gaId ? <GoogleAnalytics gaId={gaId} /> : null}
     </html>
   );
 }

@@ -22,7 +22,7 @@
 | 4 | 图片分发系统 / Image Delivery System | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-4-image-delivery.md) |
 | 5 | UI 组件库 / UI Component Library | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-5-ui-components.md) |
 | 6 | 中文排版系统 / Chinese Typography System | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-6-typography.md) |
-| 7 | 分析系统 / Analytics System | ⬜ | — | [查看 / View](docs/phases/phase-7-analytics.md) |
+| 7 | 分析系统 / Analytics System | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-7-analytics.md) |
 | 8 | 搜索功能 / Search | ⬜ | — | [查看 / View](docs/phases/phase-8-search.md) |
 | 9 | AI 编辑工具链 / AI Editorial Tooling | ⬜ | — | [查看 / View](docs/phases/phase-9-ai-tooling.md) |
 | 10 | 部署流水线 / Deployment Pipeline | ⬜ | — | [查看 / View](docs/phases/phase-10-deployment.md) |
@@ -177,11 +177,11 @@
 
 ### 交付物清单 / Deliverable Checklist
 
-- [ ] `lib/analytics/event-registry.ts`
-- [ ] `lib/analytics/providers.ts`
-- [ ] `lib/analytics/track.ts`
-- [ ] `lib/analytics/route-change-debug.ts`
-- [ ] `app/layout.tsx` 接入 Umami + GA4
+- [x] `lib/analytics/event-registry.ts`
+- [x] `lib/analytics/providers.ts`
+- [x] `lib/analytics/track.ts`
+- [x] `lib/analytics/route-change-debug.tsx`
+- [x] `app/layout.tsx` 接入 Umami + GA4
 
 ---
 

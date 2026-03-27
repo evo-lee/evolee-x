@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import type { Heading } from '@/lib/content/types';
+import { trackEvent } from '@/lib/analytics/track';
 
 export function ArticleToc({ headings }: { headings: Heading[] }) {
   const tocHeadings = headings.filter((heading) => heading.level <= 3);
@@ -52,6 +53,7 @@ export function ArticleToc({ headings }: { headings: Heading[] }) {
             <Link
               href={`#${heading.id}`}
               aria-current={activeId === heading.id ? 'location' : undefined}
+              onClick={() => trackEvent('toc_click', { headingId: heading.id, heading: heading.text })}
             >
               {heading.text}
             </Link>

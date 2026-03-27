@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { TrackedLink } from '@/components/analytics/TrackedLink';
 import type { PostSummary } from '@/lib/content/types';
 import { formatDate } from '@/lib/format';
 
@@ -18,7 +18,13 @@ export function RelatedPosts({ posts }: { posts: PostSummary[] }) {
           <li key={post.slug} className="related-posts__item">
             <p className="related-posts__meta">{formatDate(post.date)}</p>
             <h3>
-              <Link href={post.url}>{post.title}</Link>
+              <TrackedLink
+                href={post.url}
+                eventName="read_related_post"
+                eventParams={{ slug: post.slug }}
+              >
+                {post.title}
+              </TrackedLink>
             </h3>
             <p>{post.excerpt}</p>
           </li>

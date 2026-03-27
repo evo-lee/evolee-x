@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { CategoryBadge } from '@/components/taxonomy/CategoryBadge';
 import { TagList } from '@/components/taxonomy/TagList';
 import { ArticleImage } from '@/components/ui/ArticleImage';
@@ -18,14 +19,21 @@ export function ArticleCard({ post }: { post: PostSummary }) {
         ) : null}
       </div>
       <div className="post-list__body">
-        <Link className="post-list__cover" href={post.url} aria-hidden="true" tabIndex={-1}>
+        <TrackedLink
+          className="post-list__cover"
+          href={post.url}
+          ariaHidden
+          eventName="click_cover"
+          eventParams={{ slug: post.slug }}
+          tabIndex={-1}
+        >
           <ArticleImage
             alt={post.coverImage.alt}
             priority={post.featured}
             src={post.coverImage.src}
             variant="thumb-md"
           />
-        </Link>
+        </TrackedLink>
         <h2>
           <Link href={post.url}>{post.title}</Link>
         </h2>
