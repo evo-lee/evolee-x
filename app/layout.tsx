@@ -1,25 +1,24 @@
 import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
+import { siteConfig } from '@/lib/site';
 import './globals.css';
-
-// Phase 0 placeholder — will be fully implemented in Phase 2.
-// This minimal layout satisfies Next.js's requirement that every app
-// must have a root layout exporting html + body elements.
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | evolee',
-    default: 'evolee — Personal Blog',
+    template: `%s | ${siteConfig.name}`,
+    default: siteConfig.title,
   },
-  description: 'A personal blog built with Next.js on Cloudflare Workers.',
+  description: siteConfig.description,
+  metadataBase: new URL(siteConfig.baseUrl),
 };
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
-    <html lang="zh-CN">
+    <html lang={siteConfig.locale} suppressHydrationWarning>
       <body>{children}</body>
     </html>
   );

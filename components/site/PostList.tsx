@@ -1,0 +1,48 @@
+import Link from 'next/link';
+import { formatDate } from '@/lib/format';
+import type { PostSummary } from '@/lib/content/types';
+
+export function PostList({
+  posts,
+  emptyLabel,
+}: {
+  posts: PostSummary[];
+  emptyLabel?: string;
+}) {
+  if (posts.length === 0) {
+    return <p className="empty-state">{emptyLabel || 'No posts yet.'}</p>;
+  }
+
+  return (
+    <ul className="post-list">
+      {posts.map((post) => (
+        <li key={post.slug} className="post-list__item">
+          <div className="post-list__meta">
+            <time dateTime={post.date.toISOString()}>{formatDate(post.date)}</time>
+            {post.category ? (
+              <>
+                <span className="meta-separator">/</span>
+                <Link href={`/categories/${post.category}`}>{post.category}</Link>
+              </>
+            ) : null}
+          </div>
+          <div className="post-list__body">
+            <h2>
+              <Link href={post.url}>{post.title}</Link>
+            </h2>
+            <p>{post.excerpt}</p>
+            {post.tags.length > 0 ? (
+              <ul className="tag-list" aria-label={`${post.title} tags`}>
+                {post.tags.map((tag) => (
+                  <li key={tag}>
+                    <Link href={`/tags/${tag}`}>#{tag}</Link>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}

@@ -17,7 +17,7 @@
 |---|---|---|---|---|
 | 0 | 脚手架与配置基线 / Scaffolding & Config Baseline | ✅ | 2026-03-26 | [查看 / View](docs/phases/phase-0-scaffolding.md) |
 | 1 | 内容层与数据模型 / Content Layer & Data Model | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-1-content-layer.md) |
-| 2 | 应用骨架与核心页面 / Application Shell & Core Pages | ⬜ | — | [查看 / View](docs/phases/phase-2-core-pages.md) |
+| 2 | 应用骨架与核心页面 / Application Shell & Core Pages | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-2-core-pages.md) |
 | 3 | SEO 系统 / SEO System | ⬜ | — | [查看 / View](docs/phases/phase-3-seo.md) |
 | 4 | 图片分发系统 / Image Delivery System | ⬜ | — | [查看 / View](docs/phases/phase-4-image-delivery.md) |
 | 5 | UI 组件库 / UI Component Library | ⬜ | — | [查看 / View](docs/phases/phase-5-ui-components.md) |
@@ -75,23 +75,31 @@
 
 ### 交付物清单 / Deliverable Checklist
 
-- [ ] `app/layout.tsx` (完整版)
-- [ ] `app/globals.css` (完整版)
-- [ ] `app/(site)/page.tsx`
-- [ ] `app/(site)/posts/page.tsx`
-- [ ] `app/(site)/posts/[slug]/page.tsx`
-- [ ] `app/(site)/tags/[tag]/page.tsx`
-- [ ] `app/(site)/categories/[category]/page.tsx`
-- [ ] `app/(site)/archives/page.tsx`
-- [ ] `app/(site)/about/page.tsx`
-- [ ] `app/(site)/projects/page.tsx`
-- [ ] `app/api/health/route.ts`
-- [ ] `app/sitemap.ts`
-- [ ] `app/robots.ts`
-- [ ] `app/rss.xml/route.ts`
-- [ ] `app/not-found.tsx`
-- [ ] `app/error.tsx`
-- [ ] `app/loading.tsx`
+- [x] `app/layout.tsx` (完整版)
+- [x] `app/globals.css` (完整版)
+- [x] `app/(site)/layout.tsx`
+- [x] `app/(site)/page.tsx`
+- [x] `app/(site)/posts/page.tsx`
+- [x] `app/(site)/posts/[slug]/page.tsx`
+- [x] `app/(site)/tags/[tag]/page.tsx`
+- [x] `app/(site)/categories/[category]/page.tsx`
+- [x] `app/(site)/archives/page.tsx`
+- [x] `app/(site)/about/page.tsx`
+- [x] `app/(site)/projects/page.tsx`
+- [x] `app/api/health/route.ts`
+- [x] `app/sitemap.ts`
+- [x] `app/robots.ts`
+- [x] `app/rss.xml/route.ts`
+- [x] `app/not-found.tsx`
+- [x] `app/error.tsx`
+- [x] `app/loading.tsx`
+- [x] `components/site/SiteLayout.tsx`
+- [x] `components/site/PostList.tsx`
+- [x] `components/site/RichContent.tsx`
+- [x] `lib/site.ts`
+- [x] `lib/format.ts`
+- [x] `lib/content/runtime.ts`
+- [x] `scripts/content/build-runtime-data.ts`
 
 ---
 

@@ -1,9 +1,12 @@
-import { compileMDX } from 'next-mdx-remote/rsc';
-import { renderToStaticMarkup } from 'react-dom/server';
+import { toHtml } from 'hast-util-to-html';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
+import remarkMdx from 'remark-mdx';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import { unified } from 'unified';
 import type { Heading, ProcessedContent } from './types';
 
 function stripTags(html: string): string {
@@ -40,22 +43,18 @@ function extractHeadings(html: string): Heading[] {
 }
 
 export async function processMarkdown(source: string): Promise<ProcessedContent> {
-  const { content } = await compileMDX({
-    source,
-    options: {
-      parseFrontmatter: false,
-      mdxOptions: {
-        remarkPlugins: [remarkGfm],
-        rehypePlugins: [
-          rehypeSlug,
-          [rehypeAutolinkHeadings, { behavior: 'append' }],
-          [rehypePrettyCode, { theme: 'github-light-default', keepBackground: false }],
-        ],
-      },
-    },
-  });
+  const processor = unified()
+    .use(remarkParse)
+    .use(remarkMdx)
+    .use(remarkGfm)
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeSlug)
+    .use(rehypeAutolinkHeadings, { behavior: 'append' })
+    .use(rehypePrettyCode, { theme: 'github-light-default', keepBackground: false });
 
-  const html = renderToStaticMarkup(content).trim();
+  const tree = processor.parse(source);
+  const htmlTree = await processor.run(tree);
+  const html = toHtml(htmlTree).trim();
   const text = stripTags(html);
 
   return {
@@ -65,4 +64,3 @@ export async function processMarkdown(source: string): Promise<ProcessedContent>
     headings: extractHeadings(html),
   };
 }
-
