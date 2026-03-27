@@ -4,96 +4,174 @@ English | [简体中文](./README.zh-CN.md)
 
 ## Project Overview
 
-`evolee-x` is a personal blog built with Next.js App Router and OpenNext for Cloudflare Workers. It is designed for writing programming notes, reading reflections, and personal essays while keeping the runtime compatible with edge deployment.
+`evolee-x` is a personal publishing stack built with Next.js App Router and OpenNext for Cloudflare Workers. It is designed for technical writing, reading notes, essays, and long-form pages while keeping the runtime edge-compatible, documentation-first, and easy to extend without a database.
 
-The repository follows a documentation-first layout:
+This repository follows a strict reading order:
 
-1. Product and setup documentation
-2. Architecture and API reference
-3. Route and component implementation
+1. Documentation first
+2. Architecture and API reference second
+3. Routes, components, and implementation last
 
-## Features
+## Feature Coverage
 
-- Markdown/MDX content pipeline with Zod frontmatter validation
-- Static route generation for posts, tags, categories, archives, About, and Projects
-- Unified SEO system for metadata, Open Graph, Twitter cards, sitemap, robots, RSS, and JSON-LD
-- Fixed-variant image delivery pipeline for lists, article covers, inline images, and social sharing
-- Cloudflare-friendly runtime snapshot to avoid filesystem traversal in Worker execution
+- Markdown/MDX content pipeline with Zod-validated frontmatter
+- Generated runtime snapshot for Cloudflare Workers without filesystem traversal
+- Core pages for posts, tags, categories, archives, About, and Projects
+- SEO layer for metadata, Open Graph, Twitter cards, RSS, sitemap, robots, and JSON-LD
+- Fixed-variant image delivery for thumbnails, covers, inline assets, and OG images
+- Componentized site shell and article rendering flow
+- Scoped Chinese typography enhancement behind a feature flag
+- Search modal backed by a generated search index and lazy Fuse.js loading
+- Dual analytics integration with Umami and GA4 under a unified event layer
+- AI editorial tooling for proofreading, summaries, SEO suggestions, and typography review
+- GitHub Actions deployment and content-quality workflows
+- Health check and build reporting for operations visibility
 
 ## Typical Use Cases
 
 - Personal technical blog
-- Reading notes and essay archive
-- Lightweight content site deployed to Cloudflare Workers
-- Edge-hosted publishing stack that avoids a database
+- Reading log and essay archive
+- Static-first content site on Cloudflare Workers
+- Documentation-heavy personal website without a CMS or database
 
-## Architecture Summary
+## Documentation Zone
 
-### Documentation First
+Start here before reading code:
 
-- [README.md](./README.md): English project guide
-- [README.zh-CN.md](./README.zh-CN.md): Chinese project guide
-- [docs/api-reference.md](./docs/api-reference.md): English API reference
+- [README.md](./README.md): project overview, setup, workflow, and examples
+- [README.zh-CN.md](./README.zh-CN.md): Chinese guide with the same scope
+- [docs/api-reference.md](./docs/api-reference.md): function-level reference and design notes
 - [docs/api-reference.zh-CN.md](./docs/api-reference.zh-CN.md): Chinese API reference
-- `docs/phases/`: implementation notes for each completed phase
+- [docs/content-pipeline.md](./docs/content-pipeline.md): content ingestion and runtime snapshot flow
+- [docs/search-system.md](./docs/search-system.md): search index and query flow
+- [docs/analytics-system.md](./docs/analytics-system.md): analytics ownership and event dispatch
+- [docs/ai-tooling.md](./docs/ai-tooling.md): editorial CLI tools
+- [docs/operations.md](./docs/operations.md): health checks and build reporting
+- [`docs/phases/`](./docs/phases): implementation records for phases 0 to 11
+- [PROGRESS.md](./PROGRESS.md): current implementation status
 
-### Code After Docs
+## Code Zone
 
-- `app/`: App Router routes, metadata routes, image route, and error/loading pages
-- `components/`: site layout, SEO helpers, and image wrappers
-- `content/`: Markdown/MDX source files and generated sidecar data
-- `lib/content/`: content parsing, validation, runtime snapshot access, taxonomy, and cover resolution
-- `lib/seo/`: metadata builders, Open Graph logic, and structured data
-- `lib/cloudflare/`: fixed image variants and custom image loader
-- `scripts/content/`: build-time content snapshot generation
+Read these after the docs:
+
+- `app/`: App Router pages, metadata routes, image route, health endpoint, loading/error boundaries
+- `components/`: layout, article, taxonomy, and shared UI components
+- `content/`: source Markdown/MDX content and generated sidecar data
+- `lib/content/`: frontmatter parsing, Markdown processing, runtime access, taxonomy, cover resolution
+- `lib/seo/`: metadata builders, Open Graph helpers, and structured data
+- `lib/cloudflare/`: public image route helpers and variant catalog
+- `lib/search/`: client-side search index loading and query execution
+- `lib/analytics/`: event registry, provider guards, event dispatch
+- `lib/typography/`: Heti client integration and exclusion policy
+- `scripts/content/`: build-time runtime snapshot and search index generation
+- `scripts/ai/`: editorial helper CLIs
+- `scripts/ci/`: content linting and build report generation
+- `config/`: typography and operations documentation used by the implementation
 
 ## Environment Requirements
 
 - Node.js `>= 20`
 - npm
-- Cloudflare Wrangler for local Worker preview and deployment
+- Cloudflare Wrangler for preview and deployment
+- Optional: Anthropic API access for AI editorial tooling
 
-## Installation
+## Installation and Configuration
+
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-## Configuration
+Review these files before local development:
 
-This repository currently uses code-based configuration. Review these files before local development:
+- `package.json`: scripts and tool entry points
+- `next.config.ts`: Next.js and image settings
+- `open-next.config.ts`: OpenNext Cloudflare adapter settings
+- `wrangler.jsonc`: Worker preview and deployment configuration
 
-- `package.json`: scripts and toolchain entry points
-- `next.config.ts`: Next.js and custom image loader config
-- `open-next.config.ts`: OpenNext Cloudflare adapter config
-- `wrangler.jsonc`: local preview and deployment settings
+### Environment Variables
 
-## Development Workflow
+The project is mostly code-configured, but these variables affect runtime behavior:
+
+- `NEXT_PUBLIC_ENABLE_HETI`: enables article-scoped Chinese typography enhancement
+- `NEXT_PUBLIC_ENABLE_UMAMI`: enables Umami analytics loading
+- `NEXT_PUBLIC_UMAMI_SCRIPT_URL`: Umami script URL
+- `NEXT_PUBLIC_UMAMI_WEBSITE_ID`: Umami website identifier
+- `NEXT_PUBLIC_ENABLE_GA`: enables GA4 loading
+- `NEXT_PUBLIC_GA_ID`: GA4 measurement ID
+- `ANTHROPIC_API_KEY`: required for `npm run ai:*` commands
+
+## Run Steps
+
+### Local development
 
 ```bash
 npm run dev
 ```
 
-Starts Next.js dev mode after generating `content/.generated/runtime-data.json`.
+This command generates:
+
+- `content/.generated/runtime-data.json`
+- `public/search-index.json`
+
+Then it starts the Next.js development server with Turbopack.
+
+### Production build
 
 ```bash
-npm run lint
-npm test
-npm run type-check
+npm run build
+npm run start
 ```
 
-Validates lint rules, unit tests, and the full typed production build.
+`build` regenerates content artifacts before the Next.js production build.
+
+### Cloudflare preview
 
 ```bash
 npm run cf:build
 npm run cf:preview
 ```
 
-Builds and previews the Worker-compatible bundle locally.
+Use this path to validate the Worker-compatible output locally.
+
+## Validation Suite
+
+Use the repository minimum validation set before a PR:
+
+```bash
+npm run lint
+npm run test
+npm run lint:content
+npm run type-check
+npm run build
+```
+
+## Core Design Logic
+
+### 1. Build-time validation instead of runtime trust
+
+Markdown content is parsed, validated, rendered, and summarized before it is used by pages. Invalid frontmatter fails early instead of leaking into runtime rendering.
+
+### 2. Snapshot-based runtime for Workers
+
+Cloudflare Workers should not depend on runtime directory traversal. The site therefore generates a runtime JSON snapshot and search index during `dev`, `build`, and preview flows.
+
+### 3. Centralized SEO and image policies
+
+Routes do not build ad hoc metadata or expose raw source images. Metadata builders and image helpers keep canonical, Open Graph, Twitter, and image-variant decisions in one place.
+
+### 4. Progressive enhancement at the edges
+
+Typography enhancement, analytics, and search are all feature-flagged or lazy-loaded so failures do not block page rendering.
+
+### 5. Docs-first maintenance
+
+Every finished phase is expected to update progress tracking, phase notes, README, and API reference together so architecture and implementation stay aligned.
 
 ## Usage Examples
 
-### Add a New Post
+### Add a new post
 
 Create `content/posts/my-note.mdx`:
 
@@ -110,7 +188,7 @@ draft: false
 Hello from the content pipeline.
 ```
 
-### Read Runtime Posts
+### Read runtime posts
 
 ```ts
 import { getRuntimePosts } from '@/lib/content/runtime';
@@ -118,7 +196,7 @@ import { getRuntimePosts } from '@/lib/content/runtime';
 const posts = getRuntimePosts();
 ```
 
-### Build Post Metadata
+### Build post metadata
 
 ```ts
 import { buildPostMetadata } from '@/lib/seo/metadata';
@@ -128,12 +206,38 @@ const post = getRuntimePostBySlug('hello-world');
 const metadata = post ? buildPostMetadata(post) : null;
 ```
 
-## Design Notes
+### Run local search
 
-- Content is validated at build time, not trusted at render time.
-- Worker runtime uses generated JSON snapshots instead of directory reads.
-- Public HTML only exposes fixed image variants, not raw source image URLs.
-- SEO decisions are centralized in reusable builders instead of route-local ad hoc code.
+```ts
+import { searchDocuments } from '@/lib/search/client';
+
+const results = await searchDocuments('cloudflare');
+```
+
+### Dispatch an analytics event
+
+```ts
+import { trackEvent } from '@/lib/analytics/track';
+
+trackEvent('open_search', {
+  source: 'header',
+});
+```
+
+### Run an AI editorial tool
+
+```bash
+npm run ai:proofread -- --file content/posts/hello-world.mdx
+```
+
+## Recommended Reading Order
+
+1. [README.md](./README.md)
+2. [docs/phases](./docs/phases)
+3. [docs/api-reference.md](./docs/api-reference.md)
+4. `lib/content/*`, `lib/seo/*`, `lib/cloudflare/*`
+5. `app/*` and `components/*`
+6. `scripts/*` and `config/*`
 
 ## Documentation Sync Rule
 
@@ -145,10 +249,3 @@ After every completed phase, update all of the following together:
 - `README.zh-CN.md`
 - `docs/api-reference.md`
 - `docs/api-reference.zh-CN.md`
-
-## Code Reference
-
-For detailed function-level parameters, return values, logic notes, error cases, and examples, see:
-
-- [docs/api-reference.md](./docs/api-reference.md)
-- [docs/api-reference.zh-CN.md](./docs/api-reference.zh-CN.md)
