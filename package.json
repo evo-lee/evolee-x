@@ -1,0 +1,71 @@
+{
+  "name": "evolee-x",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "cf:build": "opennextjs-cloudflare build",
+    "cf:preview": "opennextjs-cloudflare preview",
+    "cf:deploy": "opennextjs-cloudflare deploy",
+    "lint": "next lint",
+    "lint:content": "tsx scripts/ci/lint-content.ts",
+    "type-check": "tsc --noEmit",
+    "ai:proofread": "tsx scripts/ai/proofread.ts",
+    "ai:summarize": "tsx scripts/ai/summarize.ts",
+    "ai:seo": "tsx scripts/ai/seo-suggest.ts",
+    "ai:typography": "tsx scripts/ai/typography-review.ts",
+    "ai:check": "tsx scripts/ai/proofread.ts --changed-files",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "next": "^15.2.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@next/third-parties": "^15.2.3",
+    "gray-matter": "^4.0.3",
+    "remark": "^15.0.1",
+    "remark-gfm": "^4.0.0",
+    "rehype-slug": "^6.0.0",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-pretty-code": "^0.14.1",
+    "shiki": "^1.24.2",
+    "next-mdx-remote": "^5.0.0",
+    "heti": "^0.9.6",
+    "fuse.js": "^7.0.0",
+    "isomorphic-dompurify": "^2.14.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/dompurify": "^3.0.5",
+    "typescript": "^5.7.3",
+    "@opennextjs/cloudflare": "^1.17.3",
+    "wrangler": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/postcss": "^4.0.0",
+    "eslint": "^9",
+    "eslint-config-next": "^15.2.3",
+    "@eslint/eslintrc": "^3",
+    "prettier": "^3.4.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "tsx": "^4.19.2",
+    "@anthropic-ai/sdk": "^0.37.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  // Wrangler configuration for Cloudflare Workers deployment.
+  // Reference: https://developers.cloudflare.com/workers/wrangler/configuration/
+
+  // Worker name — must be unique within your Cloudflare account.
+  "name": "evolee-x",
+
+  // Entry point produced by `opennextjs-cloudflare build`.
+  "main": ".open-next/worker.js",
+
+  // Use a recent compatibility date. Cloudflare freezes behavior on this date
+  // so that future platform changes don't silently break your Worker.
+  "compatibility_date": "2024-09-23",
+
+  // nodejs_compat: enables Node.js-compatible APIs (Buffer, crypto, streams, etc.)
+  // Required by Next.js and many npm packages that assume a Node.js environment.
+  "compatibility_flags": ["nodejs_compat"],
+
+  // Static assets produced by the Next.js + OpenNext build.
+  // The ASSETS binding makes them available inside the Worker via env.ASSETS.fetch().
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+
+  // Local development port. `opennextjs-cloudflare preview` uses this.
+  "dev": {
+    "port": 8787
+  }
+
+  // Future bindings (add only when actually needed):
+  // "kv_namespaces": [{ "binding": "CACHE", "id": "..." }]
+  // "r2_buckets": [{ "binding": "IMAGES", "bucket_name": "..." }]
+}
