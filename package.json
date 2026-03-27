@@ -12,6 +12,10 @@
     "lint": "eslint .",
     "test": "node --import tsx --test tests/**/*.test.ts",
     "lint:content": "tsx scripts/ci/lint-content.ts",
+    "ai:proofread": "node --import tsx scripts/ai/proofread.ts",
+    "ai:summarize": "node --import tsx scripts/ai/summarize.ts",
+    "ai:seo-suggest": "node --import tsx scripts/ai/seo-suggest.ts",
+    "ai:typography-review": "node --import tsx scripts/ai/typography-review.ts",
     "type-check": "node --import tsx scripts/content/build-runtime-data.ts && node --import tsx scripts/content/build-search-index.ts && next build && tsc --noEmit",
     "prepare": "husky"
   },

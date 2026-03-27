@@ -24,7 +24,7 @@
 | 6 | 中文排版系统 / Chinese Typography System | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-6-typography.md) |
 | 7 | 分析系统 / Analytics System | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-7-analytics.md) |
 | 8 | 搜索功能 / Search | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-8-search.md) |
-| 9 | AI 编辑工具链 / AI Editorial Tooling | ⬜ | — | [查看 / View](docs/phases/phase-9-ai-tooling.md) |
+| 9 | AI 编辑工具链 / AI Editorial Tooling | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-9-ai-tooling.md) |
 | 10 | 部署流水线 / Deployment Pipeline | ⬜ | — | [查看 / View](docs/phases/phase-10-deployment.md) |
 | 11 | 可观测与运维 / Observability & Operations | ⬜ | — | [查看 / View](docs/phases/phase-11-observability.md) |
 
@@ -202,19 +202,19 @@
 
 ### 交付物清单 / Deliverable Checklist
 
-- [ ] `scripts/ai/shared/types.ts`
-- [ ] `scripts/ai/shared/client.ts`
-- [ ] `scripts/ai/shared/schema-validator.ts`
-- [ ] `scripts/ai/shared/file-resolver.ts`
-- [ ] `scripts/ai/shared/reporter.ts`
-- [ ] `scripts/ai/proofread.ts`
-- [ ] `scripts/ai/summarize.ts`
-- [ ] `scripts/ai/seo-suggest.ts`
-- [ ] `scripts/ai/typography-review.ts`
-- [ ] `prompts/proofread.md`
-- [ ] `prompts/summarize.md`
-- [ ] `prompts/seo-suggest.md`
-- [ ] `prompts/typography-review.md`
+- [x] `scripts/ai/shared/types.ts`
+- [x] `scripts/ai/shared/client.ts`
+- [x] `scripts/ai/shared/schema-validator.ts`
+- [x] `scripts/ai/shared/file-resolver.ts`
+- [x] `scripts/ai/shared/reporter.ts`
+- [x] `scripts/ai/proofread.ts`
+- [x] `scripts/ai/summarize.ts`
+- [x] `scripts/ai/seo-suggest.ts`
+- [x] `scripts/ai/typography-review.ts`
+- [x] `prompts/proofread.md`
+- [x] `prompts/summarize.md`
+- [x] `prompts/seo-suggest.md`
+- [x] `prompts/typography-review.md`
 
 ---
 
