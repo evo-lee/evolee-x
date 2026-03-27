@@ -9,14 +9,9 @@
     "cf:build": "opennextjs-cloudflare build",
     "cf:preview": "opennextjs-cloudflare preview",
     "cf:deploy": "opennextjs-cloudflare deploy",
-    "lint": "next lint",
+    "lint": "eslint .",
     "lint:content": "tsx scripts/ci/lint-content.ts",
-    "type-check": "tsc --noEmit",
-    "ai:proofread": "tsx scripts/ai/proofread.ts",
-    "ai:summarize": "tsx scripts/ai/summarize.ts",
-    "ai:seo": "tsx scripts/ai/seo-suggest.ts",
-    "ai:typography": "tsx scripts/ai/typography-review.ts",
-    "ai:check": "tsx scripts/ai/proofread.ts --changed-files",
+    "type-check": "next build && tsc --noEmit",
     "prepare": "husky"
   },
   "dependencies": {

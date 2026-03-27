@@ -1,7 +1,7 @@
 # 项目进度追踪 / Project Progress Tracker
 
-> 每完成一个阶段，在状态列填入 ✅ 并记录完成日期。
-> When a phase is complete, mark ✅ in the status column and record the date.
+> 每完成一个阶段，在状态列填入 ✅、记录完成日期，并同步更新对应的 `docs/phases/phase-*.md` 学习文档。
+> When a phase is complete, mark ✅, record the completion date, and update the matching `docs/phases/phase-*.md` learning document.
 
 | 图例 | 含义 |
 |---|---|
@@ -16,7 +16,7 @@
 | # | 阶段名称 / Phase Name | 状态 | 完成日期 | 学习文档 |
 |---|---|---|---|---|
 | 0 | 脚手架与配置基线 / Scaffolding & Config Baseline | ✅ | 2026-03-26 | [查看 / View](docs/phases/phase-0-scaffolding.md) |
-| 1 | 内容层与数据模型 / Content Layer & Data Model | ⬜ | — | [查看 / View](docs/phases/phase-1-content-layer.md) |
+| 1 | 内容层与数据模型 / Content Layer & Data Model | ✅ | 2026-03-27 | [查看 / View](docs/phases/phase-1-content-layer.md) |
 | 2 | 应用骨架与核心页面 / Application Shell & Core Pages | ⬜ | — | [查看 / View](docs/phases/phase-2-core-pages.md) |
 | 3 | SEO 系统 / SEO System | ⬜ | — | [查看 / View](docs/phases/phase-3-seo.md) |
 | 4 | 图片分发系统 / Image Delivery System | ⬜ | — | [查看 / View](docs/phases/phase-4-image-delivery.md) |
@@ -41,7 +41,7 @@
 - [x] `wrangler.jsonc` — Cloudflare Worker 绑定与部署元数据
 - [x] `.gitignore` — 排除构建产物与密钥文件
 - [x] `.env.example` — 环境变量占位模板
-- [x] `eslint.config.js` — 代码质量规则
+- [x] `eslint.config.mjs` — 代码质量规则
 - [x] `.prettierrc` — 代码格式风格
 - [x] `postcss.config.mjs` — Tailwind v4 PostCSS 集成
 - [x] `app/layout.tsx` — 根布局占位（Phase 2 完善）
@@ -55,16 +55,19 @@
 
 ### 交付物清单 / Deliverable Checklist
 
-- [ ] `lib/content/types.ts`
-- [ ] `lib/content/frontmatter.ts`
-- [ ] `lib/content/processor.ts`
-- [ ] `lib/content/posts.ts`
-- [ ] `lib/content/pages.ts`
-- [ ] `lib/content/taxonomy.ts`
-- [ ] `lib/content/cover-resolver.ts`
-- [ ] `lib/content/index-builder.ts`
-- [ ] `content/posts/hello-world.mdx` (示例内容)
-- [ ] `content/pages/about.mdx`
+- [x] `lib/content/types.ts`
+- [x] `lib/content/frontmatter.ts`
+- [x] `lib/content/processor.ts`
+- [x] `lib/content/posts.ts`
+- [x] `lib/content/pages.ts`
+- [x] `lib/content/taxonomy.ts`
+- [x] `lib/content/cover-resolver.ts`
+- [x] `lib/content/index-builder.ts`
+- [x] `lib/content/index.ts`
+- [x] `content/posts/hello-world.mdx` (示例内容)
+- [x] `content/pages/about.mdx`
+- [x] `content/taxonomy/tags.json`
+- [x] `content/.generated/` 旁路元数据目录
 
 ---
 

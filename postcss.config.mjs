@@ -3,8 +3,10 @@
 // No tailwind.config.js is needed — theme customisation is done in CSS
 // using @theme { } blocks inside globals.css.
 
-export default {
+const config = {
   plugins: {
     '@tailwindcss/postcss': {},
   },
 };
+
+export default config;
