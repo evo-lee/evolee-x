@@ -18,6 +18,21 @@ function getFirstImageFromHtml(html: string): { src: string; alt: string } | nul
   };
 }
 
+/**
+ * Resolve the cover image for a post using a deterministic fallback chain.
+ *
+ * Resolution order:
+ * 1. Explicit `cover` from frontmatter
+ * 2. First `<img>` found in rendered body HTML
+ * 3. Repository default cover asset
+ *
+ * @param options.slug Post slug used to persist sidecar metadata.
+ * @param options.html Raw rendered HTML before image URL rewriting.
+ * @param options.cover Explicit frontmatter cover path, if present.
+ * @param options.coverAlt Optional alt text paired with the explicit cover.
+ * @returns Final cover source, alt text, and the resolution source label.
+ * @throws Propagates filesystem errors if the sidecar metadata file cannot be written.
+ */
 export async function resolveCoverImage({
   slug,
   html,

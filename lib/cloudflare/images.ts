@@ -40,14 +40,34 @@ function normalizeSource(src?: string): string {
   return src;
 }
 
+/**
+ * Encode a source image path into a URL-safe token for the image route.
+ *
+ * @param src Original relative or absolute image source.
+ * @returns Base64url token used in `/image/{variant}/{token}` routes.
+ */
 export function encodeImageToken(src: string): string {
   return Buffer.from(normalizeSource(src)).toString('base64url');
 }
 
+/**
+ * Decode a URL-safe image token back into its original source string.
+ *
+ * @param token Base64url token from an image route.
+ * @returns Decoded source path or URL.
+ */
 export function decodeImageToken(token: string): string {
   return Buffer.from(token, 'base64url').toString('utf8');
 }
 
+/**
+ * Build a public image delivery URL for a predefined variant.
+ *
+ * @param src Original source path or URL. Missing or data URLs fall back to the default cover.
+ * @param variant Named image variant from the catalog.
+ * @param options Optional absolute URL switch for metadata output.
+ * @returns Relative or absolute `/image/{variant}/{token}` URL.
+ */
 export function getImageUrl(
   src: string | undefined,
   variant: ImageVariant,
@@ -59,15 +79,32 @@ export function getImageUrl(
   return options?.absolute ? `${siteConfig.baseUrl}${pathname}` : pathname;
 }
 
+/**
+ * Look up the width, height, and aspect ratio metadata for a named variant.
+ *
+ * @param variant Named image variant.
+ * @returns Variant configuration object.
+ */
 export function getVariantConfig(variant: ImageVariant) {
   return VARIANT_CATALOG[variant];
 }
 
+/**
+ * Choose the thumbnail variant that best matches a requested width bucket.
+ *
+ * @param width Consumer-requested width.
+ * @returns `thumb-sm` for compact widths, otherwise `thumb-md`.
+ */
 export function getThumbVariant(width: number): ImageVariant {
   return width <= VARIANT_CATALOG['thumb-sm'].width ? 'thumb-sm' : 'thumb-md';
 }
 
+/**
+ * Choose the cover variant that best matches a requested width bucket.
+ *
+ * @param width Consumer-requested width.
+ * @returns `cover-md` for standard widths, otherwise `cover-lg`.
+ */
 export function getCoverVariant(width: number): ImageVariant {
   return width <= VARIANT_CATALOG['cover-md'].width ? 'cover-md' : 'cover-lg';
 }
-

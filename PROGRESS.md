@@ -1,7 +1,7 @@
 # 项目进度追踪 / Project Progress Tracker
 
-> 每完成一个阶段，在状态列填入 ✅、记录完成日期，并同步更新对应的 `docs/phases/phase-*.md` 学习文档。
-> When a phase is complete, mark ✅, record the completion date, and update the matching `docs/phases/phase-*.md` learning document.
+> 每完成一个阶段，在状态列填入 ✅、记录完成日期，并同步更新对应的 `docs/phases/phase-*.md` 学习文档以及中英文项目文档。
+> When a phase is complete, mark ✅, record the completion date, and update the matching `docs/phases/phase-*.md` learning document plus the bilingual project documentation.
 
 | 图例 | 含义 |
 |---|---|

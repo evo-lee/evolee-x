@@ -57,6 +57,17 @@ export interface ProcessedMarkdown extends ProcessedContent {
   rawHtml: string;
 }
 
+/**
+ * Convert Markdown/MDX source into HTML, text, excerpt, and heading metadata.
+ *
+ * The function keeps both:
+ * - `rawHtml` for internal consumers that need original image URLs, such as cover extraction
+ * - `html` with public image URLs rewritten to fixed Phase 4 variants
+ *
+ * @param source Raw Markdown or MDX source body without YAML frontmatter.
+ * @returns Rendered HTML plus derived text, excerpt, headings, and raw HTML.
+ * @throws Propagates parser or syntax-highlighting failures from the unified pipeline.
+ */
 export async function processMarkdown(source: string): Promise<ProcessedMarkdown> {
   const processor = unified()
     .use(remarkParse)

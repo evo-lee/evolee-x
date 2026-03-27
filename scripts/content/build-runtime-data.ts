@@ -8,6 +8,14 @@ import { getAllCategories, getAllTags, getTagCounts } from '@/lib/content/taxono
 
 const OUTPUT_PATH = path.join(process.cwd(), 'content', '.generated', 'runtime-data.json');
 
+/**
+ * Build the content snapshot consumed by Cloudflare-compatible runtime loaders.
+ *
+ * The snapshot removes any need for runtime filesystem directory traversal in Worker mode.
+ *
+ * @returns Resolves when `content/.generated/runtime-data.json` has been written.
+ * @throws Propagates content loading or filesystem write errors and exits the process with code 1.
+ */
 async function main() {
   const posts = await getAllPosts();
   const fullPosts = await Promise.all(posts.map((post) => getPostBySlug(post.slug)));

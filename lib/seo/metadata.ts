@@ -16,6 +16,11 @@ function absoluteUrl(path: string): string {
   return path === '/' ? seoConfig.baseUrl : `${seoConfig.baseUrl}${path}`;
 }
 
+/**
+ * Build site-wide metadata used by the root layout.
+ *
+ * @returns The default title template, description, authors, and share image metadata.
+ */
 export function buildSiteMetadata(): Metadata {
   return {
     applicationName: seoConfig.siteName,
@@ -44,6 +49,12 @@ export function buildSiteMetadata(): Metadata {
   };
 }
 
+/**
+ * Build metadata for generic collection pages and static routes.
+ *
+ * @param options Route path, title, description, optional share image, and noindex flag.
+ * @returns Next.js metadata object with canonical, OG, Twitter, and robots fields.
+ */
 export function buildPageMetadata({
   path,
   title,
@@ -80,6 +91,12 @@ export function buildPageMetadata({
   };
 }
 
+/**
+ * Build metadata for an individual blog post.
+ *
+ * @param post Post summary or full post entity.
+ * @returns Article-specific metadata with canonical, OG, Twitter, authors, keywords, and draft robots policy.
+ */
 export function buildPostMetadata(post: Post | PostSummary): Metadata {
   const title = post.seoTitle || post.title;
   const description = post.seoDescription || post.description;
@@ -125,6 +142,12 @@ export function buildPostMetadata(post: Post | PostSummary): Metadata {
   };
 }
 
+/**
+ * Build metadata for a Markdown-backed content page such as About.
+ *
+ * @param page Runtime page entity.
+ * @returns Generic page metadata derived from the page model.
+ */
 export function buildPageContentMetadata(page: Page): Metadata {
   return buildPageMetadata({
     path: page.url,
