@@ -76,7 +76,13 @@ export async function processMarkdown(source: string): Promise<ProcessedMarkdown
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeSlug)
     .use(rehypeAutolinkHeadings, { behavior: 'append' })
-    .use(rehypePrettyCode, { theme: 'github-light-default', keepBackground: false });
+    .use(rehypePrettyCode, {
+      theme: {
+        light: 'github-light-default',
+        dark: 'github-dark-dimmed',
+      },
+      keepBackground: false,
+    });
 
   const tree = processor.parse(source);
   const htmlTree = await processor.run(tree);

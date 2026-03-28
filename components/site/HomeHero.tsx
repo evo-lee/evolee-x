@@ -22,8 +22,8 @@ export function HomeHero({
   return (
     <section className="hero">
       <p className="hero__eyebrow">Personal blog</p>
-      <h1>Programming, reading, and quiet notes from an ongoing life.</h1>
-      <p>
+      <h1 className="hero__title">Programming, reading, and quiet notes from an ongoing life.</h1>
+      <p className="hero__description">
         A small archive of code, books, and lived observations. The structure stays minimal so the
         writing can carry the weight.
       </p>
