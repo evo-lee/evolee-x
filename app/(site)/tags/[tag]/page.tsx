@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { CollectionPage } from '@/components/site/CollectionPage';
 import { PostList } from '@/components/site/PostList';
 import { getRuntimePostsByTag, getRuntimeTags } from '@/lib/content/runtime';
+import { detectRequestLocale } from '@/lib/i18n/detect';
+import { getLocaleMessages } from '@/lib/i18n/messages';
 import { buildPageMetadata } from '@/lib/seo/metadata';
 import { buildCollectionPageStructuredData } from '@/lib/seo/structured-data';
 
@@ -15,31 +17,37 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const locale = await detectRequestLocale();
+  const messages = getLocaleMessages(locale);
   const { tag } = await params;
   return buildPageMetadata({
+    locale,
     path: `/tags/${tag}`,
-    title: `Tag: ${tag}`,
-    description: `Posts tagged with ${tag}.`,
+    title: messages.pages.tag.metadataTitle(tag),
+    description: messages.pages.tag.metadataDescription(tag),
   });
 }
 
 export default async function TagPage({ params }: PageProps) {
+  const locale = await detectRequestLocale();
+  const messages = getLocaleMessages(locale);
   const { tag } = await params;
-  const posts = getRuntimePostsByTag(tag);
+  const posts = getRuntimePostsByTag(tag, locale);
   const structuredData = buildCollectionPageStructuredData({
-    title: `Tag: ${tag}`,
-    description: `Posts tagged with ${tag}.`,
+    locale,
+    title: messages.pages.tag.metadataTitle(tag),
+    description: messages.pages.tag.metadataDescription(tag),
     path: `/tags/${tag}`,
   });
 
   return (
     <CollectionPage
-      description="Posts collected under a shared topic."
-      eyebrow="Tag"
+      description={messages.pages.tag.description}
+      eyebrow={messages.pages.tag.eyebrow}
       structuredData={structuredData}
       title={`#${tag}`}
     >
-      <PostList posts={posts} emptyLabel={`No posts tagged with "${tag}" yet.`} />
+      <PostList posts={posts} emptyLabel={messages.pages.tag.empty(tag)} />
     </CollectionPage>
   );
 }

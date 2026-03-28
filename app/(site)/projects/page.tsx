@@ -1,31 +1,42 @@
 import type { Metadata } from 'next';
 import { CollectionPage } from '@/components/site/CollectionPage';
 import { EmptyState } from '@/components/site/EmptyState';
+import { detectRequestLocale } from '@/lib/i18n/detect';
+import { getLocaleMessages } from '@/lib/i18n/messages';
 import { buildPageMetadata } from '@/lib/seo/metadata';
 import { buildCollectionPageStructuredData } from '@/lib/seo/structured-data';
 
-export const metadata: Metadata = buildPageMetadata({
-  path: '/projects',
-  title: 'Projects',
-  description: 'Current and upcoming work.',
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await detectRequestLocale();
+  const messages = getLocaleMessages(locale);
 
-export default function ProjectsPage() {
+  return buildPageMetadata({
+    locale,
+    path: '/projects',
+    title: messages.pages.projects.metadataTitle,
+    description: messages.pages.projects.metadataDescription,
+  });
+}
+
+export default async function ProjectsPage() {
+  const locale = await detectRequestLocale();
+  const messages = getLocaleMessages(locale);
   const structuredData = buildCollectionPageStructuredData({
-    title: 'Projects',
-    description: 'Current and upcoming work.',
+    locale,
+    title: messages.pages.projects.metadataTitle,
+    description: messages.pages.projects.metadataDescription,
     path: '/projects',
   });
 
   return (
     <CollectionPage
-      description="A placeholder shelf for experiments, shipped tools, and works still taking shape."
-      eyebrow="Projects"
+      description={messages.pages.projects.description}
+      eyebrow={messages.pages.projects.eyebrow}
       structuredData={structuredData}
-      title="Things in progress"
+      title={messages.pages.projects.title}
     >
       <div className="section">
-        <EmptyState label="No project entries are published yet. This page is ready for structured content in a later phase." />
+        <EmptyState label={messages.pages.projects.empty} />
       </div>
     </CollectionPage>
   );

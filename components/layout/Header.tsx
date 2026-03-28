@@ -1,9 +1,15 @@
 import Link from 'next/link';
+import { detectRequestLocale } from '@/lib/i18n/detect';
+import { getLocaleMessages } from '@/lib/i18n/messages';
 import { SearchTrigger } from '@/components/ui/SearchTrigger';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
-import { siteConfig } from '@/lib/site';
+import { getSiteConfig } from '@/lib/site';
 
-export function Header() {
+export async function Header() {
+  const locale = await detectRequestLocale();
+  const siteConfig = getSiteConfig(locale);
+  const messages = getLocaleMessages(locale);
+
   return (
     <header className="site-header">
       <div className="site-header__inner">
@@ -11,7 +17,7 @@ export function Header() {
           {siteConfig.title}
         </Link>
         <div className="site-header__nav-wrap">
-          <nav className="site-nav" aria-label="Primary navigation">
+          <nav className="site-nav" aria-label={messages.header.primaryNavigation}>
             {siteConfig.nav.map((item) => (
               <Link key={item.href} href={item.href}>
                 {item.label}
@@ -19,7 +25,7 @@ export function Header() {
             ))}
           </nav>
           <div className="site-header__actions" data-no-typography="true">
-            <SearchTrigger />
+            <SearchTrigger label={messages.search.button} title={messages.search.openTitle} />
             <ThemeToggle />
           </div>
         </div>

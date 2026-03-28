@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import type { Page, Post, PostSummary } from '@/lib/content/types';
 import { getImageUrl } from '@/lib/cloudflare/images';
-import { seoConfig } from './constants';
+import type { AppLocale } from '@/lib/i18n/config';
+import { getSeoConfig } from './constants';
 import { buildOpenGraph } from './og';
 
 type MetadataOptions = {
+  locale?: AppLocale;
   path: string;
   title: string;
   description: string;
@@ -12,16 +14,14 @@ type MetadataOptions = {
   noIndex?: boolean;
 };
 
-function absoluteUrl(path: string): string {
-  return path === '/' ? seoConfig.baseUrl : `${seoConfig.baseUrl}${path}`;
-}
-
 /**
  * Build site-wide metadata used by the root layout.
  *
  * @returns The default title template, description, authors, and share image metadata.
  */
-export function buildSiteMetadata(): Metadata {
+export function buildSiteMetadata(locale: AppLocale): Metadata {
+  const seoConfig = getSeoConfig(locale);
+
   return {
     applicationName: seoConfig.siteName,
     title: {
@@ -34,6 +34,7 @@ export function buildSiteMetadata(): Metadata {
       canonical: seoConfig.baseUrl,
     },
     openGraph: buildOpenGraph({
+      locale,
       title: seoConfig.siteTitle,
       description: seoConfig.siteDescription,
       url: seoConfig.baseUrl,
@@ -56,13 +57,15 @@ export function buildSiteMetadata(): Metadata {
  * @returns Next.js metadata object with canonical, OG, Twitter, and robots fields.
  */
 export function buildPageMetadata({
+  locale = 'zh-CN',
   path,
   title,
   description,
   image,
   noIndex,
 }: MetadataOptions): Metadata {
-  const url = absoluteUrl(path);
+  const seoConfig = getSeoConfig(locale);
+  const url = path === '/' ? seoConfig.baseUrl : `${seoConfig.baseUrl}${path}`;
 
   return {
     title,
@@ -71,6 +74,7 @@ export function buildPageMetadata({
       canonical: url,
     },
     openGraph: buildOpenGraph({
+      locale,
       title,
       description,
       url,
@@ -98,9 +102,10 @@ export function buildPageMetadata({
  * @returns Article-specific metadata with canonical, OG, Twitter, authors, keywords, and draft robots policy.
  */
 export function buildPostMetadata(post: Post | PostSummary): Metadata {
+  const seoConfig = getSeoConfig(post.locale);
   const title = post.seoTitle || post.title;
   const description = post.seoDescription || post.description;
-  const url = absoluteUrl(post.url);
+  const url = post.url === '/' ? seoConfig.baseUrl : `${seoConfig.baseUrl}${post.url}`;
 
   return {
     title,
@@ -109,6 +114,7 @@ export function buildPostMetadata(post: Post | PostSummary): Metadata {
       canonical: post.canonical || url,
     },
     openGraph: buildOpenGraph({
+      locale: post.locale,
       title,
       description,
       url,
@@ -150,6 +156,7 @@ export function buildPostMetadata(post: Post | PostSummary): Metadata {
  */
 export function buildPageContentMetadata(page: Page): Metadata {
   return buildPageMetadata({
+    locale: page.locale,
     path: page.url,
     title: page.title,
     description: page.description,

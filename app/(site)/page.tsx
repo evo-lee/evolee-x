@@ -1,40 +1,38 @@
 import type { Metadata } from 'next';
 import { StructuredData } from '@/components/seo/StructuredData';
-import { HomeHero } from '@/components/site/HomeHero';
 import { PostList } from '@/components/site/PostList';
-import { SectionIntro } from '@/components/site/SectionIntro';
-import { getRuntimeCategories, getRuntimePosts, getRuntimeTags } from '@/lib/content/runtime';
+import { getRuntimePosts } from '@/lib/content/runtime';
+import { detectRequestLocale } from '@/lib/i18n/detect';
+import { getLocaleMessages } from '@/lib/i18n/messages';
 import { buildPageMetadata } from '@/lib/seo/metadata';
 import { buildWebsiteStructuredData } from '@/lib/seo/structured-data';
 
-export const metadata: Metadata = buildPageMetadata({
-  path: '/',
-  title: 'Home',
-  description: 'Programming notes, reading reflections, and personal essays.',
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await detectRequestLocale();
+  const messages = getLocaleMessages(locale);
+
+  return buildPageMetadata({
+    locale,
+    path: '/',
+    title: messages.pages.home.title,
+    description: messages.pages.home.description,
+  });
+}
 
 export default async function HomePage() {
-  const posts = getRuntimePosts();
+  const locale = await detectRequestLocale();
+  const posts = getRuntimePosts(locale);
   const featuredPosts = posts.filter((post) => post.featured);
-  const recentPosts = posts.slice(0, 8);
-  const tags = getRuntimeTags();
-  const categories = getRuntimeCategories();
+  const homePosts =
+    featuredPosts.length > 0
+      ? [...featuredPosts, ...posts.filter((post) => !post.featured)].slice(0, 8)
+      : posts.slice(0, 8);
 
   return (
     <>
-      <StructuredData data={buildWebsiteStructuredData()} />
-      <HomeHero categories={categories} tags={tags} />
-
-      {featuredPosts.length > 0 ? (
-        <section className="section">
-          <SectionIntro eyebrow="Featured" title="Highlighted writing" />
-          <PostList posts={featuredPosts} />
-        </section>
-      ) : null}
-
+      <StructuredData data={buildWebsiteStructuredData(locale)} />
       <section className="section">
-        <SectionIntro eyebrow="Recent" title="Latest entries" />
-        <PostList posts={recentPosts} emptyLabel="No published posts yet." />
+        <PostList posts={homePosts} />
       </section>
     </>
   );

@@ -4,6 +4,7 @@ import { startTransition, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { SearchResults } from '@/components/search/SearchResults';
 import { trackEvent } from '@/lib/analytics/track';
+import type { AppLocale } from '@/lib/i18n/config';
 import { primeSearchIndex, searchDocuments } from '@/lib/search/client';
 import type { SearchResult } from '@/lib/search/types';
 
@@ -13,7 +14,29 @@ function isModifierShortcut(event: KeyboardEvent) {
   return (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k';
 }
 
-export function SearchModal() {
+export function SearchModal({
+  closeAriaLabel,
+  dialogLabel,
+  emptyHint,
+  eyebrow,
+  failed,
+  locale,
+  placeholder,
+  resultsAriaLabel,
+  searching,
+  unavailable,
+}: {
+  closeAriaLabel: string;
+  dialogLabel: string;
+  emptyHint: string;
+  eyebrow: string;
+  failed: string;
+  locale: AppLocale;
+  placeholder: string;
+  resultsAriaLabel: string;
+  searching: string;
+  unavailable: string;
+}) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -31,7 +54,7 @@ export function SearchModal() {
       setError(null);
       trackEvent('open_search', { source, path: pathname });
       void primeSearchIndex().catch(() => {
-        setError('Search index is unavailable right now.');
+        setError(unavailable);
       });
     }
 
@@ -57,7 +80,7 @@ export function SearchModal() {
       window.removeEventListener('keydown', handleShortcut);
       window.removeEventListener(OPEN_EVENT, handleOpenEvent);
     };
-  }, [pathname]);
+  }, [pathname, unavailable]);
 
   useEffect(() => {
     if (!open) {
@@ -88,20 +111,20 @@ export function SearchModal() {
 
     const timeout = window.setTimeout(() => {
       startTransition(() => {
-        void searchDocuments(normalizedQuery)
+        void searchDocuments(normalizedQuery, locale)
           .then((nextResults) => {
             setResults(nextResults);
             setLoading(false);
           })
           .catch(() => {
-            setError('Search failed to load. Try again.');
+            setError(failed);
             setLoading(false);
           });
       });
     }, 300);
 
     return () => window.clearTimeout(timeout);
-  }, [normalizedQuery, open]);
+  }, [failed, locale, normalizedQuery, open]);
 
   if (!open) {
     return null;
@@ -122,15 +145,15 @@ export function SearchModal() {
         className="search-modal__panel"
         role="dialog"
         aria-modal="true"
-        aria-label="Search posts"
+        aria-label={dialogLabel}
       >
         <div className="search-modal__header">
-          <p className="search-modal__eyebrow">Search</p>
+          <p className="search-modal__eyebrow">{eyebrow}</p>
           <button
             type="button"
             className="control-button"
             onClick={() => setOpen(false)}
-            aria-label="Close search"
+            aria-label={closeAriaLabel}
           >
             Esc
           </button>
@@ -141,13 +164,17 @@ export function SearchModal() {
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search titles, summaries, tags, categories…"
+          placeholder={placeholder}
         />
         <SearchResults
+          emptyHint={emptyHint}
           error={error}
           loading={loading}
+          locale={locale}
           query={query}
+          resultsAriaLabel={resultsAriaLabel}
           results={results}
+          searching={searching}
           onSelect={() => setOpen(false)}
         />
       </div>

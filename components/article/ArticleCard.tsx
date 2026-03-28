@@ -3,14 +3,18 @@ import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { CategoryBadge } from '@/components/taxonomy/CategoryBadge';
 import { TagList } from '@/components/taxonomy/TagList';
 import { ArticleImage } from '@/components/ui/ArticleImage';
+import type { AppLocale } from '@/lib/i18n/config';
+import { getLocaleMessages } from '@/lib/i18n/messages';
 import type { PostSummary } from '@/lib/content/types';
 import { formatDate } from '@/lib/format';
 
-export function ArticleCard({ post }: { post: PostSummary }) {
+export function ArticleCard({ post, locale }: { post: PostSummary; locale: AppLocale }) {
+  const messages = getLocaleMessages(locale);
+
   return (
     <li className="post-list__item">
       <div className="post-list__meta" data-no-typography="true">
-        <time dateTime={post.date.toISOString()}>{formatDate(post.date)}</time>
+        <time dateTime={post.date.toISOString()}>{formatDate(post.date, locale)}</time>
         {post.category ? (
           <>
             <span className="meta-separator">/</span>
@@ -38,7 +42,7 @@ export function ArticleCard({ post }: { post: PostSummary }) {
           <Link href={post.url}>{post.title}</Link>
         </h2>
         <p>{post.excerpt}</p>
-        <TagList ariaLabel={`${post.title} tags`} compact tags={post.tags} />
+        <TagList ariaLabel={messages.article.tagsAriaLabel(post.title)} compact tags={post.tags} />
       </div>
     </li>
   );

@@ -1,5 +1,5 @@
 import { getRuntimePosts } from '@/lib/content/runtime';
-import { siteConfig } from '@/lib/site';
+import { getSiteConfig } from '@/lib/site';
 
 function escapeXml(input: string): string {
   return input
@@ -11,6 +11,7 @@ function escapeXml(input: string): string {
 }
 
 export async function GET() {
+  const siteConfig = getSiteConfig('zh-CN');
   const posts = getRuntimePosts();
   const items = posts
     .map(

@@ -1,15 +1,19 @@
 import Link from 'next/link';
+import { detectRequestLocale } from '@/lib/i18n/detect';
+import { getLocaleMessages } from '@/lib/i18n/messages';
 
-export default function NotFound() {
+export default async function NotFound() {
+  const locale = await detectRequestLocale();
+  const messages = getLocaleMessages(locale);
+
   return (
     <div className="error-panel">
       <p className="meta-note">404</p>
-      <h1>Page not found</h1>
-      <p>The route exists in memory only. The published archive has nothing at this address yet.</p>
+      <h1>{messages.pages.notFound.title}</h1>
+      <p>{messages.pages.notFound.description}</p>
       <p>
-        <Link href="/">Return home</Link>
+        <Link href="/">{messages.pages.notFound.backHome}</Link>
       </p>
     </div>
   );
 }
-

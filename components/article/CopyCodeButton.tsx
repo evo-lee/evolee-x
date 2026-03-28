@@ -3,7 +3,15 @@
 import { useState } from 'react';
 import { trackEvent } from '@/lib/analytics/track';
 
-export function CopyCodeButton({ code }: { code: string }) {
+export function CopyCodeButton({
+  code,
+  copyLabel = 'Copy',
+  copiedLabel = 'Copied',
+}: {
+  code: string;
+  copyLabel?: string;
+  copiedLabel?: string;
+}) {
   const [copied, setCopied] = useState(false);
 
   return (
@@ -17,7 +25,7 @@ export function CopyCodeButton({ code }: { code: string }) {
         window.setTimeout(() => setCopied(false), 1600);
       }}
     >
-      {copied ? 'Copied' : 'Copy'}
+      {copied ? copiedLabel : copyLabel}
     </button>
   );
 }

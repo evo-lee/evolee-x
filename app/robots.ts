@@ -1,7 +1,9 @@
 import type { MetadataRoute } from 'next';
-import { siteConfig } from '@/lib/site';
+import { getSiteConfig } from '@/lib/site';
 
 export default function robots(): MetadataRoute.Robots {
+  const siteConfig = getSiteConfig('zh-CN');
+
   return {
     rules: {
       userAgent: '*',
@@ -10,4 +12,3 @@ export default function robots(): MetadataRoute.Robots {
     sitemap: `${siteConfig.baseUrl}/sitemap.xml`,
   };
 }
-

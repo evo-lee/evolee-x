@@ -1,13 +1,15 @@
-export function formatDate(date: Date): string {
-  return new Intl.DateTimeFormat('zh-CN', {
+import type { AppLocale } from '@/lib/i18n/config';
+
+export function formatDate(date: Date, locale: AppLocale = 'zh-CN'): string {
+  return new Intl.DateTimeFormat(locale, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
   }).format(date);
 }
 
-export function formatMonth(date: Date): string {
-  return new Intl.DateTimeFormat('zh-CN', {
+export function formatMonth(date: Date, locale: AppLocale = 'zh-CN'): string {
+  return new Intl.DateTimeFormat(locale, {
     year: 'numeric',
     month: 'long',
   }).format(date);
@@ -31,4 +33,3 @@ export function groupPostsByMonth<T extends { date: Date }>(items: T[]): Array<{
       items: groupedItems.sort((a, b) => b.date.getTime() - a.date.getTime()),
     }));
 }
-

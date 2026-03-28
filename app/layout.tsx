@@ -5,21 +5,26 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script';
 import { RouteChangeDebug } from '@/lib/analytics/route-change-debug';
 import { StructuredData } from '@/components/seo/StructuredData';
+import { detectRequestLocale } from '@/lib/i18n/detect';
 import { buildSiteMetadata } from '@/lib/seo/metadata';
 import { buildPersonStructuredData } from '@/lib/seo/structured-data';
-import { siteConfig } from '@/lib/site';
+import { getSiteConfig } from '@/lib/site';
 import { THEME_STORAGE_KEY } from '@/lib/theme';
 import './globals.css';
 import 'heti/umd/heti.min.css';
 import '@/styles/heti-overrides.css';
 
-export const metadata: Metadata = buildSiteMetadata();
-
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await detectRequestLocale();
+  return buildSiteMetadata(locale);
+}
+export default async function RootLayout({
   children,
 }: {
   children: ReactNode;
 }) {
+  const locale = await detectRequestLocale();
+  const siteConfig = getSiteConfig(locale);
   const enableUmami = process.env.NEXT_PUBLIC_ENABLE_UMAMI === 'true';
   const enableGA = process.env.NEXT_PUBLIC_ENABLE_GA === 'true';
   const umamiScriptUrl = process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL;
@@ -43,7 +48,7 @@ export default function RootLayout({
             __html: `(function(){try{var stored=window.localStorage.getItem('${THEME_STORAGE_KEY}');var theme=stored==='light'||stored==='dark'?stored:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=theme;}catch(e){}})();`,
           }}
         />
-        <StructuredData data={buildPersonStructuredData()} />
+        <StructuredData data={buildPersonStructuredData(locale)} />
         {children}
         <Suspense fallback={null}>
           <RouteChangeDebug />

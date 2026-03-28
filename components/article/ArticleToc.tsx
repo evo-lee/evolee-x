@@ -5,7 +5,15 @@ import { useEffect, useState } from 'react';
 import type { Heading } from '@/lib/content/types';
 import { trackEvent } from '@/lib/analytics/track';
 
-export function ArticleToc({ headings }: { headings: Heading[] }) {
+export function ArticleToc({
+  headings,
+  ariaLabel,
+  title,
+}: {
+  headings: Heading[];
+  ariaLabel: string;
+  title: string;
+}) {
   const tocHeadings = headings.filter((heading) => heading.level <= 3);
   const [activeId, setActiveId] = useState<string | null>(tocHeadings[0]?.id ?? null);
 
@@ -45,8 +53,8 @@ export function ArticleToc({ headings }: { headings: Heading[] }) {
   }
 
   return (
-    <aside className="toc" aria-label="Table of contents" data-no-typography="true">
-      <p className="toc__title">On this page</p>
+    <aside className="toc" aria-label={ariaLabel} data-no-typography="true">
+      <p className="toc__title">{title}</p>
       <ol className="toc__list">
         {tocHeadings.map((heading) => (
           <li key={heading.id} data-level={heading.level}>

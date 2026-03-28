@@ -1,23 +1,32 @@
 import Link from 'next/link';
+import type { AppLocale } from '@/lib/i18n/config';
 import type { SearchResult } from '@/lib/search/types';
 
 export function SearchResults({
+  emptyHint,
   query,
   results,
   loading,
   error,
+  locale,
+  resultsAriaLabel,
+  searching,
   onSelect,
 }: {
+  emptyHint: string;
   query: string;
   results: SearchResult[];
   loading: boolean;
   error: string | null;
+  locale: AppLocale;
+  resultsAriaLabel: string;
+  searching: string;
   onSelect: () => void;
 }) {
   if (!query.trim()) {
     return (
       <div className="search-empty">
-        <p>Type a title, tag, category, or phrase from a summary.</p>
+        <p>{emptyHint}</p>
       </div>
     );
   }
@@ -25,7 +34,7 @@ export function SearchResults({
   if (loading) {
     return (
       <div className="search-empty">
-        <p>Searching…</p>
+        <p>{searching}</p>
       </div>
     );
   }
@@ -41,18 +50,18 @@ export function SearchResults({
   if (results.length === 0) {
     return (
       <div className="search-empty">
-        <p>No matches for “{query}”.</p>
+        <p>{locale === 'zh-CN' ? `没有找到“${query}”的相关结果。` : `No matches for “${query}”.`}</p>
       </div>
     );
   }
 
   return (
-    <ul className="search-results" aria-label="Search results">
+    <ul className="search-results" aria-label={resultsAriaLabel}>
       {results.map((result) => (
         <li key={result.slug} className="search-results__item">
           <Link href={`/posts/${result.slug}`} onClick={onSelect}>
             <div className="search-results__meta">
-              <span>{new Date(result.date).toLocaleDateString('en-CA')}</span>
+              <span>{new Date(result.date).toLocaleDateString(locale)}</span>
               {result.category ? <span>{result.category}</span> : null}
             </div>
             <h3>{result.title}</h3>

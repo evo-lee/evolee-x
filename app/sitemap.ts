@@ -1,8 +1,9 @@
 import type { MetadataRoute } from 'next';
 import { getRuntimeCategories, getRuntimePosts, getRuntimeTags } from '@/lib/content/runtime';
-import { siteConfig } from '@/lib/site';
+import { getSiteConfig } from '@/lib/site';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const siteConfig = getSiteConfig('zh-CN');
   const posts = getRuntimePosts();
   const tags = getRuntimeTags();
   const categories = getRuntimeCategories();

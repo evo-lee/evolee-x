@@ -1,6 +1,14 @@
 import { stat } from 'fs/promises';
 import * as path from 'path';
-import { listMarkdownFiles, pathToSlug, POSTS_DIR, readUtf8, slugToFileCandidates } from './files';
+import type { AppLocale } from '@/lib/i18n/config';
+import {
+  listMarkdownFiles,
+  pathToLocale,
+  pathToSlug,
+  POSTS_DIR,
+  readUtf8,
+  slugToFileCandidates,
+} from './files';
 import { parsePostSource } from './frontmatter';
 import { processMarkdown } from './processor';
 import { resolveCoverImage } from './cover-resolver';
@@ -14,6 +22,29 @@ function comparePosts(a: PostSummary, b: PostSummary): number {
   return b.date.getTime() - a.date.getTime();
 }
 
+function selectLocalizedItems<T extends { slug: string; locale: AppLocale; date: Date }>(
+  items: T[],
+  locale: AppLocale
+): T[] {
+  const grouped = new Map<string, T[]>();
+
+  for (const item of items) {
+    grouped.set(item.slug, [...(grouped.get(item.slug) || []), item]);
+  }
+
+  return [...grouped.values()]
+    .map((variants) => {
+      const exact = variants.find((variant) => variant.locale === locale);
+      if (exact) {
+        return exact;
+      }
+
+      const chinese = variants.find((variant) => variant.locale === 'zh-CN');
+      return chinese || variants[0];
+    })
+    .sort((left, right) => right.date.getTime() - left.date.getTime());
+}
+
 async function loadPostFromFile(filePath: string): Promise<Post> {
   const fileStats = await stat(filePath);
   const source = await readUtf8(filePath);
@@ -21,6 +52,7 @@ async function loadPostFromFile(filePath: string): Promise<Post> {
     fallbackDate: fileStats.mtime,
   });
   const slug = pathToSlug(POSTS_DIR, filePath);
+  const locale = pathToLocale(POSTS_DIR, filePath);
   const { rawHtml, ...processed } = await processMarkdown(body);
   const coverImage = await resolveCoverImage({
     slug,
@@ -31,6 +63,7 @@ async function loadPostFromFile(filePath: string): Promise<Post> {
 
   return {
     ...frontmatter,
+    locale,
     ...processed,
     slug,
     url: `/posts/${slug}`,
@@ -47,15 +80,19 @@ async function loadAllPosts(): Promise<Post[]> {
   return posts.filter((post) => isVisible(post.draft)).sort(comparePosts);
 }
 
+export async function getAllPostVariants(): Promise<Post[]> {
+  return loadAllPosts();
+}
+
 /**
  * Load all visible post summaries for list pages and taxonomy pages.
  *
  * @returns Posts sorted by publication date descending.
  * @throws Propagates filesystem, frontmatter, or Markdown processing failures.
  */
-export async function getAllPosts(): Promise<PostSummary[]> {
+export async function getAllPosts(locale: AppLocale = 'zh-CN'): Promise<PostSummary[]> {
   const posts = await loadAllPosts();
-  return posts.map((post) => ({
+  const summaries = posts.map((post) => ({
     title: post.title,
     description: post.description,
     date: post.date,
@@ -75,11 +112,14 @@ export async function getAllPosts(): Promise<PostSummary[]> {
     thumbnailAlt: post.thumbnailAlt,
     imageCredit: post.imageCredit,
     ogImage: post.ogImage,
+    locale: post.locale,
     slug: post.slug,
     url: post.url,
     excerpt: post.excerpt,
     coverImage: post.coverImage,
   }));
+
+  return selectLocalizedItems(summaries, locale);
 }
 
 /**
@@ -89,8 +129,8 @@ export async function getAllPosts(): Promise<PostSummary[]> {
  * @returns Full post object, or `null` if the file does not exist or is hidden as a draft.
  * @throws Propagates non-ENOENT read or parsing errors.
  */
-export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const candidates = slugToFileCandidates(POSTS_DIR, slug);
+export async function getPostBySlug(slug: string, locale: AppLocale = 'zh-CN'): Promise<Post | null> {
+  const candidates = slugToFileCandidates(POSTS_DIR, slug, locale);
   for (const filePath of candidates) {
     try {
       const post = await loadPostFromFile(filePath);
@@ -111,8 +151,8 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
  * @param tag Exact tag value.
  * @returns Visible posts that include the requested tag.
  */
-export async function getPostsByTag(tag: string): Promise<PostSummary[]> {
-  const posts = await getAllPosts();
+export async function getPostsByTag(tag: string, locale: AppLocale = 'zh-CN'): Promise<PostSummary[]> {
+  const posts = await getAllPosts(locale);
   return posts.filter((post) => post.tags.includes(tag));
 }
 
@@ -122,7 +162,10 @@ export async function getPostsByTag(tag: string): Promise<PostSummary[]> {
  * @param category Exact category value.
  * @returns Visible posts that belong to the requested category.
  */
-export async function getPostsByCategory(category: string): Promise<PostSummary[]> {
-  const posts = await getAllPosts();
+export async function getPostsByCategory(
+  category: string,
+  locale: AppLocale = 'zh-CN'
+): Promise<PostSummary[]> {
+  const posts = await getAllPosts(locale);
   return posts.filter((post) => post.category === category);
 }

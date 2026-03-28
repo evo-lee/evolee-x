@@ -2,9 +2,8 @@
 
 import { mkdir, writeFile } from 'fs/promises';
 import path from 'path';
-import { getAllPages } from '@/lib/content/pages';
-import { getAllPosts, getPostBySlug } from '@/lib/content/posts';
-import { getAllCategories, getAllTags, getTagCounts } from '@/lib/content/taxonomy';
+import { getAllPageVariants } from '@/lib/content/pages';
+import { getAllPostVariants } from '@/lib/content/posts';
 
 const OUTPUT_PATH = path.join(process.cwd(), 'content', '.generated', 'runtime-data.json');
 
@@ -17,23 +16,45 @@ const OUTPUT_PATH = path.join(process.cwd(), 'content', '.generated', 'runtime-d
  * @throws Propagates content loading or filesystem write errors and exits the process with code 1.
  */
 async function main() {
-  const posts = await getAllPosts();
-  const fullPosts = await Promise.all(posts.map((post) => getPostBySlug(post.slug)));
-  const pages = await getAllPages();
-  const tags = await getAllTags();
-  const categories = await getAllCategories();
-  const tagCounts = await getTagCounts();
+  const fullPosts = await getAllPostVariants();
+  const pages = await getAllPageVariants();
+  const posts = fullPosts.map((post) => ({
+    title: post.title,
+    description: post.description,
+    date: post.date,
+    updated: post.updated,
+    tags: post.tags,
+    category: post.category,
+    draft: post.draft,
+    featured: post.featured,
+    author: post.author,
+    canonical: post.canonical,
+    summary: post.summary,
+    seoTitle: post.seoTitle,
+    seoDescription: post.seoDescription,
+    cover: post.cover,
+    coverAlt: post.coverAlt,
+    thumbnail: post.thumbnail,
+    thumbnailAlt: post.thumbnailAlt,
+    imageCredit: post.imageCredit,
+    ogImage: post.ogImage,
+    locale: post.locale,
+    slug: post.slug,
+    url: post.url,
+    excerpt: post.excerpt,
+    coverImage: post.coverImage,
+  }));
 
   const payload = {
     generatedAt: new Date().toISOString(),
     posts,
     postMap: Object.fromEntries(
-      fullPosts.filter((post): post is NonNullable<typeof post> => post !== null).map((post) => [post.slug, post])
+      fullPosts.map((post) => [
+        `${post.slug}:${post.locale}`,
+        post,
+      ])
     ),
     pages,
-    tags,
-    categories,
-    tagCounts,
   };
 
   await mkdir(path.dirname(OUTPUT_PATH), { recursive: true });

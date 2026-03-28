@@ -1,10 +1,12 @@
 import Link from 'next/link';
+import { detectRequestLocale } from '@/lib/i18n/detect';
+import { getLocaleMessages } from '@/lib/i18n/messages';
 
 function buildPageHref(basePath: string, page: number) {
   return page <= 1 ? basePath : `${basePath}?page=${page}`;
 }
 
-export function Pagination({
+export async function Pagination({
   currentPage,
   totalPages,
   basePath,
@@ -13,28 +15,35 @@ export function Pagination({
   totalPages: number;
   basePath: string;
 }) {
+  const locale = await detectRequestLocale();
+  const messages = getLocaleMessages(locale);
+
   if (totalPages <= 1) {
     return null;
   }
 
   return (
-    <nav className="pagination" aria-label="Pagination" data-no-typography="true">
+    <nav className="pagination" aria-label={messages.pagination.ariaLabel} data-no-typography="true">
       {currentPage > 1 ? (
         <Link className="pagination__link" href={buildPageHref(basePath, currentPage - 1)}>
-          Previous
+          {messages.pagination.previous}
         </Link>
       ) : (
-        <span className="pagination__link pagination__link--muted">Previous</span>
+        <span className="pagination__link pagination__link--muted">
+          {messages.pagination.previous}
+        </span>
       )}
       <span className="pagination__status">
-        Page {currentPage} of {totalPages}
+        {messages.pagination.status(currentPage, totalPages)}
       </span>
       {currentPage < totalPages ? (
         <Link className="pagination__link" href={buildPageHref(basePath, currentPage + 1)}>
-          Next
+          {messages.pagination.next}
         </Link>
       ) : (
-        <span className="pagination__link pagination__link--muted">Next</span>
+        <span className="pagination__link pagination__link--muted">
+          {messages.pagination.next}
+        </span>
       )}
     </nav>
   );

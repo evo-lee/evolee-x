@@ -1,5 +1,6 @@
 import runtimeData from '@/content/.generated/runtime-data.json';
 import { groupPostsByMonth } from '@/lib/format';
+import type { AppLocale } from '@/lib/i18n/config';
 import type { Page, Post, PostSummary } from './types';
 
 type RuntimePage = Omit<Page, 'updated'> & {
@@ -21,9 +22,6 @@ type RuntimeSnapshot = {
   posts: RuntimePostSummary[];
   postMap: Record<string, RuntimePost>;
   pages: RuntimePage[];
-  tags: string[];
-  categories: string[];
-  tagCounts: Record<string, number>;
 };
 
 const snapshot = runtimeData as RuntimeSnapshot;
@@ -51,13 +49,36 @@ function revivePage(page: RuntimePage): Page {
   };
 }
 
+function selectLocalizedItems<T extends { slug: string; locale: AppLocale }>(
+  items: T[],
+  locale: AppLocale
+): T[] {
+  const grouped = new Map<string, T[]>();
+
+  for (const item of items) {
+    grouped.set(item.slug, [...(grouped.get(item.slug) || []), item]);
+  }
+
+  return [...grouped.values()].map((variants) => {
+    const exact = variants.find((variant) => variant.locale === locale);
+    if (exact) {
+      return exact;
+    }
+
+    const chinese = variants.find((variant) => variant.locale === 'zh-CN');
+    return chinese || variants[0];
+  });
+}
+
 /**
  * Read all post summaries from the build-time runtime snapshot.
  *
  * @returns Post summaries with ISO date strings revived to `Date` objects.
  */
-export function getRuntimePosts(): PostSummary[] {
-  return snapshot.posts.map(revivePostSummary);
+export function getRuntimePosts(locale?: AppLocale): PostSummary[] {
+  const posts = snapshot.posts.map(revivePostSummary);
+  const selected = locale ? selectLocalizedItems(posts, locale) : selectLocalizedItems(posts, 'zh-CN');
+  return selected.sort((left, right) => right.date.getTime() - left.date.getTime());
 }
 
 /**
@@ -66,9 +87,19 @@ export function getRuntimePosts(): PostSummary[] {
  * @param slug Post slug used as the snapshot map key.
  * @returns Full post object, or `null` if the slug is absent from the snapshot.
  */
-export function getRuntimePostBySlug(slug: string): Post | null {
-  const post = snapshot.postMap[slug];
-  return post ? revivePost(post) : null;
+export function getRuntimePostBySlug(slug: string, locale: AppLocale = 'zh-CN'): Post | null {
+  const exact = snapshot.postMap[`${slug}:${locale}`];
+  if (exact) {
+    return revivePost(exact);
+  }
+
+  const chinese = snapshot.postMap[`${slug}:zh-CN`];
+  if (chinese) {
+    return revivePost(chinese);
+  }
+
+  const fallbackKey = Object.keys(snapshot.postMap).find((key) => key.startsWith(`${slug}:`));
+  return fallbackKey ? revivePost(snapshot.postMap[fallbackKey]) : null;
 }
 
 /**
@@ -77,8 +108,8 @@ export function getRuntimePostBySlug(slug: string): Post | null {
  * @param tag Exact tag value.
  * @returns Matching post summaries.
  */
-export function getRuntimePostsByTag(tag: string): PostSummary[] {
-  return getRuntimePosts().filter((post) => post.tags.includes(tag));
+export function getRuntimePostsByTag(tag: string, locale?: AppLocale): PostSummary[] {
+  return getRuntimePosts(locale).filter((post) => post.tags.includes(tag));
 }
 
 /**
@@ -87,8 +118,8 @@ export function getRuntimePostsByTag(tag: string): PostSummary[] {
  * @param category Exact category value.
  * @returns Matching post summaries.
  */
-export function getRuntimePostsByCategory(category: string): PostSummary[] {
-  return getRuntimePosts().filter((post) => post.category === category);
+export function getRuntimePostsByCategory(category: string, locale?: AppLocale): PostSummary[] {
+  return getRuntimePosts(locale).filter((post) => post.category === category);
 }
 
 /**
@@ -96,8 +127,9 @@ export function getRuntimePostsByCategory(category: string): PostSummary[] {
  *
  * @returns Pages with optional update timestamps revived to `Date` objects.
  */
-export function getRuntimePages(): Page[] {
-  return snapshot.pages.map(revivePage);
+export function getRuntimePages(locale?: AppLocale): Page[] {
+  const pages = snapshot.pages.map(revivePage);
+  return locale ? selectLocalizedItems(pages, locale) : selectLocalizedItems(pages, 'zh-CN');
 }
 
 /**
@@ -106,9 +138,10 @@ export function getRuntimePages(): Page[] {
  * @param slug Page slug.
  * @returns Matching page, or `null` if it does not exist in the snapshot.
  */
-export function getRuntimePageBySlug(slug: string): Page | null {
-  const page = snapshot.pages.find((item) => item.slug === slug);
-  return page ? revivePage(page) : null;
+export function getRuntimePageBySlug(slug: string, locale: AppLocale = 'zh-CN'): Page | null {
+  const pages = getRuntimePages(locale);
+  const page = pages.find((item) => item.slug === slug);
+  return page || null;
 }
 
 /**
@@ -116,8 +149,10 @@ export function getRuntimePageBySlug(slug: string): Page | null {
  *
  * @returns Cloned tag array so callers cannot mutate snapshot state.
  */
-export function getRuntimeTags(): string[] {
-  return [...snapshot.tags];
+export function getRuntimeTags(locale?: AppLocale): string[] {
+  return Array.from(new Set(getRuntimePosts(locale).flatMap((post) => post.tags))).sort((a, b) =>
+    a.localeCompare(b)
+  );
 }
 
 /**
@@ -125,8 +160,14 @@ export function getRuntimeTags(): string[] {
  *
  * @returns Cloned category array so callers cannot mutate snapshot state.
  */
-export function getRuntimeCategories(): string[] {
-  return [...snapshot.categories];
+export function getRuntimeCategories(locale?: AppLocale): string[] {
+  return Array.from(
+    new Set(
+      getRuntimePosts(locale)
+        .map((post) => post.category)
+        .filter((category): category is string => Boolean(category))
+    )
+  ).sort((a, b) => a.localeCompare(b));
 }
 
 /**
@@ -134,8 +175,14 @@ export function getRuntimeCategories(): string[] {
  *
  * @returns Cloned tag count record.
  */
-export function getRuntimeTagCounts(): Record<string, number> {
-  return { ...snapshot.tagCounts };
+export function getRuntimeTagCounts(locale?: AppLocale): Record<string, number> {
+  return getRuntimePosts(locale).reduce<Record<string, number>>((counts, post) => {
+    for (const tag of post.tags) {
+      counts[tag] = (counts[tag] || 0) + 1;
+    }
+
+    return counts;
+  }, {});
 }
 
 /**
@@ -143,8 +190,8 @@ export function getRuntimeTagCounts(): Record<string, number> {
  *
  * @returns Archive buckets produced by `groupPostsByMonth`.
  */
-export function getRuntimeArchives() {
-  return groupPostsByMonth(getRuntimePosts());
+export function getRuntimeArchives(locale?: AppLocale) {
+  return groupPostsByMonth(getRuntimePosts(locale));
 }
 
 /**
@@ -156,9 +203,10 @@ export function getRuntimeArchives() {
  */
 export function getRuntimeRelatedPosts(
   sourcePost: Pick<PostSummary, 'slug' | 'tags' | 'category'>,
+  locale: AppLocale = 'zh-CN',
   limit = 3
 ): PostSummary[] {
-  const posts = getRuntimePosts();
+  const posts = getRuntimePosts(locale);
 
   return posts
     .filter((post) => post.slug !== sourcePost.slug)

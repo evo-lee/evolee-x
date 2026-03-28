@@ -2,13 +2,14 @@
 
 import { mkdir, writeFile } from 'fs/promises';
 import path from 'path';
-import { getAllPosts } from '@/lib/content/posts';
+import { getAllPostVariants } from '@/lib/content/posts';
 
 const OUTPUT_PATH = path.join(process.cwd(), 'public', 'search-index.json');
 
 async function main() {
-  const posts = await getAllPosts();
+  const posts = await getAllPostVariants();
   const payload = posts.map((post) => ({
+    locale: post.locale,
     slug: post.slug,
     title: post.title,
     description: post.description,

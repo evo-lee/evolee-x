@@ -2,7 +2,7 @@
 
 import { openSearchModal } from '@/components/search/SearchModal';
 
-export function SearchTrigger() {
+export function SearchTrigger({ label, title }: { label: string; title: string }) {
   return (
     <button
       type="button"
@@ -11,9 +11,9 @@ export function SearchTrigger() {
       onClick={() => {
         openSearchModal();
       }}
-      title="Open search"
+      title={title}
     >
-      Search
+      {label}
     </button>
   );
 }

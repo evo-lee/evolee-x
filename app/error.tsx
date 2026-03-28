@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
+import { normalizeLocale } from '@/lib/i18n/config';
+import { getLocaleMessages } from '@/lib/i18n/messages';
 
 export default function GlobalError({
   error,
@@ -9,23 +11,26 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const locale =
+    typeof document !== 'undefined' ? normalizeLocale(document.documentElement.lang) : 'zh-CN';
+  const messages = getLocaleMessages(locale);
+
   useEffect(() => {
     console.error(error);
   }, [error]);
 
   return (
-    <html lang="zh-CN">
+    <html lang={locale}>
       <body>
         <div className="error-panel">
-          <p className="meta-note">Unexpected error</p>
-          <h1>Something failed while rendering this page.</h1>
+          <p className="meta-note">{messages.pages.error.eyebrow}</p>
+          <h1>{messages.pages.error.title}</h1>
           <p>{error.message}</p>
           <button className="chip-link" onClick={() => reset()} type="button">
-            Try again
+            {messages.pages.error.retry}
           </button>
         </div>
       </body>
     </html>
   );
 }
-
