@@ -312,6 +312,10 @@ img {
   margin-bottom: 0.15rem;
 }
 
+.post-list__cover .article-image {
+  max-height: 180px;
+}
+
 .post-list__body h2,
 .article-header h1,
 .page-header h1 {
@@ -372,7 +376,8 @@ img {
 }
 
 .cover-image {
-  aspect-ratio: 2 / 1;
+  aspect-ratio: 4 / 1;
+  max-height: 320px;
   border-radius: 1.2rem;
 }
 

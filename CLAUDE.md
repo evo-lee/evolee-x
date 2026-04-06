@@ -2,83 +2,82 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Status
-
-This project is in the planning/scaffolding phase. The architecture document `blog_v_4_nextjs_open_next_cloudflare_workers.md` is the current source of truth for all design decisions. No application code exists yet. Implementation should strictly follow that document.
-
 ## Commands
 
-Once scaffolded, the standard commands will be:
-
 ```bash
-# Local development (standard Next.js dev server)
+# Local development — rebuilds runtime snapshot + search index, then starts Next.js with Turbopack
 npm run dev
 
-# Build for production (Next.js build)
+# Production build — same pre-build steps, then Next.js build + post-build export check
 npm run build
 
-# Build for Cloudflare Workers (OpenNext transform)
-npx opennextjs-cloudflare build
+# Cloudflare Workers build / preview / deploy (wraps opennextjs-cloudflare)
+npm run cf:build
+npm run cf:preview
+npm run cf:deploy
 
-# Local preview of the Worker build
-npx opennextjs-cloudflare preview
+# Lint & format
+npm run lint
+npx prettier --write .
 
-# Deploy to Cloudflare Workers
-npx opennextjs-cloudflare deploy
+# Type check (also runs pre-build scripts first)
+npm run type-check
+
+# Tests — Node built-in test runner via tsx, no Jest/Vitest
+npm test
+# Run a single test file
+node --import tsx --test tests/content/cover-resolver.test.ts
+
+# Content lint (CI gate — deterministic, must pass)
+npm run lint:content
+
+# AI editorial tools (advisory, not CI gates)
+npm run ai:proofread -- --file content/posts/my-post.md
+npm run ai:summarize
+npm run ai:seo-suggest
+npm run ai:typography-review
 ```
-
-Use the OpenNext CLI (`opennextjs-cloudflare`) as the primary deployment workflow, not raw `wrangler` commands, unless the OpenNext docs explicitly require it.
 
 ## Architecture
 
-### Five-Layer Model
+### Build-time content pipeline
 
-1. **Content layer** — Markdown/MDX files in `content/` with frontmatter metadata, stored in Git
-2. **Application layer** — Next.js App Router in `app/`, static generation by default
-3. **AI editorial layer** — TypeScript CLIs in `scripts/ai/`, runs locally or in CI only, never in the request path
-4. **Deployment layer** — `@opennextjs/cloudflare` adapter transforms Next.js build output for Cloudflare Workers
-5. **Observability layer** — build reports, runtime logs, analytics
+`npm run dev` and `npm run build` both run two pre-build scripts before Next.js starts:
 
-### Repository Structure (Target)
+1. `scripts/content/build-runtime-data.ts` — reads all `content/posts/**/*.md` and `content/pages/**/*.md`, processes frontmatter + Markdown, and writes a full snapshot to `content/.generated/runtime-data.json`.
+2. `scripts/content/build-search-index.ts` — builds a Fuse.js index from the same content and writes it to `content/.generated/search-index.json`.
 
-```
-app/
-  (site)/
-    page.tsx, posts/, tags/, categories/, archives/, about/, projects/
-  api/health/route.ts
-  sitemap.ts, robots.ts, rss.xml/route.ts
-  layout.tsx, globals.css
-content/
-  posts/, pages/, taxonomy/, .generated/
-components/
-lib/
-  content/, seo/, cloudflare/, utils/
-prompts/
-scripts/
-  ai/, content/, ci/
-reports/
-  ai/, build/
-public/
-next.config.ts
-open-next.config.ts       # OpenNext Cloudflare adapter config
-wrangler.jsonc            # Cloudflare Worker bindings and deployment metadata
-```
+At runtime (including Cloudflare Workers, where filesystem traversal is unavailable), **all data access goes through `lib/content/runtime.ts`**, which imports the JSON snapshot directly — no filesystem reads happen after build time.
 
-### Key Architectural Decisions
+### Locale handling (no i18n routing middleware)
 
-**Rendering**: Static generation for all content pages (homepage, posts, tags, categories, archives, about, projects). Dynamic rendering only for health checks, optional search APIs, and analytics endpoints.
+The app supports `zh-CN` and `en`. Locale is detected per-request in `lib/i18n/detect.ts` (Cloudflare `CF-IPCountry` header or `Accept-Language`), not via URL segments or Next.js i18n config. Each content file can have locale variants (e.g. `post.zh-CN.md`, `post.en.md`); `selectLocalizedItems()` in `runtime.ts` picks the best variant per locale, falling back to `zh-CN` then any available variant.
 
-**Content model**: Frontmatter is the primary source of publication metadata. AI-generated suggestions go to `content/.generated/` as sidecar files until a human approves them — never auto-written back to frontmatter.
+### Rendering model
 
-**Cloudflare bindings**: Accessed via `getCloudflareContext()` from the OpenNext adapter. Used only for optional capabilities (incremental cache via R2/KV, image storage, analytics). Not hidden global dependencies.
+All `app/(site)/` routes are **statically generated**. Dynamic rendering is limited to `app/api/health/` and analytics endpoints. The `app/(site)/layout.tsx` uses `detectRequestLocale()` (an async server function) to pick the locale for each rendered page.
 
-**AI tooling**: All AI scripts are TypeScript CLIs outputting structured JSON first, Markdown summaries second, with schema validation before writing reports. Must support file, glob, and changed-files execution modes. Deterministic lint runs as a hard CI gate; AI checks are soft/advisory.
+### Image delivery
 
-**Image delivery**: All article images delivered through predefined Cloudflare-managed variants (`thumb-sm`, `thumb-md`, `cover-md`, `cover-lg`, `og-cover`). Never expose raw originals on listing surfaces. Cover resolution order: explicit `cover` frontmatter → first body image → site default.
+All images go through `lib/cloudflare/loader.ts` (custom Next.js image loader). The cover resolution order in `lib/content/cover-resolver.ts`: explicit `cover` frontmatter → first image found in body HTML → site default. Cloudflare image variants used: `thumb-sm`, `thumb-md`, `cover-md`, `cover-lg`, `og-cover`. Never expose raw originals.
 
-**Chinese typography**: Heti-inspired typography scoped only to article reading containers (`.heti` or equivalent). Never applied globally. `autoSpacing()` initialized client-side only. Code blocks, tables, navigation excluded from typography mutation.
+### Chinese typography
 
-### Frontmatter Schema
+`heti` CSS + `lib/typography/` applies CJK spacing rules **only inside `.heti` containers** (article bodies). It is initialized client-side only. Code blocks, tables, and navigation are excluded.
+
+### AI editorial tooling
+
+Scripts in `scripts/ai/` use `@anthropic-ai/sdk` and output structured JSON to `reports/ai/` before writing Markdown summaries. AI-generated content suggestions go to `content/.generated/` as sidecar files — never auto-applied to frontmatter. `lint:content` is a hard CI gate; all `ai:*` scripts are soft/advisory.
+
+### Key config files
+
+- `next.config.ts` — custom image loader, `outputFileTracingRoot`
+- `open-next.config.ts` — OpenNext Cloudflare adapter config
+- `wrangler.jsonc` — Worker bindings (R2, KV, Images) and deployment metadata
+- `lib/site.ts` — localized site config (name, nav, baseUrl)
+- `lib/i18n/config.ts` — `AppLocale` type, locale list, `normalizeLocale()`
+
+### Frontmatter schema
 
 ```yaml
 title, description, date, updated, tags[], category, draft, featured,
