@@ -348,7 +348,7 @@ img {
 
 .article-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 16rem;
+  grid-template-columns: 16rem minmax(0, 1fr);
   gap: 2rem;
   align-items: start;
   padding-top: 2rem;
@@ -735,7 +735,6 @@ html[data-theme='dark'] .prose [data-theme~='github-dark-dimmed'] span {
 
   .toc {
     position: static;
-    order: -1;
   }
 }
 

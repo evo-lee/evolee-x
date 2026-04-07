@@ -1,6 +1,9 @@
+import { loadEnvConfig } from '@next/env';
 import { readFile } from 'fs/promises';
 import type { AIProvider, ToolContext } from '@/scripts/ai/shared/types';
 import { validateModelOutput } from '@/scripts/ai/shared/schema-validator';
+
+loadEnvConfig(process.cwd());
 
 const DEFAULT_ANTHROPIC_MODEL = 'claude-3-5-sonnet-latest';
 const DEFAULT_ANTHROPIC_BASE_URL = 'https://api.anthropic.com';
