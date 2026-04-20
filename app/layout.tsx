@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Suspense } from 'react';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { Fraunces, Noto_Serif_SC } from 'next/font/google';
 import Script from 'next/script';
 import { RouteChangeDebug } from '@/lib/analytics/route-change-debug';
 import { StructuredData } from '@/components/seo/StructuredData';
@@ -13,6 +14,22 @@ import { THEME_STORAGE_KEY } from '@/lib/theme';
 import './globals.css';
 import 'heti/umd/heti.min.css';
 import '@/styles/heti-overrides.css';
+
+const notoSerifSC = Noto_Serif_SC({
+  weight: ['300', '400', '500', '600', '700'],
+  subsets: ['chinese-simplified'],
+  display: 'swap',
+  preload: false,
+  variable: '--font-noto-serif-sc',
+});
+
+const fraunces = Fraunces({
+  weight: ['300', '400', '500'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-fraunces',
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await detectRequestLocale();
@@ -32,14 +49,8 @@ export default async function RootLayout({
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
   return (
-    <html lang={siteConfig.locale} suppressHydrationWarning>
+    <html lang={siteConfig.locale} className={`${notoSerifSC.variable} ${fraunces.variable}`} suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&display=swap"
-          rel="stylesheet"
-        />
         {enableUmami && umamiScriptUrl && umamiWebsiteId ? (
           <Script
             src={umamiScriptUrl}
