@@ -4,6 +4,7 @@ const localeMessages = {
   'zh-CN': {
     header: {
       primaryNavigation: '主导航',
+      subtitle: 'evolee 的花园笔记',
     },
     footer: {
       builtWith: '种在 Cloudflare 的土壤上 · 基于 Next.js 构建',
@@ -113,6 +114,7 @@ const localeMessages = {
   en: {
     header: {
       primaryNavigation: 'Primary navigation',
+      subtitle: "evolee's garden of notes",
     },
     footer: {
       builtWith: 'Built with Next.js and Cloudflare Workers.',

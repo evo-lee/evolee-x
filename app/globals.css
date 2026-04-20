@@ -60,7 +60,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: 'Noto Serif SC', 'Songti SC', 'Source Han Serif SC', 'Iowan Old Style', 'Palatino Linotype', Palatino, serif;
+  font-family: var(--font-noto-serif-sc), 'Songti SC', 'Source Han Serif SC', 'Iowan Old Style', 'Palatino Linotype', Palatino, serif;
   line-height: 1.75;
 }
 
@@ -137,7 +137,7 @@ img {
 }
 
 .garden-eyebrow {
-  font-family: 'Fraunces', 'Noto Serif SC', serif;
+  font-family: var(--font-fraunces), var(--font-noto-serif-sc), serif;
   font-style: italic;
   font-weight: 400;
   font-size: 0.82rem;
@@ -152,7 +152,7 @@ img {
 }
 
 .site-title__sub {
-  font-family: 'Fraunces', 'Noto Serif SC', serif;
+  font-family: var(--font-fraunces), var(--font-noto-serif-sc), serif;
   font-style: italic;
   font-weight: 300;
   font-size: 0.72rem;
@@ -161,7 +161,7 @@ img {
 }
 
 .footer-desc {
-  font-family: 'Fraunces', 'Noto Serif SC', serif;
+  font-family: var(--font-fraunces), var(--font-noto-serif-sc), serif;
   font-style: italic;
 }
 
