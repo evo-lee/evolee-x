@@ -6,7 +6,7 @@ const localeMessages = {
       primaryNavigation: '主导航',
     },
     footer: {
-      builtWith: '基于 Next.js 与 Cloudflare Workers 构建。',
+      builtWith: '种在 Cloudflare 的土壤上 · 基于 Next.js 构建',
     },
     pagination: {
       ariaLabel: '分页',
@@ -46,16 +46,16 @@ const localeMessages = {
       posts: {
         metadataTitle: '文章',
         metadataDescription: '所有已发布文章。',
-        eyebrow: '文章',
-        title: '全部文章',
-        description: '按时间整理的编程、阅读和生活记录。',
+        eyebrow: '· 全部文章 ·',
+        title: '花园日志',
+        description: '按栽种时间倒序排列的编程、阅读和生活记录。',
         empty: '还没有已发布的文章。',
       },
       archives: {
         metadataTitle: '归档',
         metadataDescription: '按月份浏览文章。',
-        eyebrow: '归档',
-        title: '月度索引',
+        eyebrow: '· 归档 ·',
+        title: '时间的年轮',
         description: '按时间整理的文章归档。',
       },
       category: {

@@ -21,16 +21,15 @@ export function HomeHero({
 
   return (
     <section className="hero">
-      <p className="hero__eyebrow">Personal blog</p>
-      <h1 className="hero__title">Programming, reading, and quiet notes from an ongoing life.</h1>
+      <p className="garden-eyebrow">· 花园笔记 · evolee&rsquo;s garden ·</p>
+      <h1 className="hero__title">博客是一座<br /><em style={{ fontStyle: 'italic', color: 'var(--bloom)' }}>小花园。</em></h1>
       <p className="hero__description">
-        A small archive of code, books, and lived observations. The structure stays minimal so the
-        writing can carry the weight.
+        每一篇文字都是一株植物——有些是常青，有些是季候花，有些只活了一周就枯了。我把它们都种在这里。
       </p>
       <div className="hero__links">
-        <Link href="/posts">Browse all posts</Link>
-        <Link href="/archives">Open archives</Link>
-        <Link href="/about">Read about this blog</Link>
+        <Link href="/posts">走进花园 →</Link>
+        <Link href="/archives">时间的年轮</Link>
+        <Link href="/about">关于这个花园</Link>
       </div>
       <TaxonomyChipList ariaLabel="Homepage taxonomy shortcuts" items={shortcutItems} />
     </section>

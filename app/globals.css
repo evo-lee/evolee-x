@@ -2,14 +2,15 @@
 
 :root {
   color-scheme: light;
-  --bg: oklch(0.97 0.01 95);
-  --surface: oklch(0.992 0.005 95);
-  --surface-strong: oklch(0.945 0.012 95);
-  --text: oklch(0.26 0.03 240);
-  --text-soft: oklch(0.45 0.02 240);
-  --line: oklch(0.88 0.01 95);
-  --accent: oklch(0.52 0.08 170);
-  --accent-soft: oklch(0.91 0.03 170);
+  --bg: #f6f1e3;
+  --surface: #fbf8ee;
+  --surface-strong: #ede7d0;
+  --text: #1e3528;
+  --text-soft: #5a6b5c;
+  --line: #d6cfb8;
+  --accent: #3a6a48;
+  --accent-soft: #d4e5d9;
+  --bloom: #c97c5d;
   --max-width: 76rem;
 }
 
@@ -19,28 +20,30 @@ html[data-theme='light'] {
 
 html[data-theme='dark'] {
   color-scheme: dark;
-  --bg: oklch(0.19 0.015 250);
-  --surface: oklch(0.24 0.012 250);
-  --surface-strong: oklch(0.29 0.014 250);
-  --text: oklch(0.93 0.01 95);
-  --text-soft: oklch(0.75 0.018 95);
-  --line: oklch(0.34 0.01 250);
-  --accent: oklch(0.75 0.08 170);
-  --accent-soft: oklch(0.3 0.03 170);
+  --bg: #132118;
+  --surface: #1a2921;
+  --surface-strong: #1f3226;
+  --text: #e8dfc7;
+  --text-soft: #9fae9f;
+  --line: #25362a;
+  --accent: #7eb08a;
+  --accent-soft: #1e3528;
+  --bloom: #e0a080;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]),
   html:not([data-theme]) {
     color-scheme: dark;
-    --bg: oklch(0.19 0.015 250);
-    --surface: oklch(0.24 0.012 250);
-    --surface-strong: oklch(0.29 0.014 250);
-    --text: oklch(0.93 0.01 95);
-    --text-soft: oklch(0.75 0.018 95);
-    --line: oklch(0.34 0.01 250);
-    --accent: oklch(0.75 0.08 170);
-    --accent-soft: oklch(0.3 0.03 170);
+    --bg: #132118;
+    --surface: #1a2921;
+    --surface-strong: #1f3226;
+    --text: #e8dfc7;
+    --text-soft: #9fae9f;
+    --line: #25362a;
+    --accent: #7eb08a;
+    --accent-soft: #1e3528;
+    --bloom: #e0a080;
   }
 }
 
@@ -55,14 +58,10 @@ html {
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--accent-soft) 55%, transparent), transparent 32%),
-    linear-gradient(180deg, var(--bg), color-mix(in srgb, var(--bg) 92%, var(--surface)));
+  background: var(--bg);
   color: var(--text);
-  font-family:
-    'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, 'Source Han Serif SC',
-    'Noto Serif SC', serif;
-  line-height: 1.7;
+  font-family: 'Noto Serif SC', 'Songti SC', 'Source Han Serif SC', 'Iowan Old Style', 'Palatino Linotype', Palatino, serif;
+  line-height: 1.75;
 }
 
 a {
@@ -84,8 +83,8 @@ img {
   top: 0;
   z-index: 20;
   backdrop-filter: blur(18px);
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  border-bottom: 1px dashed var(--line);
 }
 
 .site-header__inner,
@@ -104,9 +103,10 @@ img {
 }
 
 .site-title {
-  font-size: clamp(1.2rem, 1rem + 0.8vw, 1.7rem);
-  letter-spacing: 0.04em;
-  text-transform: lowercase;
+  font-size: clamp(1.1rem, 0.9rem + 0.6vw, 1.4rem);
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  font-weight: 500;
 }
 
 .site-header__nav-wrap {
@@ -133,7 +133,36 @@ img {
 .simple-list a:focus-visible,
 .toc a:hover,
 .toc a:focus-visible {
+  color: var(--bloom);
+}
+
+.garden-eyebrow {
+  font-family: 'Fraunces', 'Noto Serif SC', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.82rem;
+  letter-spacing: 0.2em;
   color: var(--accent);
+}
+
+.garden-ornament {
+  color: var(--bloom);
+  letter-spacing: 0.5em;
+  font-size: 1.2rem;
+}
+
+.site-title__sub {
+  font-family: 'Fraunces', 'Noto Serif SC', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--text-soft);
+}
+
+.footer-desc {
+  font-family: 'Fraunces', 'Noto Serif SC', serif;
+  font-style: italic;
 }
 
 .site-header__actions {
@@ -172,7 +201,7 @@ img {
 }
 
 .site-footer {
-  border-top: 1px solid var(--line);
+  border-top: 1px dashed var(--line);
 }
 
 .site-footer__inner {
@@ -188,7 +217,7 @@ img {
   display: grid;
   gap: 2rem;
   padding: clamp(2rem, 5vw, 5rem) 0 2rem;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px dashed var(--line);
 }
 
 .hero__eyebrow,
@@ -259,7 +288,7 @@ img {
 }
 
 .section + .section {
-  border-top: 1px solid var(--line);
+  border-top: 1px dashed var(--line);
 }
 
 .section-intro {
@@ -286,7 +315,16 @@ img {
   grid-template-columns: minmax(8rem, 10rem) 1fr;
   gap: 1rem 2rem;
   padding: 1.35rem 0;
-  border-top: 1px solid var(--line);
+  border-top: 1px dashed var(--line);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .post-list__item {
+    transition: transform 0.15s ease;
+  }
+  .post-list__item:hover {
+    transform: translate(-2px, -2px);
+  }
 }
 
 .post-list__meta {
@@ -337,7 +375,7 @@ img {
   display: grid;
   gap: 1rem;
   padding: 1.4rem 0 2rem;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px dashed var(--line);
 }
 
 .page-grid {
@@ -420,9 +458,12 @@ img {
 
 .prose blockquote {
   margin-left: 0;
-  padding-left: 1rem;
-  border-left: 2px solid var(--accent);
+  padding: 1rem 1.4rem;
+  border-left: 3px solid var(--bloom);
+  border-radius: 0 0.75rem 0.75rem 0;
+  background: var(--surface);
   color: var(--text-soft);
+  font-style: italic;
 }
 
 .prose code:not(pre code) {
@@ -514,8 +555,8 @@ html[data-theme='dark'] .prose [data-theme~='github-dark-dimmed'] span {
   display: grid;
   gap: 0.8rem;
   padding: 1rem;
-  border: 1px solid var(--line);
-  border-radius: 1rem;
+  border: 1px dashed var(--line);
+  border-radius: 1.25rem;
   background: color-mix(in srgb, var(--surface) 92%, transparent);
 }
 
@@ -552,7 +593,7 @@ html[data-theme='dark'] .prose [data-theme~='github-dark-dimmed'] span {
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem 0 0;
-  border-top: 1px solid var(--line);
+  border-top: 1px dashed var(--line);
 }
 
 .pagination__status {
@@ -578,7 +619,7 @@ html[data-theme='dark'] .prose [data-theme~='github-dark-dimmed'] span {
   display: grid;
   gap: 0.55rem;
   padding: 1rem 0;
-  border-top: 1px solid var(--line);
+  border-top: 1px dashed var(--line);
 }
 
 .related-posts__item h3,
