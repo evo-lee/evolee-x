@@ -17,7 +17,6 @@ import '@/styles/heti-overrides.css';
 
 const notoSerifSC = Noto_Serif_SC({
   weight: ['300', '400', '500', '600', '700'],
-  subsets: ['chinese-simplified'],
   display: 'swap',
   preload: false,
   variable: '--font-noto-serif-sc',
