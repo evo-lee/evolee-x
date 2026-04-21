@@ -7,7 +7,7 @@ const localeMessages = {
       subtitle: '',
     },
     footer: {
-      builtWith: '种在 Cloudflare 的土壤上 · 基于 Next.js 构建',
+      builtWith: '',
     },
     pagination: {
       ariaLabel: '分页',
