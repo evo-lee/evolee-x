@@ -10,8 +10,7 @@ export async function Footer() {
   return (
     <footer className="site-footer">
       <div className="site-footer__inner" style={{ flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0.6rem' }}>
-        <p className="garden-ornament">❀ ✿ ❀</p>
-        <p className="footer-desc">{siteConfig.description}</p>
+<p className="footer-desc">{siteConfig.description}</p>
         <p>{messages.footer.builtWith}</p>
       </div>
     </footer>
