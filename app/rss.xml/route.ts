@@ -1,4 +1,5 @@
 import { getRuntimePosts } from '@/lib/content/runtime';
+import { detectRequestLocale } from '@/lib/i18n/detect';
 import { getSiteConfig } from '@/lib/site';
 
 function escapeXml(input: string): string {
@@ -11,7 +12,8 @@ function escapeXml(input: string): string {
 }
 
 export async function GET() {
-  const siteConfig = getSiteConfig('zh-CN');
+  const locale = await detectRequestLocale();
+  const siteConfig = getSiteConfig(locale);
   const posts = getRuntimePosts();
   const items = posts
     .map(

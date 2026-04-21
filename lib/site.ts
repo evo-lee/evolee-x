@@ -2,9 +2,9 @@ import type { AppLocale } from '@/lib/i18n/config';
 
 const localizedSiteConfig = {
   'zh-CN': {
-    name: 'evolee\'s blog',
-    title: 'evolee\'s blog',
-    description: '编程笔记、阅读记录与个人写作。',
+    name: '刻意进化',
+    title: '刻意进化',
+    description: '愿这里像一个小花园。不急着开花，不急着结果。',
     baseUrl: 'https://litang.one',
     locale: 'zh-CN',
     author: 'evolee',
@@ -17,9 +17,9 @@ const localizedSiteConfig = {
     ],
   },
   en: {
-    name: 'evolee\'s blog',
-    title: 'evolee\'s blog',
-    description: 'Programming notes, reading reflections, and personal essays.',
+    name: 'evolee\'s garden',
+    title: 'evolee\'s garden',
+    description: 'A small garden of notes — code, books, and quiet observations.',
     baseUrl: 'https://litang.one',
     locale: 'en',
     author: 'evolee',

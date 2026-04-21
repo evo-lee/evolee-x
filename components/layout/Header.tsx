@@ -13,8 +13,9 @@ export async function Header() {
   return (
     <header className="site-header">
       <div className="site-header__inner">
-        <Link className="site-title" href="/">
-          {siteConfig.title}
+        <Link className="site-title" href="/" style={{ display: 'flex', alignItems: 'baseline', gap: '0.6rem' }}>
+          <span>✿ {siteConfig.title}</span>
+          <span className="site-title__sub">{messages.header.subtitle}</span>
         </Link>
         <div className="site-header__nav-wrap">
           <nav className="site-nav" aria-label={messages.header.primaryNavigation}>
