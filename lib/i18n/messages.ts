@@ -4,7 +4,7 @@ const localeMessages = {
   'zh-CN': {
     header: {
       primaryNavigation: '主导航',
-      subtitle: 'evolee 的花园笔记',
+      subtitle: '',
     },
     footer: {
       builtWith: '种在 Cloudflare 的土壤上 · 基于 Next.js 构建',

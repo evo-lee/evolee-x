@@ -2,8 +2,8 @@ import type { AppLocale } from '@/lib/i18n/config';
 
 const localizedSiteConfig = {
   'zh-CN': {
-    name: '三餘札記',
-    title: '三餘札記',
+    name: '刻意进化',
+    title: '刻意进化',
     description: '愿这里像一个小花园。不急着开花，不急着结果。',
     baseUrl: 'https://litang.one',
     locale: 'zh-CN',
