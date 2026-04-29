@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node --import tsx scripts/content/build-runtime-data.ts && node --import tsx scripts/content/build-search-index.ts && next dev --turbopack",
-    "build": "node --import tsx scripts/content/build-runtime-data.ts && node --import tsx scripts/content/build-search-index.ts && next build && node --import tsx scripts/ci/ensure-next-export-errors.ts",
+    "content:build": "node --import tsx scripts/content/build-runtime-data.ts && node --import tsx scripts/content/build-search-index.ts",
+    "dev": "npm run content:build && next dev --turbopack",
+    "build": "npm run content:build && next build && node --import tsx scripts/ci/ensure-next-export-errors.ts",
     "start": "next start",
-    "cf:build": "opennextjs-cloudflare build",
+    "cf:build": "npm run content:build && opennextjs-cloudflare build",
     "cf:preview": "npm run cf:build && opennextjs-cloudflare preview",
     "cf:deploy": "npm run cf:build && opennextjs-cloudflare deploy",
+    "cf:versions:upload": "npm run cf:build && wrangler versions upload",
     "lint": "eslint .",
     "test": "node --import tsx --test tests/**/*.test.ts",
     "lint:content": "tsx scripts/ci/lint-content.ts",
@@ -17,7 +19,7 @@
     "ai:summarize": "node --import tsx scripts/ai/summarize.ts",
     "ai:seo-suggest": "node --import tsx scripts/ai/seo-suggest.ts",
     "ai:typography-review": "node --import tsx scripts/ai/typography-review.ts",
-    "type-check": "node --import tsx scripts/content/build-runtime-data.ts && node --import tsx scripts/content/build-search-index.ts && tsc --noEmit",
+    "type-check": "npm run content:build && next typegen && tsc --noEmit",
     "prepare": "husky"
   },
   "dependencies": {

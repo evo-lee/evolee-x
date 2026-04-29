@@ -27,6 +27,27 @@ type RuntimeSnapshot = {
 
 const snapshot = runtimeData as RuntimeSnapshot;
 
+function selectLocalizedItems<T extends { slug: string; locale: AppLocale }>(
+  items: T[],
+  locale: AppLocale
+): T[] {
+  const grouped = new Map<string, T[]>();
+
+  for (const item of items) {
+    grouped.set(item.slug, [...(grouped.get(item.slug) || []), item]);
+  }
+
+  return [...grouped.values()].flatMap((variants) => {
+    const exact = variants.find((variant) => variant.locale === locale);
+    if (exact) {
+      return [exact];
+    }
+
+    const chinese = variants.find((variant) => variant.locale === 'zh-CN');
+    return chinese ? [chinese] : [];
+  });
+}
+
 function localizePostUrl<T extends { locale: AppLocale; slug: string; url: string }>(post: T): T {
   return {
     ...post,
@@ -76,14 +97,13 @@ export function getRuntimePostVariants(): PostSummary[] {
 }
 
 export function getRuntimePosts(locale: AppLocale): PostSummary[] {
-  return getRuntimePostVariants().filter((post) => post.locale === locale);
+  return selectLocalizedItems(getRuntimePostVariants(), locale);
 }
 
 export function getRuntimePostLocalesBySlug(slug: string): AppLocale[] {
   return Array.from(
     new Set(
-      getRuntimePostVariants()
-        .filter((post) => post.slug === slug)
+      getRuntimePostsBySlug(slug)
         .map((post) => post.locale)
     )
   );
@@ -105,7 +125,8 @@ export function getRuntimePostBySlug(slug: string, locale: AppLocale = 'zh-CN'):
     return revivePost(exact);
   }
 
-  return null;
+  const chinese = snapshot.postMap[`${slug}:zh-CN`];
+  return chinese ? revivePost(chinese) : null;
 }
 
 /**
