@@ -1,6 +1,6 @@
 #!/usr/bin/env node --import tsx
 
-import { access, copyFile, mkdir, writeFile } from 'fs/promises';
+import { access, mkdir, writeFile, readFile } from 'fs/promises';
 import path from 'path';
 
 function buildFallbackHtml(fileName: '404.html' | '500.html'): string {
@@ -29,19 +29,26 @@ function buildFallbackHtml(fileName: '404.html' | '500.html'): string {
 
 async function copyIfNeeded(fileName: '404.html' | '500.html') {
   const source = path.join(process.cwd(), '.next', 'server', 'pages', fileName);
-  const targetDir = path.join(process.cwd(), '.next', 'export');
-  const target = path.join(targetDir, fileName);
+  const targetDirs = [
+    path.join(process.cwd(), '.next', 'export'),
+    path.join(process.cwd(), '.open-next', 'assets'),
+  ];
 
-  await mkdir(targetDir, { recursive: true });
-  try {
-    await access(source);
-    await copyFile(source, target);
+  const content = await (async () => {
+    try {
+      await access(source);
+      return await readFile(source, 'utf8');
+    } catch {
+      return buildFallbackHtml(fileName);
+    }
+  })();
+
+  for (const dir of targetDirs) {
+    await mkdir(dir, { recursive: true });
+    const target = path.join(dir, fileName);
+    await writeFile(target, content, 'utf8');
     console.log(`[next-export] Ensured ${target}`);
-    return;
-  } catch {}
-
-  await writeFile(target, buildFallbackHtml(fileName), 'utf8');
-  console.log(`[next-export] Generated fallback ${target}`);
+  }
 }
 
 async function main() {

@@ -1,6 +1,6 @@
 import { ArticleToc } from '@/components/article/ArticleToc';
 import { ArticleTypography } from '@/components/article/ArticleTypography';
-import { detectRequestLocale } from '@/lib/i18n/detect';
+import type { AppLocale } from '@/lib/i18n/config';
 import { getLocaleMessages } from '@/lib/i18n/messages';
 import type { Heading } from '@/lib/content/types';
 
@@ -8,14 +8,15 @@ export async function ArticleContent({
   html,
   headings,
   scope,
+  locale,
   enableTypography = true,
 }: {
   html: string;
   headings: Heading[];
   scope: string;
+  locale: AppLocale;
   enableTypography?: boolean;
 }) {
-  const locale = await detectRequestLocale();
   const messages = getLocaleMessages(locale);
   const selector = `[data-article-content="${scope}"]`;
 

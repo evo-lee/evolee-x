@@ -24,7 +24,7 @@ export function ArticleCard({
         {post.category ? (
           <>
             <span className="meta-separator">/</span>
-            <CategoryBadge category={post.category} />
+            <CategoryBadge category={post.category} locale={locale} />
           </>
         ) : null}
       </div>

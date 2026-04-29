@@ -37,4 +37,4 @@ export function getSiteConfig(locale: AppLocale) {
   return localizedSiteConfig[locale];
 }
 
-export const siteConfig = getSiteConfig('zh-CN');
+export const siteConfig = getSiteConfig('en');

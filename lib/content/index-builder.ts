@@ -16,6 +16,7 @@ export async function buildSearchIndex(): Promise<SearchIndexEntry[]> {
       return {
         locale: post.locale,
         slug: post.slug,
+        url: post.url,
         title: post.title,
         description: post.description,
         summary: post.excerpt,

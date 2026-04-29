@@ -1,9 +1,8 @@
-import { detectRequestLocale } from '@/lib/i18n/detect';
+import type { AppLocale } from '@/lib/i18n/config';
 import { getLocaleMessages } from '@/lib/i18n/messages';
 import { getSiteConfig } from '@/lib/site';
 
-export async function Footer() {
-  const locale = await detectRequestLocale();
+export async function Footer({ locale }: { locale: AppLocale }) {
   const siteConfig = getSiteConfig(locale);
   const messages = getLocaleMessages(locale);
 

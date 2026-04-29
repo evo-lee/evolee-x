@@ -1,17 +1,19 @@
 import type { Metadata } from 'next';
 import type { Page, Post, PostSummary } from '@/lib/content/types';
 import { getImageUrl } from '@/lib/cloudflare/images';
-import type { AppLocale } from '@/lib/i18n/config';
+import { APP_LOCALES, DEFAULT_LOCALE, type AppLocale } from '@/lib/i18n/config';
+import { localeHref } from '@/lib/i18n/route';
 import { getSeoConfig } from './constants';
 import { buildOpenGraph } from './og';
 
 type MetadataOptions = {
-  locale?: AppLocale;
+  locale: AppLocale;
   path: string;
   title: string;
   description: string;
   image?: string;
   noIndex?: boolean;
+  alternates?: Partial<Record<AppLocale, string>>;
 };
 
 /**
@@ -21,6 +23,7 @@ type MetadataOptions = {
  */
 export function buildSiteMetadata(locale: AppLocale): Metadata {
   const seoConfig = getSeoConfig(locale);
+  const canonical = localeHref(DEFAULT_LOCALE, '/');
 
   return {
     applicationName: seoConfig.siteName,
@@ -31,13 +34,16 @@ export function buildSiteMetadata(locale: AppLocale): Metadata {
     description: seoConfig.siteDescription,
     metadataBase: new URL(seoConfig.baseUrl),
     alternates: {
-      canonical: seoConfig.baseUrl,
+      canonical,
+      languages: Object.fromEntries(
+        APP_LOCALES.map((item) => [item, localeHref(item, '/')])
+      ),
     },
     openGraph: buildOpenGraph({
       locale,
       title: seoConfig.siteTitle,
       description: seoConfig.siteDescription,
-      url: seoConfig.baseUrl,
+      url: `${seoConfig.baseUrl}${canonical}`,
       image: getImageUrl(seoConfig.defaultOgImage, 'og-cover', { absolute: true }),
     }),
     twitter: {
@@ -57,21 +63,28 @@ export function buildSiteMetadata(locale: AppLocale): Metadata {
  * @returns Next.js metadata object with canonical, OG, Twitter, and robots fields.
  */
 export function buildPageMetadata({
-  locale = 'zh-CN',
+  locale,
   path,
   title,
   description,
   image,
   noIndex,
+  alternates,
 }: MetadataOptions): Metadata {
   const seoConfig = getSeoConfig(locale);
-  const url = path === '/' ? seoConfig.baseUrl : `${seoConfig.baseUrl}${path}`;
+  const localizedPath = path.startsWith(`/${locale}`) ? path : localeHref(locale, path);
+  const url = `${seoConfig.baseUrl}${localizedPath}`;
 
   return {
     title,
     description,
     alternates: {
       canonical: url,
+      languages: alternates
+        ? Object.fromEntries(
+            Object.entries(alternates).map(([key, value]) => [key, `${seoConfig.baseUrl}${value}`])
+          )
+        : undefined,
     },
     openGraph: buildOpenGraph({
       locale,
@@ -101,17 +114,25 @@ export function buildPageMetadata({
  * @param post Post summary or full post entity.
  * @returns Article-specific metadata with canonical, OG, Twitter, authors, keywords, and draft robots policy.
  */
-export function buildPostMetadata(post: Post | PostSummary): Metadata {
+export function buildPostMetadata(
+  post: Post | PostSummary,
+  alternates?: Partial<Record<AppLocale, string>>
+): Metadata {
   const seoConfig = getSeoConfig(post.locale);
   const title = post.seoTitle || post.title;
   const description = post.seoDescription || post.description;
-  const url = post.url === '/' ? seoConfig.baseUrl : `${seoConfig.baseUrl}${post.url}`;
+  const url = `${seoConfig.baseUrl}${post.url}`;
 
   return {
     title,
     description,
     alternates: {
       canonical: post.canonical || url,
+      languages: alternates
+        ? Object.fromEntries(
+            Object.entries(alternates).map(([key, value]) => [key, `${seoConfig.baseUrl}${value}`])
+          )
+        : undefined,
     },
     openGraph: buildOpenGraph({
       locale: post.locale,

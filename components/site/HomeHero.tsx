@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { AppLocale } from '@/lib/i18n/config';
+import { localeHref } from '@/lib/i18n/route';
 import { TaxonomyChipList } from '@/components/site/TaxonomyChipList';
 
 export function HomeHero({
@@ -13,11 +14,11 @@ export function HomeHero({
 }) {
   const shortcutItems = [
     ...categories.slice(0, 4).map((category) => ({
-      href: `/categories/${category}`,
+      href: localeHref(locale, `/categories/${encodeURIComponent(category)}`),
       label: category,
     })),
     ...tags.slice(0, 4).map((tag) => ({
-      href: `/tags/${tag}`,
+      href: localeHref(locale, `/tags/${encodeURIComponent(tag)}`),
       label: `#${tag}`,
     })),
   ];
@@ -34,9 +35,9 @@ export function HomeHero({
             每一篇文字都是一株植物——有些是常青，有些是季候花，有些只活了一周就枯了。我把它们都种在这里。
           </p>
           <div className="hero__links">
-            <Link href="/posts">走进花园 →</Link>
-            <Link href="/archives">时间的年轮</Link>
-            <Link href="/about">关于这个花园</Link>
+            <Link href={localeHref(locale, '/posts')}>走进花园 →</Link>
+            <Link href={localeHref(locale, '/archives')}>时间的年轮</Link>
+            <Link href={localeHref(locale, '/about')}>关于这个花园</Link>
           </div>
         </>
       ) : (
@@ -46,9 +47,9 @@ export function HomeHero({
             Every post is a plant — some evergreen, some seasonal, some that only lived a week. All of them planted here.
           </p>
           <div className="hero__links">
-            <Link href="/posts">Walk the garden →</Link>
-            <Link href="/archives">Time&rsquo;s rings</Link>
-            <Link href="/about">About this garden</Link>
+            <Link href={localeHref(locale, '/posts')}>Walk the garden →</Link>
+            <Link href={localeHref(locale, '/archives')}>Time&rsquo;s rings</Link>
+            <Link href={localeHref(locale, '/about')}>About this garden</Link>
           </div>
         </>
       )}

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { detectRequestLocale } from '@/lib/i18n/detect';
+import type { AppLocale } from '@/lib/i18n/config';
 import type { PostSummary } from '@/lib/content/types';
 import { formatDate, formatMonth } from '@/lib/format';
 
@@ -8,9 +8,13 @@ type ArchiveGroup = {
   items: PostSummary[];
 };
 
-export async function ArchiveList({ groups }: { groups: ArchiveGroup[] }) {
-  const locale = await detectRequestLocale();
-
+export async function ArchiveList({
+  groups,
+  locale,
+}: {
+  groups: ArchiveGroup[];
+  locale: AppLocale;
+}) {
   return (
     <div className="section">
       {groups.map((group) => (

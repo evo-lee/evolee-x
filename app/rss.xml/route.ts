@@ -1,46 +1,6 @@
-import { getRuntimePosts } from '@/lib/content/runtime';
-import { detectRequestLocale } from '@/lib/i18n/detect';
-import { getSiteConfig } from '@/lib/site';
-
-function escapeXml(input: string): string {
-  return input
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
-}
+import { DEFAULT_LOCALE } from '@/lib/i18n/config';
+import { localeHref } from '@/lib/i18n/route';
 
 export async function GET() {
-  const locale = await detectRequestLocale();
-  const siteConfig = getSiteConfig(locale);
-  const posts = getRuntimePosts();
-  const items = posts
-    .map(
-      (post) => `
-        <item>
-          <title>${escapeXml(post.title)}</title>
-          <link>${siteConfig.baseUrl}${post.url}</link>
-          <guid>${siteConfig.baseUrl}${post.url}</guid>
-          <pubDate>${post.date.toUTCString()}</pubDate>
-          <description>${escapeXml(post.description)}</description>
-        </item>`
-    )
-    .join('');
-
-  const xml = `<?xml version="1.0" encoding="UTF-8" ?>
-  <rss version="2.0">
-    <channel>
-      <title>${escapeXml(siteConfig.title)}</title>
-      <link>${siteConfig.baseUrl}</link>
-      <description>${escapeXml(siteConfig.description)}</description>
-      ${items}
-    </channel>
-  </rss>`;
-
-  return new Response(xml, {
-    headers: {
-      'Content-Type': 'application/xml; charset=utf-8',
-    },
-  });
+  return Response.redirect(new URL(localeHref(DEFAULT_LOCALE, '/rss.xml'), 'https://litang.one'), 308);
 }

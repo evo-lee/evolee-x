@@ -1,6 +1,7 @@
 import { stat } from 'fs/promises';
 import * as path from 'path';
 import type { AppLocale } from '@/lib/i18n/config';
+import { localeHref } from '@/lib/i18n/route';
 import {
   listMarkdownFiles,
   pathToLocale,
@@ -22,26 +23,12 @@ function comparePosts(a: PostSummary, b: PostSummary): number {
   return b.date.getTime() - a.date.getTime();
 }
 
-function selectLocalizedItems<T extends { slug: string; locale: AppLocale; date: Date }>(
+function selectLocalizedItems<T extends { locale: AppLocale; date: Date }>(
   items: T[],
   locale: AppLocale
 ): T[] {
-  const grouped = new Map<string, T[]>();
-
-  for (const item of items) {
-    grouped.set(item.slug, [...(grouped.get(item.slug) || []), item]);
-  }
-
-  return [...grouped.values()]
-    .map((variants) => {
-      const exact = variants.find((variant) => variant.locale === locale);
-      if (exact) {
-        return exact;
-      }
-
-      const chinese = variants.find((variant) => variant.locale === 'zh-CN');
-      return chinese || variants[0];
-    })
+  return items
+    .filter((item) => item.locale === locale)
     .sort((left, right) => right.date.getTime() - left.date.getTime());
 }
 
@@ -66,7 +53,7 @@ async function loadPostFromFile(filePath: string): Promise<Post> {
     locale,
     ...processed,
     slug,
-    url: `/posts/${slug}`,
+    url: localeHref(locale, `/posts/${slug}`),
     sourcePath: path.relative(process.cwd(), filePath),
     content: body,
     excerpt: frontmatter.summary || processed.excerpt,
@@ -134,7 +121,7 @@ export async function getPostBySlug(slug: string, locale: AppLocale = 'zh-CN'): 
   for (const filePath of candidates) {
     try {
       const post = await loadPostFromFile(filePath);
-      return isVisible(post.draft) ? post : null;
+      return isVisible(post.draft) && post.locale === locale ? post : null;
     } catch (error) {
       const maybeMissingFile = error as NodeJS.ErrnoException;
       if (maybeMissingFile.code !== 'ENOENT') {

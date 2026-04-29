@@ -11,6 +11,7 @@ async function main() {
   const payload = posts.map((post) => ({
     locale: post.locale,
     slug: post.slug,
+    url: post.url,
     title: post.title,
     description: post.description,
     tags: post.tags,

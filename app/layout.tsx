@@ -6,10 +6,9 @@ import { Fraunces, Noto_Serif_SC } from 'next/font/google';
 import Script from 'next/script';
 import { RouteChangeDebug } from '@/lib/analytics/route-change-debug';
 import { StructuredData } from '@/components/seo/StructuredData';
-import { detectRequestLocale } from '@/lib/i18n/detect';
+import { DEFAULT_LOCALE } from '@/lib/i18n/config';
 import { buildSiteMetadata } from '@/lib/seo/metadata';
 import { buildPersonStructuredData } from '@/lib/seo/structured-data';
-import { getSiteConfig } from '@/lib/site';
 import { THEME_STORAGE_KEY } from '@/lib/theme';
 import './globals.css';
 import 'heti/umd/heti.min.css';
@@ -31,16 +30,13 @@ const fraunces = Fraunces({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await detectRequestLocale();
-  return buildSiteMetadata(locale);
+  return buildSiteMetadata(DEFAULT_LOCALE);
 }
 export default async function RootLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  const locale = await detectRequestLocale();
-  const siteConfig = getSiteConfig(locale);
   const enableUmami = process.env.NEXT_PUBLIC_ENABLE_UMAMI === 'true';
   const enableGA = process.env.NEXT_PUBLIC_ENABLE_GA === 'true';
   const umamiScriptUrl = process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL;
@@ -48,7 +44,7 @@ export default async function RootLayout({
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
   return (
-    <html lang={siteConfig.locale} className={`${notoSerifSC.variable} ${fraunces.variable}`} suppressHydrationWarning>
+    <html lang={DEFAULT_LOCALE} className={`${notoSerifSC.variable} ${fraunces.variable}`} suppressHydrationWarning>
       <head>
         {enableUmami && umamiScriptUrl && umamiWebsiteId ? (
           <Script
@@ -61,10 +57,10 @@ export default async function RootLayout({
       <body>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var stored=window.localStorage.getItem('${THEME_STORAGE_KEY}');var theme=stored==='light'||stored==='dark'?stored:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=theme;}catch(e){}})();`,
+            __html: `(function(){try{var stored=window.localStorage.getItem('${THEME_STORAGE_KEY}');var theme=stored==='light'||stored==='dark'?stored:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=theme;var segments=window.location.pathname.split('/').filter(Boolean);if(segments[0]==='en'||segments[0]==='zh-CN'){document.documentElement.lang=segments[0];}}catch(e){}})();`,
           }}
         />
-        <StructuredData data={buildPersonStructuredData(locale)} />
+        <StructuredData data={buildPersonStructuredData(DEFAULT_LOCALE)} />
         {children}
         <Suspense fallback={null}>
           <RouteChangeDebug />

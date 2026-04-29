@@ -10,14 +10,6 @@ export function isAppLocale(value: string | null | undefined): value is AppLocal
   return value === 'zh-CN' || value === 'en';
 }
 
-export function normalizeLocale(locale?: string | null): AppLocale {
-  if (!locale) {
-    return DEFAULT_LOCALE;
-  }
-
-  return locale.toLowerCase().startsWith('zh') ? 'zh-CN' : 'en';
-}
-
 export function isChineseMainlandCountry(country?: string | null): boolean {
   return country?.toUpperCase() === 'CN';
 }

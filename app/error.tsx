@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { normalizeLocale } from '@/lib/i18n/config';
+import { DEFAULT_LOCALE } from '@/lib/i18n/config';
 import { getLocaleMessages } from '@/lib/i18n/messages';
 
 export default function GlobalError({
@@ -12,7 +12,10 @@ export default function GlobalError({
   reset: () => void;
 }) {
   const locale =
-    typeof document !== 'undefined' ? normalizeLocale(document.documentElement.lang) : 'zh-CN';
+    typeof document !== 'undefined' &&
+    (document.documentElement.lang === 'en' || document.documentElement.lang === 'zh-CN')
+      ? document.documentElement.lang
+      : DEFAULT_LOCALE;
   const messages = getLocaleMessages(locale);
 
   useEffect(() => {

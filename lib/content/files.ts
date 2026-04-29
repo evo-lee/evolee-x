@@ -1,6 +1,6 @@
 import { readdir, readFile } from 'fs/promises';
 import * as path from 'path';
-import { normalizeLocale, type AppLocale } from '@/lib/i18n/config';
+import { isAppLocale, type AppLocale } from '@/lib/i18n/config';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content');
 
@@ -34,7 +34,7 @@ export function parseLocalizedContentPath(baseDir: string, filePath: string): {
 
   return {
     slug: match[1],
-    locale: normalizeLocale(match[2]),
+    locale: isAppLocale(match[2]) ? match[2] : 'zh-CN',
   };
 }
 

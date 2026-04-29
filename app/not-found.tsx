@@ -1,10 +1,9 @@
 import Link from 'next/link';
-import { detectRequestLocale } from '@/lib/i18n/detect';
+import { DEFAULT_LOCALE } from '@/lib/i18n/config';
 import { getLocaleMessages } from '@/lib/i18n/messages';
 
 export default async function NotFound() {
-  const locale = await detectRequestLocale();
-  const messages = getLocaleMessages(locale);
+  const messages = getLocaleMessages(DEFAULT_LOCALE);
 
   return (
     <div className="error-panel">

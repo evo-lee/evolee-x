@@ -3,6 +3,7 @@ import type { AppLocale } from '@/lib/i18n/config';
 export interface SearchDocument {
   locale: AppLocale;
   slug: string;
+  url: string;
   title: string;
   description: string;
   tags: string[];

@@ -58,8 +58,8 @@ export function SearchResults({
   return (
     <ul className="search-results" aria-label={resultsAriaLabel}>
       {results.map((result) => (
-        <li key={result.slug} className="search-results__item">
-          <Link href={`/posts/${result.slug}`} onClick={onSelect}>
+        <li key={`${result.locale}:${result.slug}`} className="search-results__item">
+          <Link href={result.url} onClick={onSelect}>
             <div className="search-results__meta">
               <span>{new Date(result.date).toLocaleDateString(locale)}</span>
               {result.category ? <span>{result.category}</span> : null}

@@ -1,5 +1,6 @@
 import * as path from 'path';
 import type { AppLocale } from '@/lib/i18n/config';
+import { localeHref } from '@/lib/i18n/route';
 import {
   listMarkdownFiles,
   PAGES_DIR,
@@ -31,7 +32,7 @@ async function loadPageFromFile(filePath: string): Promise<Page> {
     text: processed.text,
     headings: processed.headings,
     slug,
-    url: `/${slug}`,
+    url: localeHref(locale, `/${slug}`),
     sourcePath: path.relative(process.cwd(), filePath),
     content: body,
   };
@@ -52,7 +53,7 @@ export async function getPageBySlug(slug: string, locale: AppLocale = 'zh-CN'): 
   for (const filePath of candidates) {
     try {
       const page = await loadPageFromFile(filePath);
-      return isVisible(page.draft) ? page : null;
+      return isVisible(page.draft) && page.locale === locale ? page : null;
     } catch (error) {
       const maybeMissingFile = error as NodeJS.ErrnoException;
       if (maybeMissingFile.code !== 'ENOENT') {

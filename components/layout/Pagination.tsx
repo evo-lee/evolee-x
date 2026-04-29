@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { detectRequestLocale } from '@/lib/i18n/detect';
+import type { AppLocale } from '@/lib/i18n/config';
 import { getLocaleMessages } from '@/lib/i18n/messages';
 
 function buildPageHref(basePath: string, page: number) {
@@ -10,12 +10,13 @@ export async function Pagination({
   currentPage,
   totalPages,
   basePath,
+  locale,
 }: {
   currentPage: number;
   totalPages: number;
   basePath: string;
+  locale: AppLocale;
 }) {
-  const locale = await detectRequestLocale();
   const messages = getLocaleMessages(locale);
 
   if (totalPages <= 1) {

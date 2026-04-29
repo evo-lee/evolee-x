@@ -1,12 +1,17 @@
 import { CategoryBadge } from '@/components/taxonomy/CategoryBadge';
-import { detectRequestLocale } from '@/lib/i18n/detect';
+import type { AppLocale } from '@/lib/i18n/config';
 import { getLocaleMessages } from '@/lib/i18n/messages';
 import type { Post } from '@/lib/content/types';
 import { formatDate } from '@/lib/format';
 import { getSiteConfig } from '@/lib/site';
 
-export async function ArticleHeader({ post }: { post: Post }) {
-  const locale = await detectRequestLocale();
+export async function ArticleHeader({
+  post,
+  locale,
+}: {
+  post: Post;
+  locale: AppLocale;
+}) {
   const messages = getLocaleMessages(locale);
   const siteConfig = getSiteConfig(locale);
 
@@ -24,7 +29,7 @@ export async function ArticleHeader({ post }: { post: Post }) {
         <li>{post.author || siteConfig.author}</li>
         {post.category ? (
           <li>
-            <CategoryBadge category={post.category} />
+            <CategoryBadge category={post.category} locale={locale} />
           </li>
         ) : null}
       </ul>

@@ -1,11 +1,16 @@
 import { TrackedLink } from '@/components/analytics/TrackedLink';
-import { detectRequestLocale } from '@/lib/i18n/detect';
+import type { AppLocale } from '@/lib/i18n/config';
 import { getLocaleMessages } from '@/lib/i18n/messages';
 import type { PostSummary } from '@/lib/content/types';
 import { formatDate } from '@/lib/format';
 
-export async function RelatedPosts({ posts }: { posts: PostSummary[] }) {
-  const locale = await detectRequestLocale();
+export async function RelatedPosts({
+  posts,
+  locale,
+}: {
+  posts: PostSummary[];
+  locale: AppLocale;
+}) {
   const messages = getLocaleMessages(locale);
 
   if (posts.length === 0) {

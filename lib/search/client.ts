@@ -71,15 +71,6 @@ export async function searchDocuments(query: string, locale: AppLocale): Promise
   }));
 
   return results
-    .sort((left, right) => {
-      const leftLocaleScore = left.locale === locale ? 2 : left.locale === 'zh-CN' ? 1 : 0;
-      const rightLocaleScore = right.locale === locale ? 2 : right.locale === 'zh-CN' ? 1 : 0;
-
-      if (rightLocaleScore !== leftLocaleScore) {
-        return rightLocaleScore - leftLocaleScore;
-      }
-
-      return (left.score || 0) - (right.score || 0);
-    })
-    .filter((result, index, all) => all.findIndex((item) => item.slug === result.slug) === index);
+    .filter((result) => result.locale === locale)
+    .sort((left, right) => (left.score || 0) - (right.score || 0));
 }

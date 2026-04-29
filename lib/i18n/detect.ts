@@ -1,29 +1,26 @@
-import { cache } from 'react';
-import { cookies, headers } from 'next/headers';
+import type { NextRequest } from 'next/server';
 import {
+  DEFAULT_LOCALE,
   LOCALE_COOKIE_NAME,
   isAppLocale,
   isChineseMainlandCountry,
-  normalizeLocale,
   type AppLocale,
 } from './config';
 
-export const detectRequestLocale = cache(async (): Promise<AppLocale> => {
-  const cookieStore = await cookies();
-  const cookieLocale = cookieStore.get(LOCALE_COOKIE_NAME)?.value;
+export function detectLocaleFromRequest(request: Pick<NextRequest, 'cookies' | 'headers'>): AppLocale {
+  const cookieLocale = request.cookies.get(LOCALE_COOKIE_NAME)?.value;
   if (isAppLocale(cookieLocale)) {
     return cookieLocale;
   }
 
-  const requestHeaders = await headers();
   const country =
-    requestHeaders.get('cf-ipcountry') ||
-    requestHeaders.get('x-vercel-ip-country') ||
-    requestHeaders.get('x-country');
+    request.headers.get('cf-ipcountry') ||
+    request.headers.get('x-vercel-ip-country') ||
+    request.headers.get('x-country');
 
   if (isChineseMainlandCountry(country)) {
     return 'zh-CN';
   }
 
-  return normalizeLocale(requestHeaders.get('accept-language'));
-});
+  return DEFAULT_LOCALE;
+}

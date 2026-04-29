@@ -1,7 +1,9 @@
 'use client';
 
+import { usePathname, useRouter } from 'next/navigation';
 import type { AppLocale } from '@/lib/i18n/config';
 import { LOCALE_COOKIE_NAME } from '@/lib/i18n/config';
+import { stripLocalePrefix } from '@/lib/i18n/route';
 
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
 
@@ -19,10 +21,17 @@ export function LocaleToggle({
   currentLocale: AppLocale;
   ariaLabel: string;
 }) {
+  const pathname = usePathname();
+  const router = useRouter();
+
   const switchTo = (target: AppLocale) => {
-    if (target === currentLocale) return;
+    if (target === currentLocale) {
+      return;
+    }
+
+    const rest = stripLocalePrefix(pathname);
     document.cookie = `${LOCALE_COOKIE_NAME}=${target}; path=/; max-age=${COOKIE_MAX_AGE_SECONDS}; samesite=lax`;
-    window.location.reload();
+    router.push(`/${target}${rest}`);
   };
 
   return (

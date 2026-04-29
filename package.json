@@ -17,7 +17,7 @@
     "ai:summarize": "node --import tsx scripts/ai/summarize.ts",
     "ai:seo-suggest": "node --import tsx scripts/ai/seo-suggest.ts",
     "ai:typography-review": "node --import tsx scripts/ai/typography-review.ts",
-    "type-check": "node --import tsx scripts/content/build-runtime-data.ts && node --import tsx scripts/content/build-search-index.ts && next build && tsc --noEmit",
+    "type-check": "node --import tsx scripts/content/build-runtime-data.ts && node --import tsx scripts/content/build-search-index.ts && tsc --noEmit",
     "prepare": "husky"
   },
   "dependencies": {

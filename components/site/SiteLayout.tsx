@@ -2,16 +2,21 @@ import type { ReactNode } from 'react';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { SearchModal } from '@/components/search/SearchModal';
-import { detectRequestLocale } from '@/lib/i18n/detect';
+import type { AppLocale } from '@/lib/i18n/config';
 import { getLocaleMessages } from '@/lib/i18n/messages';
 
-export async function SiteLayout({ children }: { children: ReactNode }) {
-  const locale = await detectRequestLocale();
+export async function SiteLayout({
+  children,
+  locale,
+}: {
+  children: ReactNode;
+  locale: AppLocale;
+}) {
   const messages = getLocaleMessages(locale);
 
   return (
     <div className="site-shell">
-      <Header />
+      <Header locale={locale} />
       <main className="site-main">{children}</main>
       <SearchModal
         closeAriaLabel={messages.search.closeAriaLabel}
@@ -25,7 +30,7 @@ export async function SiteLayout({ children }: { children: ReactNode }) {
         searching={messages.search.searching}
         unavailable={messages.search.unavailable}
       />
-      <Footer />
+      <Footer locale={locale} />
     </div>
   );
 }
