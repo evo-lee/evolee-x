@@ -12,8 +12,14 @@ The monitoring baseline stays intentionally light, but it must answer three ques
 
 ### Deployment Failure
 
-- Source: GitHub Actions `Deploy` workflow
-- Trigger: any failed run on `main`
+- Source: Cloudflare Workers Git integration build
+- Trigger: any failed production build or deploy on `main`
+- Action: Cloudflare notification to the maintainer
+
+### CI Failure
+
+- Source: GitHub Actions `CI` workflow
+- Trigger: any failed run on `main` or pull request
 - Action: GitHub email / notification to the maintainer
 
 ### Health Endpoint Failure
@@ -31,7 +37,8 @@ The monitoring baseline stays intentionally light, but it must answer three ques
 
 ## Dashboard Ownership
 
-- GitHub Actions: deployment success and CI failure visibility
+- Cloudflare Workers: deployment success and build logs
+- GitHub Actions: CI failure visibility
 - `/api/health`: runtime reachability and deployed version check
 - `reports/build/`: build complexity and route inventory
 

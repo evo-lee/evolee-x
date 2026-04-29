@@ -24,7 +24,7 @@ This repository follows a strict reading order:
 - Search modal backed by a generated search index and lazy Fuse.js loading
 - Dual analytics integration with Umami and GA4 under a unified event layer
 - AI editorial tooling for proofreading, summaries, SEO suggestions, and typography review
-- GitHub Actions deployment and content-quality workflows
+- GitHub Actions CI and content-quality workflows
 - Health check and build reporting for operations visibility
 
 ## Typical Use Cases
@@ -154,25 +154,32 @@ npm run cf:build
 npm run cf:deploy
 ```
 
-GitHub Actions deployment:
+Recommended production deployment:
 
 1. Push to `main`.
-2. GitHub Actions runs `.github/workflows/deploy.yml`.
-3. The workflow validates content and build output.
-4. The workflow deploys with OpenNext to Cloudflare Workers.
-5. The workflow checks `/api/health` after deployment.
+2. GitHub Actions runs `.github/workflows/ci.yml` to validate content, source, tests, build output, and the Cloudflare Worker bundle.
+3. Cloudflare Workers Git integration picks up the same commit from the connected GitHub repository.
+4. Cloudflare runs the configured OpenNext deploy command and publishes the Worker.
+5. Check `/api/health` after deployment when verifying production.
 
-Required deployment variables:
+Cloudflare Workers Git integration should own production deployment for this repository. Configure the Worker build settings in Cloudflare with the repository connected to `main` and use this deploy command:
 
-- GitHub Actions Secrets:
-  `CLOUDFLARE_API_TOKEN`
-  `CLOUDFLARE_ACCOUNT_ID`
+```bash
+npm run cf:deploy
+```
+
+Required variables:
+
+- GitHub Actions Variables, for CI build checks:
+  `NEXT_PUBLIC_*`
+- GitHub Actions Secrets, for the advisory AI content check:
   `ANTHROPIC_API_KEY`
-  `OPENAI_API_KEY`
-- GitHub Actions Variables:
+- Cloudflare Worker build variables and secrets, for production deployment:
   `NEXT_PUBLIC_*`
   `AI_PROVIDER`
+  `ANTHROPIC_API_KEY`
   `ANTHROPIC_BASE_URL`
+  `OPENAI_API_KEY`
   `OPENAI_BASE_URL`
 
 Deployment references:

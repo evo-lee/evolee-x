@@ -24,7 +24,7 @@
 - 基于生成式搜索索引和懒加载 Fuse.js 的站内搜索
 - Umami + GA4 双分析系统，统一事件命名层
 - AI 编辑辅助工具：校对、摘要、SEO 建议、排版审查
-- GitHub Actions 部署与内容质量检查工作流
+- GitHub Actions CI 与内容质量检查工作流
 - 健康检查与构建报告，方便运维观察
 
 ## 适用场景
@@ -154,25 +154,32 @@ npm run cf:build
 npm run cf:deploy
 ```
 
-GitHub Actions 自动部署：
+推荐的生产部署方式：
 
 1. 推送代码到 `main`
-2. GitHub Actions 触发 `.github/workflows/deploy.yml`
-3. workflow 先校验内容和构建结果
-4. 再通过 OpenNext 部署到 Cloudflare Workers
-5. 部署后访问 `/api/health` 做健康检查
+2. GitHub Actions 触发 `.github/workflows/ci.yml`，校验内容、源码、测试、构建结果和 Cloudflare Worker 产物
+3. Cloudflare Workers Git integration 从已连接的 GitHub 仓库读取同一个提交
+4. Cloudflare 执行配置好的 OpenNext 部署命令并发布 Worker
+5. 需要验证生产环境时，部署后访问 `/api/health` 做健康检查
 
-部署所需变量：
+本仓库的生产部署由 Cloudflare Workers Git integration 负责。在 Cloudflare 的 Worker build settings 中连接 `main` 分支，并使用这个 deploy command：
 
-- GitHub Actions Secrets：
-  `CLOUDFLARE_API_TOKEN`
-  `CLOUDFLARE_ACCOUNT_ID`
+```bash
+npm run cf:deploy
+```
+
+所需变量：
+
+- GitHub Actions Variables，用于 CI 构建检查：
+  `NEXT_PUBLIC_*`
+- GitHub Actions Secrets，用于非阻塞的 AI 内容检查：
   `ANTHROPIC_API_KEY`
-  `OPENAI_API_KEY`
-- GitHub Actions Variables：
+- Cloudflare Worker build variables 和 secrets，用于生产部署：
   `NEXT_PUBLIC_*`
   `AI_PROVIDER`
+  `ANTHROPIC_API_KEY`
   `ANTHROPIC_BASE_URL`
+  `OPENAI_API_KEY`
   `OPENAI_BASE_URL`
 
 部署参考文档：
