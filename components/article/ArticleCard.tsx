@@ -8,8 +8,17 @@ import { getLocaleMessages } from '@/lib/i18n/messages';
 import type { PostSummary } from '@/lib/content/types';
 import { formatDate } from '@/lib/format';
 
-export function ArticleCard({ post, locale }: { post: PostSummary; locale: AppLocale }) {
+export function ArticleCard({
+  post,
+  locale,
+  priority = false,
+}: {
+  post: PostSummary;
+  locale: AppLocale;
+  priority?: boolean;
+}) {
   const messages = getLocaleMessages(locale);
+  const shouldPrioritizeCover = priority || post.featured || post.coverImage.source === 'default';
 
   return (
     <li className="post-list__item">
@@ -33,7 +42,7 @@ export function ArticleCard({ post, locale }: { post: PostSummary; locale: AppLo
         >
           <ArticleImage
             alt={post.coverImage.alt}
-            priority={post.featured}
+            priority={shouldPrioritizeCover}
             src={post.coverImage.src}
             variant="thumb-md"
           />

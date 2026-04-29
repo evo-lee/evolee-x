@@ -20,8 +20,8 @@ export async function PostList({
 
   return (
     <ul className="post-list">
-      {posts.map((post) => (
-        <ArticleCard key={post.slug} locale={locale} post={post} />
+      {posts.map((post, index) => (
+        <ArticleCard key={post.slug} locale={locale} post={post} priority={index === 0} />
       ))}
     </ul>
   );
