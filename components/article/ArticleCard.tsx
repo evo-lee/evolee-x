@@ -1,10 +1,8 @@
 import Link from 'next/link';
 import { TrackedLink } from '@/components/analytics/TrackedLink';
 import { CategoryBadge } from '@/components/taxonomy/CategoryBadge';
-import { TagList } from '@/components/taxonomy/TagList';
 import { ArticleImage } from '@/components/ui/ArticleImage';
 import type { AppLocale } from '@/lib/i18n/config';
-import { getLocaleMessages } from '@/lib/i18n/messages';
 import type { PostSummary } from '@/lib/content/types';
 import { formatDate } from '@/lib/format';
 
@@ -17,7 +15,6 @@ export function ArticleCard({
   locale: AppLocale;
   priority?: boolean;
 }) {
-  const messages = getLocaleMessages(locale);
   const shouldPrioritizeCover = priority || post.featured || post.coverImage.source === 'default';
 
   return (
@@ -51,7 +48,6 @@ export function ArticleCard({
           <Link href={post.url}>{post.title}</Link>
         </h2>
         <p>{post.excerpt}</p>
-        <TagList ariaLabel={messages.article.tagsAriaLabel(post.title)} compact tags={post.tags} />
       </div>
     </li>
   );

@@ -17,9 +17,9 @@ const localizedSiteConfig = {
     ],
   },
   en: {
-    name: 'evolee\'s garden',
-    title: 'evolee\'s garden',
-    description: 'A small garden of notes — code, books, and quiet observations.',
+    name: 'evolee\'s work',
+    title: 'evolee\'s work',
+    description: "Evolee's notes — code, books, and quiet observations.",
     baseUrl: 'https://litang.one',
     locale: 'en',
     author: 'evolee',

@@ -5,6 +5,9 @@ const localeMessages = {
     header: {
       primaryNavigation: '主导航',
       subtitle: '',
+      localeToggle: {
+        ariaLabel: '切换语言',
+      },
     },
     footer: {
       builtWith: '',
@@ -114,7 +117,10 @@ const localeMessages = {
   en: {
     header: {
       primaryNavigation: 'Primary navigation',
-      subtitle: "evolee's garden of notes",
+      subtitle: "evolee's notes",
+      localeToggle: {
+        ariaLabel: 'Switch language',
+      },
     },
     footer: {
       builtWith: 'Built with Next.js and Cloudflare Workers.',

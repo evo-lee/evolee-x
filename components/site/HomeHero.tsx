@@ -26,7 +26,7 @@ export function HomeHero({
 
   return (
     <section className="hero">
-      <p className="garden-eyebrow">· 花园笔记 · evolee&rsquo;s garden ·</p>
+      <p className="garden-eyebrow">· 花园笔记 · evolee&rsquo;s work ·</p>
       {isChinese ? (
         <>
           <h1 className="hero__title">博客是一座<br /><em style={{ fontStyle: 'italic', color: 'var(--bloom)' }}>小花园。</em></h1>

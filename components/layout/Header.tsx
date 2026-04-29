@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { detectRequestLocale } from '@/lib/i18n/detect';
 import { getLocaleMessages } from '@/lib/i18n/messages';
+import { LocaleToggle } from '@/components/ui/LocaleToggle';
 import { SearchTrigger } from '@/components/ui/SearchTrigger';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { getSiteConfig } from '@/lib/site';
@@ -27,6 +28,10 @@ export async function Header() {
           </nav>
           <div className="site-header__actions" data-no-typography="true">
             <SearchTrigger label={messages.search.button} title={messages.search.openTitle} />
+            <LocaleToggle
+              currentLocale={locale}
+              ariaLabel={messages.header.localeToggle.ariaLabel}
+            />
             <ThemeToggle />
           </div>
         </div>

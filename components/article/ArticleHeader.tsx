@@ -1,5 +1,4 @@
 import { CategoryBadge } from '@/components/taxonomy/CategoryBadge';
-import { TagList } from '@/components/taxonomy/TagList';
 import { detectRequestLocale } from '@/lib/i18n/detect';
 import { getLocaleMessages } from '@/lib/i18n/messages';
 import type { Post } from '@/lib/content/types';
@@ -29,7 +28,6 @@ export async function ArticleHeader({ post }: { post: Post }) {
           </li>
         ) : null}
       </ul>
-      <TagList ariaLabel={messages.article.tagsAriaLabel(post.title)} compact tags={post.tags} />
     </header>
   );
 }
