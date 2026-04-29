@@ -2,15 +2,17 @@
 
 :root {
   color-scheme: light;
-  --bg: #f6f1e3;
-  --surface: #fbf8ee;
-  --surface-strong: #ede7d0;
-  --text: #1e3528;
-  --text-soft: #5a6b5c;
-  --line: #d6cfb8;
-  --accent: #3a6a48;
-  --accent-soft: #d4e5d9;
-  --bloom: #c97c5d;
+  --bg: #f4efe3;
+  --surface: #fffaf0;
+  --surface-strong: #ebe2cf;
+  --text: #273127;
+  --text-soft: #687060;
+  --line: #d8cfbb;
+  --accent: #4f6d55;
+  --accent-soft: #dbe7d8;
+  --bloom: #ad6d55;
+  --paper-fiber: rgba(75, 65, 45, 0.035);
+  --paper-warmth: rgba(255, 250, 235, 0.72);
   --max-width: 76rem;
 }
 
@@ -20,30 +22,34 @@ html[data-theme='light'] {
 
 html[data-theme='dark'] {
   color-scheme: dark;
-  --bg: #132118;
-  --surface: #1a2921;
-  --surface-strong: #1f3226;
-  --text: #e8dfc7;
-  --text-soft: #9fae9f;
-  --line: #25362a;
-  --accent: #7eb08a;
-  --accent-soft: #1e3528;
-  --bloom: #e0a080;
+  --bg: #171a16;
+  --surface: #20231d;
+  --surface-strong: #2a2c23;
+  --text: #ebe4d5;
+  --text-soft: #b4ad9d;
+  --line: #3a382f;
+  --accent: #9eb38e;
+  --accent-soft: #2a3428;
+  --bloom: #d59b7b;
+  --paper-fiber: rgba(235, 228, 213, 0.035);
+  --paper-warmth: rgba(32, 35, 29, 0.72);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]),
   html:not([data-theme]) {
     color-scheme: dark;
-    --bg: #132118;
-    --surface: #1a2921;
-    --surface-strong: #1f3226;
-    --text: #e8dfc7;
-    --text-soft: #9fae9f;
-    --line: #25362a;
-    --accent: #7eb08a;
-    --accent-soft: #1e3528;
-    --bloom: #e0a080;
+    --bg: #171a16;
+    --surface: #20231d;
+    --surface-strong: #2a2c23;
+    --text: #ebe4d5;
+    --text-soft: #b4ad9d;
+    --line: #3a382f;
+    --accent: #9eb38e;
+    --accent-soft: #2a3428;
+    --bloom: #d59b7b;
+    --paper-fiber: rgba(235, 228, 213, 0.035);
+    --paper-warmth: rgba(32, 35, 29, 0.72);
   }
 }
 
@@ -58,10 +64,19 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
+  background:
+    linear-gradient(90deg, transparent 0, var(--paper-fiber) 50%, transparent 100%),
+    repeating-linear-gradient(0deg, transparent 0 11px, var(--paper-fiber) 12px),
+    radial-gradient(ellipse at top, var(--paper-warmth), transparent 62%),
+    var(--bg);
   color: var(--text);
   font-family: var(--font-noto-serif-sc), 'Songti SC', 'Source Han Serif SC', 'Iowan Old Style', 'Palatino Linotype', Palatino, serif;
   line-height: 1.75;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent-soft) 78%, var(--surface));
+  color: var(--text);
 }
 
 a {
@@ -76,6 +91,9 @@ img {
 
 .site-shell {
   min-height: 100vh;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 28%, transparent), transparent 18rem),
+    transparent;
 }
 
 .site-header {
@@ -83,7 +101,7 @@ img {
   top: 0;
   z-index: 20;
   backdrop-filter: blur(18px);
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
   border-bottom: 1px dashed var(--line);
 }
 
@@ -174,7 +192,7 @@ img {
 .control-button {
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
   color: var(--text);
   padding: 0.42rem 0.9rem;
   font: inherit;
@@ -230,13 +248,21 @@ img {
   text-transform: uppercase;
 }
 
-.page-header h1,
-.article-header h1 {
+.page-header h1 {
   margin: 0;
   font-size: clamp(2.5rem, 6vw, 5.4rem);
   line-height: 0.98;
   letter-spacing: -0.04em;
   max-width: 12ch;
+}
+
+.article-header h1 {
+  max-width: min(100%, 58rem);
+  margin: 0;
+  font-size: clamp(2.15rem, 4.5vw, 4.4rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+  text-wrap: balance;
 }
 
 .hero__title {
@@ -345,6 +371,24 @@ img {
   gap: 0.55rem;
 }
 
+.article-header .page-meta,
+.article-header .tag-list {
+  row-gap: 0.7rem;
+  column-gap: 0.85rem;
+}
+
+.article-header .tag-list {
+  margin-top: 0.1rem;
+}
+
+.article-header .tag-list a,
+.article-header .category-badge {
+  min-height: 2.1rem;
+  padding-inline: 0.9rem;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
 .post-list__cover {
   display: block;
   margin-bottom: 0.15rem;
@@ -386,8 +430,8 @@ img {
 
 .article-layout {
   display: grid;
-  grid-template-columns: 16rem minmax(0, 1fr);
-  gap: 2rem;
+  grid-template-columns: minmax(0, 1fr) minmax(11rem, 14rem);
+  gap: clamp(2rem, 4vw, 3.5rem);
   align-items: start;
   padding-top: 2rem;
 }
@@ -509,7 +553,7 @@ html[data-theme='dark'] .prose code:not(pre code) {
 html[data-theme='dark'] .prose pre {
   border-color: color-mix(in srgb, var(--line) 78%, black);
   background:
-    linear-gradient(180deg, color-mix(in srgb, oklch(0.3 0.015 248) 94%, black), oklch(0.18 0.01 248));
+    linear-gradient(180deg, color-mix(in srgb, var(--surface-strong) 82%, black), #141610);
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, white 8%, transparent),
     0 16px 36px color-mix(in srgb, black 28%, transparent);
@@ -551,26 +595,37 @@ html[data-theme='dark'] .prose [data-theme~='github-dark-dimmed'] span {
 
 .toc {
   position: sticky;
-  top: 5.5rem;
+  top: 5.25rem;
   display: grid;
-  gap: 0.8rem;
-  padding: 1rem;
+  max-height: min(54vh, 28rem);
+  gap: 0.65rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.85rem 0.75rem;
   border: 1px dashed var(--line);
-  border-radius: 1.25rem;
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--line) 78%, var(--accent)) transparent;
 }
 
 .toc__list {
   display: grid;
-  gap: 0.55rem;
+  gap: 0.42rem;
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: 0.94rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
 }
 
 .toc__list li[data-level='3'] {
-  padding-left: 0.8rem;
+  padding-left: 0.65rem;
+}
+
+.toc__list a {
+  display: block;
+  color: var(--text-soft);
 }
 
 .toc__list a[aria-current='location'] {
@@ -776,6 +831,7 @@ html[data-theme='dark'] .prose [data-theme~='github-dark-dimmed'] span {
 
   .toc {
     position: static;
+    max-height: 14rem;
   }
 }
 

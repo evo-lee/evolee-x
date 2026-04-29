@@ -21,11 +21,6 @@ export async function ArticleContent({
 
   return (
     <div className="article-layout">
-      <ArticleToc
-        headings={headings}
-        ariaLabel={messages.article.tocAriaLabel}
-        title={messages.article.tocTitle}
-      />
       <article className="prose-panel">
         {enableTypography ? <ArticleTypography selector={selector} /> : null}
         <div
@@ -34,6 +29,11 @@ export async function ArticleContent({
           dangerouslySetInnerHTML={{ __html: html }}
         />
       </article>
+      <ArticleToc
+        headings={headings}
+        ariaLabel={messages.article.tocAriaLabel}
+        title={messages.article.tocTitle}
+      />
     </div>
   );
 }
