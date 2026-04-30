@@ -19,31 +19,31 @@ export function ArticleCard({
 
   return (
     <li className="post-list__item">
-      <div className="post-list__meta" data-no-typography="true">
-        <time dateTime={post.date.toISOString()}>{formatDate(post.date, locale)}</time>
-        {post.category ? (
-          <>
-            <span className="meta-separator">/</span>
-            <CategoryBadge category={post.category} locale={locale} />
-          </>
-        ) : null}
-      </div>
+      <TrackedLink
+        className="post-list__cover"
+        href={post.url}
+        ariaHidden
+        eventName="click_cover"
+        eventParams={{ slug: post.slug }}
+        tabIndex={-1}
+      >
+        <ArticleImage
+          alt={post.coverImage.alt}
+          priority={shouldPrioritizeCover}
+          src={post.coverImage.src}
+          variant="thumb-md"
+        />
+      </TrackedLink>
       <div className="post-list__body">
-        <TrackedLink
-          className="post-list__cover"
-          href={post.url}
-          ariaHidden
-          eventName="click_cover"
-          eventParams={{ slug: post.slug }}
-          tabIndex={-1}
-        >
-          <ArticleImage
-            alt={post.coverImage.alt}
-            priority={shouldPrioritizeCover}
-            src={post.coverImage.src}
-            variant="thumb-md"
-          />
-        </TrackedLink>
+        <div className="post-list__meta" data-no-typography="true">
+          <time dateTime={post.date.toISOString()}>{formatDate(post.date, locale)}</time>
+          {post.category ? (
+            <>
+              <span className="meta-separator">/</span>
+              <CategoryBadge category={post.category} locale={locale} />
+            </>
+          ) : null}
+        </div>
         <h2>
           <Link href={post.url}>{post.title}</Link>
         </h2>

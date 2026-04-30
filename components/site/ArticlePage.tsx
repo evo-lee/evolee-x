@@ -23,8 +23,8 @@ export function ArticlePage({
     <section className="page-grid">
       <StructuredData data={articleStructuredData} />
       <StructuredData data={breadcrumbStructuredData} />
-      <ArticleHeader post={post} locale={locale} />
       <CoverImage alt={post.coverImage.alt} priority src={post.coverImage.src} />
+      <ArticleHeader post={post} locale={locale} />
       <ArticleContent headings={post.headings} html={post.html} locale={locale} scope={`post-${post.slug}`} />
       <RelatedPosts posts={relatedPosts} locale={locale} />
     </section>
