@@ -47,6 +47,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
   const isDev = process.env.NODE_ENV === 'development';
+  const shouldLoadUmami = !isDev && enableUmami && umamiScriptUrl && umamiWebsiteId;
+  const shouldLoadGA = !isDev && enableGA && gaId;
 
   return (
     <html
@@ -55,11 +57,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       suppressHydrationWarning
     >
       <head>
-        {enableUmami && umamiScriptUrl && umamiWebsiteId ? (
+        {shouldLoadUmami ? (
           <Script src={umamiScriptUrl} data-website-id={umamiWebsiteId} strategy="afterInteractive" />
         ) : null}
       </head>
-      <body className="light">
+      <body className="light" suppressHydrationWarning>
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var s=window.localStorage.getItem('${THEME_STORAGE_KEY}');var t=s==='dark'||s==='light'?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.body.className=t;}catch(e){}})();`,
@@ -72,7 +74,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <RouteChangeDebug />
         </Suspense>
       </body>
-      {enableGA && gaId ? <GoogleAnalytics gaId={gaId} /> : null}
+      {shouldLoadGA ? <GoogleAnalytics gaId={gaId} /> : null}
     </html>
   );
 }
