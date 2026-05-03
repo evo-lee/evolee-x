@@ -260,18 +260,17 @@ button {
 }
 
 .nav__mobile {
-  position: fixed;
-  inset: 52px 0 0 0;
+  position: static;
   background: var(--bg);
-  z-index: 99;
   border-top: 1px solid var(--border);
   padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.12);
 }
 
-.nav__mobile button {
+.nav__mobile a {
   background: none;
   border: 0;
   border-bottom: 1px solid var(--border);
@@ -284,7 +283,7 @@ button {
   color: var(--fg-muted);
 }
 
-.nav__mobile button[data-active='true'] {
+.nav__mobile a[data-active='true'] {
   font-weight: 500;
   color: var(--fg);
 }
