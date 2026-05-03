@@ -9,6 +9,7 @@ const OUTPUT_PATH = path.join(process.cwd(), 'public', 'search-index.json');
 async function main() {
   const posts = await getAllPostVariants();
   const payload = posts.map((post) => ({
+    locale: post.locale,
     slug: post.slug,
     url: post.url,
     title: post.title,

@@ -1,16 +1,15 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArticleBody } from '@/components/article/ArticleBody';
 import { ArticleToc } from '@/components/article/ArticleToc';
 import { CopyCodeButtons } from '@/components/article/CopyCodeButtons';
 import { CoverPlaceholder, pickCoverColor } from '@/components/site/CoverPlaceholder';
+import { LocalizedLink } from '@/components/site/LocalizedLink';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { formatDate, formatReadTime } from '@/lib/format';
-import {
-  getRuntimePostBySlug,
-  getRuntimePosts,
-} from '@/lib/content/runtime';
+import { getRuntimePostBySlug, getRuntimePosts } from '@/lib/content/runtime';
+import { getLocaleMessages } from '@/lib/i18n/messages';
+import { getRequestLocale } from '@/lib/i18n/server';
 import { buildPostMetadata } from '@/lib/seo/metadata';
 import {
   buildBlogPostingStructuredData,
@@ -19,24 +18,29 @@ import {
 
 type PageProps = {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export function generateStaticParams() {
   return getRuntimePosts().map((post) => ({ slug: post.slug }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
+  const locale = await getRequestLocale(searchParams);
+  const messages = getLocaleMessages(locale);
   const { slug } = await params;
-  const post = getRuntimePostBySlug(slug);
+  const post = getRuntimePostBySlug(slug, locale);
   if (!post) {
-    return { title: '文章不存在' };
+    return { title: messages.post.missingTitle };
   }
   return buildPostMetadata(post);
 }
 
-export default async function PostPage({ params }: PageProps) {
+export default async function PostPage({ params, searchParams }: PageProps) {
+  const locale = await getRequestLocale(searchParams);
+  const messages = getLocaleMessages(locale);
   const { slug } = await params;
-  const post = getRuntimePostBySlug(slug);
+  const post = getRuntimePostBySlug(slug, locale);
   if (!post) notFound();
 
   const readTime = formatReadTime(post.text || post.excerpt || post.title);
@@ -48,17 +52,17 @@ export default async function PostPage({ params }: PageProps) {
       <StructuredData data={buildBlogPostingStructuredData(post)} />
       <StructuredData
         data={buildBreadcrumbStructuredData([
-          { name: '首页', path: '/' },
-          { name: '文章', path: '/posts' },
+          { name: messages.post.homeCrumb, path: '/' },
+          { name: messages.post.postsCrumb, path: '/posts' },
           { name: post.title, path: post.url },
         ])}
       />
 
       <main className="container--wide article-layout">
         <article>
-          <Link href="/posts" className="article-back">
-            ← 返回文章列表
-          </Link>
+          <LocalizedLink href="/posts" className="article-back">
+            {messages.post.back}
+          </LocalizedLink>
 
           <div className="article-cover">
             {showPlaceholder ? (

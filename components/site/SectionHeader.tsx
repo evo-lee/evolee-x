@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { LocalizedLink } from './LocalizedLink';
 
 export function SectionHeader({
   num,
@@ -20,9 +20,9 @@ export function SectionHeader({
         <span className="section-header__num">{num}</span>
         <div className="section-header__line" />
         {linkHref && linkLabel ? (
-          <Link href={linkHref} className="section-header__link">
+          <LocalizedLink href={linkHref} className="section-header__link">
             {linkLabel}
-          </Link>
+          </LocalizedLink>
         ) : null}
       </div>
       <h2 className="section-header__title">

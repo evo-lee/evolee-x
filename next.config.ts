@@ -8,6 +8,19 @@ const __dirname = dirname(__filename);
 const nextConfig: NextConfig = {
   outputFileTracingRoot: __dirname,
 
+  async rewrites() {
+    return [
+      {
+        source: '/:locale(en|zh-CN)',
+        destination: '/?__locale=:locale',
+      },
+      {
+        source: '/:locale(en|zh-CN)/:path*',
+        destination: '/:path*?__locale=:locale',
+      },
+    ];
+  },
+
   images: {
     loader: 'custom',
     loaderFile: './lib/cloudflare/loader.ts',

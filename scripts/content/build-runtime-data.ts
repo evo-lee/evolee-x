@@ -30,6 +30,7 @@ async function main() {
     thumbnailAlt: post.thumbnailAlt,
     imageCredit: post.imageCredit,
     ogImage: post.ogImage,
+    locale: post.locale,
     slug: post.slug,
     url: post.url,
     excerpt: post.excerpt,
@@ -39,7 +40,7 @@ async function main() {
   const payload = {
     generatedAt: new Date().toISOString(),
     posts,
-    postMap: Object.fromEntries(fullPosts.map((post) => [post.slug, post])),
+    postMap: Object.fromEntries(fullPosts.map((post) => [`${post.slug}:${post.locale}`, post])),
     pages,
   };
 

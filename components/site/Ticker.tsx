@@ -1,4 +1,4 @@
-export function Ticker({ items }: { items: string[] }) {
+export function Ticker({ items }: { items: readonly string[] }) {
   if (items.length === 0) return null;
   const text = items.join('   ·   ') + '   ·   ';
   return (

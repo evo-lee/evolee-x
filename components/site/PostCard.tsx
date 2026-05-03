@@ -1,5 +1,9 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { formatDate, formatReadTime } from '@/lib/format';
+import { getLocalePrefix, withLocalePrefix } from '@/lib/i18n/routes';
 import type { PostSummary } from '@/lib/content/types';
 import { CoverPlaceholder, pickCoverColor } from './CoverPlaceholder';
 
@@ -7,9 +11,11 @@ export function PostCard({ post, featured = false }: { post: PostSummary; featur
   const cardClass = featured ? 'post-card post-card--featured' : 'post-card';
   const coverClass = featured ? 'post-card__cover post-card__cover--featured' : 'post-card__cover';
   const readTime = formatReadTime(post.excerpt || post.description || post.title);
+  const pathname = usePathname() || '/';
+  const localePrefix = getLocalePrefix(pathname);
 
   return (
-    <Link href={post.url} className={cardClass}>
+    <Link href={withLocalePrefix(post.url, localePrefix)} className={cardClass}>
       <div className={coverClass}>
         {post.coverImage?.src && post.coverImage.source !== 'default' ? (
           <img

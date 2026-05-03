@@ -2,6 +2,7 @@ import { stat } from 'fs/promises';
 import * as path from 'path';
 import {
   listMarkdownFiles,
+  pathToLocale,
   pathToSlug,
   POSTS_DIR,
   readUtf8,
@@ -10,6 +11,7 @@ import {
 import { parsePostSource } from './frontmatter';
 import { processMarkdown } from './processor';
 import { resolveCoverImage } from './cover-resolver';
+import type { AppLocale } from '@/lib/i18n/config';
 import type { Post, PostSummary } from './types';
 
 function isVisible(draft: boolean): boolean {
@@ -27,6 +29,7 @@ async function loadPostFromFile(filePath: string): Promise<Post> {
     fallbackDate: fileStats.mtime,
   });
   const slug = pathToSlug(POSTS_DIR, filePath);
+  const locale = pathToLocale(POSTS_DIR, filePath);
   const { rawHtml, ...processed } = await processMarkdown(body);
   const coverImage = await resolveCoverImage({
     slug,
@@ -37,6 +40,7 @@ async function loadPostFromFile(filePath: string): Promise<Post> {
 
   return {
     ...frontmatter,
+    locale,
     ...processed,
     slug,
     url: `/posts/${slug}`,
@@ -57,37 +61,43 @@ export async function getAllPostVariants(): Promise<Post[]> {
   return loadAllPosts();
 }
 
-export async function getAllPosts(): Promise<PostSummary[]> {
+export async function getAllPosts(locale: AppLocale = 'zh-CN'): Promise<PostSummary[]> {
   const posts = await loadAllPosts();
-  return posts.map((post) => ({
-    title: post.title,
-    description: post.description,
-    date: post.date,
-    updated: post.updated,
-    tags: post.tags,
-    category: post.category,
-    draft: post.draft,
-    featured: post.featured,
-    author: post.author,
-    canonical: post.canonical,
-    summary: post.summary,
-    seoTitle: post.seoTitle,
-    seoDescription: post.seoDescription,
-    cover: post.cover,
-    coverAlt: post.coverAlt,
-    thumbnail: post.thumbnail,
-    thumbnailAlt: post.thumbnailAlt,
-    imageCredit: post.imageCredit,
-    ogImage: post.ogImage,
-    slug: post.slug,
-    url: post.url,
-    excerpt: post.excerpt,
-    coverImage: post.coverImage,
-  }));
+  return posts
+    .filter((post) => post.locale === locale)
+    .map((post) => ({
+      title: post.title,
+      description: post.description,
+      date: post.date,
+      updated: post.updated,
+      tags: post.tags,
+      category: post.category,
+      draft: post.draft,
+      featured: post.featured,
+      author: post.author,
+      canonical: post.canonical,
+      summary: post.summary,
+      seoTitle: post.seoTitle,
+      seoDescription: post.seoDescription,
+      cover: post.cover,
+      coverAlt: post.coverAlt,
+      thumbnail: post.thumbnail,
+      thumbnailAlt: post.thumbnailAlt,
+      imageCredit: post.imageCredit,
+      ogImage: post.ogImage,
+      locale: post.locale,
+      slug: post.slug,
+      url: post.url,
+      excerpt: post.excerpt,
+      coverImage: post.coverImage,
+    }));
 }
 
-export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const candidates = slugToFileCandidates(POSTS_DIR, slug);
+export async function getPostBySlug(
+  slug: string,
+  locale: AppLocale = 'zh-CN'
+): Promise<Post | null> {
+  const candidates = slugToFileCandidates(POSTS_DIR, slug, locale);
   for (const filePath of candidates) {
     try {
       const post = await loadPostFromFile(filePath);

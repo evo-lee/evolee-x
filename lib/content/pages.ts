@@ -2,12 +2,14 @@ import * as path from 'path';
 import {
   listMarkdownFiles,
   PAGES_DIR,
+  pathToLocale,
   pathToSlug,
   readUtf8,
   slugToFileCandidates,
 } from './files';
 import { parsePageSource } from './frontmatter';
 import { processMarkdown } from './processor';
+import type { AppLocale } from '@/lib/i18n/config';
 import type { Page } from './types';
 
 function isVisible(draft: boolean): boolean {
@@ -18,10 +20,12 @@ async function loadPageFromFile(filePath: string): Promise<Page> {
   const source = await readUtf8(filePath);
   const { body, frontmatter } = parsePageSource(source, filePath);
   const slug = pathToSlug(PAGES_DIR, filePath);
+  const locale = pathToLocale(PAGES_DIR, filePath);
   const processed = await processMarkdown(body);
 
   return {
     ...frontmatter,
+    locale,
     html: processed.html,
     excerpt: processed.excerpt,
     text: processed.text,
@@ -43,8 +47,11 @@ export async function getAllPageVariants(): Promise<Page[]> {
   return getAllPages();
 }
 
-export async function getPageBySlug(slug: string): Promise<Page | null> {
-  const candidates = slugToFileCandidates(PAGES_DIR, slug);
+export async function getPageBySlug(
+  slug: string,
+  locale: AppLocale = 'zh-CN'
+): Promise<Page | null> {
+  const candidates = slugToFileCandidates(PAGES_DIR, slug, locale);
   for (const filePath of candidates) {
     try {
       const page = await loadPageFromFile(filePath);

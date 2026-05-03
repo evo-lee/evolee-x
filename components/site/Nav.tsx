@@ -3,6 +3,14 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import {
+  getAlternateLocaleHref,
+  getLocalePrefix,
+  prefixToLocale,
+  stripLocalePrefix,
+  withLocalePrefix,
+} from '@/lib/i18n/routes';
+import { getLocaleMessages } from '@/lib/i18n/messages';
 import { siteConfig } from '@/lib/site';
 import { THEME_STORAGE_KEY } from '@/lib/theme';
 
@@ -16,6 +24,9 @@ function readTheme(): Theme {
 
 export function Nav() {
   const pathname = usePathname() || '/';
+  const localePrefix = getLocalePrefix(pathname);
+  const messages = getLocaleMessages(prefixToLocale(localePrefix));
+  const basePathname = stripLocalePrefix(pathname);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<Theme>('light');
 
@@ -24,8 +35,8 @@ export function Nav() {
   }, []);
 
   const isActive = (href: string) => {
-    if (href === '/') return pathname === '/';
-    return pathname === href || pathname.startsWith(`${href}/`);
+    if (href === '/') return basePathname === '/';
+    return basePathname === href || basePathname.startsWith(`${href}/`);
   };
 
   const toggleTheme = () => {
@@ -40,7 +51,11 @@ export function Nav() {
   return (
     <nav className="nav">
       <div className="container nav__inner">
-        <Link href="/" className="nav__logo" aria-label={siteConfig.name}>
+        <Link
+          href={withLocalePrefix('/', localePrefix)}
+          className="nav__logo"
+          aria-label={siteConfig.name}
+        >
           <span className="nav__logo-name">evo-lee</span>
           <span className="nav__logo-tag">lee刻意进化</span>
         </Link>
@@ -49,14 +64,28 @@ export function Nav() {
           {siteConfig.nav.map((item) => (
             <Link
               key={item.href}
-              href={item.href}
+              href={withLocalePrefix(item.href, localePrefix)}
               className="nav__link"
               data-active={isActive(item.href) || undefined}
             >
-              {item.label}
+              {messages.nav[item.id]}
             </Link>
           ))}
           <div className="nav__controls">
+            <div className="locale-switch" aria-label="切换语言">
+              <Link
+                href={getAlternateLocaleHref(pathname, '/zh-CN')}
+                data-active={localePrefix !== '/en' || undefined}
+              >
+                中
+              </Link>
+              <Link
+                href={getAlternateLocaleHref(pathname, '/en')}
+                data-active={localePrefix === '/en' || undefined}
+              >
+                EN
+              </Link>
+            </div>
             <button
               type="button"
               className="icon-btn"
@@ -78,9 +107,13 @@ export function Nav() {
             aria-label="菜单"
             aria-expanded={mobileOpen}
           >
-            <span style={{ transform: mobileOpen ? 'rotate(45deg) translate(4px, 4px)' : 'none' }} />
+            <span
+              style={{ transform: mobileOpen ? 'rotate(45deg) translate(4px, 4px)' : 'none' }}
+            />
             <span style={{ opacity: mobileOpen ? 0 : 1 }} />
-            <span style={{ transform: mobileOpen ? 'rotate(-45deg) translate(4px, -4px)' : 'none' }} />
+            <span
+              style={{ transform: mobileOpen ? 'rotate(-45deg) translate(4px, -4px)' : 'none' }}
+            />
           </button>
         </div>
       </div>
@@ -90,13 +123,29 @@ export function Nav() {
           {siteConfig.nav.map((item) => (
             <Link
               key={item.href}
-              href={item.href}
+              href={withLocalePrefix(item.href, localePrefix)}
               data-active={isActive(item.href) || undefined}
               onClick={() => setMobileOpen(false)}
             >
-              {item.label}
+              {messages.nav[item.id]}
             </Link>
           ))}
+          <div className="locale-switch locale-switch--mobile" aria-label="切换语言">
+            <Link
+              href={getAlternateLocaleHref(pathname, '/zh-CN')}
+              data-active={localePrefix !== '/en' || undefined}
+              onClick={() => setMobileOpen(false)}
+            >
+              中
+            </Link>
+            <Link
+              href={getAlternateLocaleHref(pathname, '/en')}
+              data-active={localePrefix === '/en' || undefined}
+              onClick={() => setMobileOpen(false)}
+            >
+              EN
+            </Link>
+          </div>
         </div>
       )}
     </nav>
