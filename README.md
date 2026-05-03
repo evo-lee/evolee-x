@@ -4,80 +4,69 @@ English | [简体中文](./README.zh-CN.md)
 
 ## Project Overview
 
-`evolee-x` is a personal publishing stack built with Next.js App Router and OpenNext for Cloudflare Workers. It is designed for technical writing, reading notes, essays, and long-form pages while keeping the runtime edge-compatible, documentation-first, and easy to extend without a database.
+`evolee-x` is a personal publishing site built with Next.js 15 App Router and
+OpenNext for Cloudflare Workers. It is designed for essays, technical writing,
+reading notes, projects, and long-form pages while keeping the runtime
+edge-compatible and database-free.
 
-This repository follows a strict reading order:
-
-1. Documentation first
-2. Architecture and API reference second
-3. Routes, components, and implementation last
+The current implementation uses generated content artifacts for runtime reads,
+real locale routes for Cloudflare compatibility, and centralized helpers for SEO,
+images, analytics, search, and typography.
 
 ## Feature Coverage
 
-- Markdown/MDX content pipeline with Zod-validated frontmatter
-- Generated runtime snapshot for Cloudflare Workers without filesystem traversal
-- Core pages for posts, tags, categories, archives, About, and Projects
-- SEO layer for metadata, Open Graph, Twitter cards, RSS, sitemap, robots, and JSON-LD
-- Fixed-variant image delivery for thumbnails, covers, inline assets, and OG images
-- Componentized site shell and article rendering flow
-- Scoped Chinese typography enhancement behind a feature flag
-- Search modal backed by a generated search index and lazy Fuse.js loading
-- Dual analytics integration with Umami and GA4 under a unified event layer
-- AI editorial tooling for proofreading, summaries, SEO suggestions, and typography review
-- GitHub Actions CI and content-quality workflows
-- Health check and build reporting for operations visibility
+- Markdown/MDX content pipeline with Zod-validated frontmatter.
+- Generated runtime snapshot at `content/.generated/runtime-data.json`.
+- Generated client search index at `public/search-index.json`.
+- Real locale routes under `app/[locale]/` for `/en` and `/zh-CN`.
+- Unprefixed routes under `app/(site)/` using the default Chinese locale.
+- Current pages: home, posts list, post detail, projects, and about.
+- Locale-aware content resolution with English fallback to Chinese content.
+- SEO routes and helpers for metadata, JSON-LD, RSS, sitemap, and robots.
+- Cloudflare image route and custom image loader helpers.
+- Article rendering, table of contents, copy buttons, site shell, and localized nav.
+- Search bar backed by the generated search index.
+- Umami and GA4 analytics behind public feature flags.
+- AI editorial CLI tools for proofreading, summaries, SEO suggestions, and typography review.
+- Health endpoint at `/api/health`.
 
-## Typical Use Cases
+## Project Structure
 
-- Personal technical blog
-- Reading log and essay archive
-- Static-first content site on Cloudflare Workers
-- Documentation-heavy personal website without a CMS or database
+- `app/(site)/`: unprefixed site routes using the default `zh-CN` locale.
+- `app/[locale]/`: concrete localized routes for `/en` and `/zh-CN`.
+- `app/api/health/route.ts`: health check endpoint.
+- `app/image/[variant]/[token]/route.ts`: public image route.
+- `app/rss.xml/route.ts`, `app/robots.ts`, `app/sitemap.ts`: metadata routes.
+- `components/`: article, site shell, analytics, SEO, and dev-only UI components.
+- `content/posts/`: source post content.
+- `content/pages/`: source page content such as `about.mdx` and `about.en.mdx`.
+- `content/.generated/`: generated runtime content and cover metadata.
+- `content/taxonomy/`: taxonomy source data.
+- `lib/content/`: content parsing, processing, runtime access, and cover resolution.
+- `lib/i18n/`: locale config, route helpers, messages, and server locale utilities.
+- `lib/seo/`: metadata, Open Graph, and structured data helpers.
+- `lib/cloudflare/`: image variant and loader utilities.
+- `lib/search/`: client search types and index loading.
+- `lib/analytics/`: analytics event registry, providers, and dispatch.
+- `lib/typography/`: Chinese typography integration and exclusion policy.
+- `scripts/content/`: runtime snapshot and search index builders.
+- `scripts/ci/`: repository checks and build-output guards.
+- `scripts/ai/`: editorial helper CLIs.
+- `config/`: operations and typography notes used by the implementation.
+- `reports/`: build and AI report output placeholders.
+- `tests/`: focused regression tests.
 
-## Documentation Zone
+## Requirements
 
-Start here before reading code:
-
-- [README.md](./README.md): project overview, setup, workflow, and examples
-- [README.zh-CN.md](./README.zh-CN.md): Chinese guide with the same scope
-- [docs/getting-started.zh-CN.md](./docs/getting-started.zh-CN.md): beginner-friendly setup and modification guide
-- [docs/api-reference.md](./docs/api-reference.md): function-level reference and design notes
-- [docs/api-reference.zh-CN.md](./docs/api-reference.zh-CN.md): Chinese API reference
-- [docs/content-pipeline.md](./docs/content-pipeline.md): content ingestion and runtime snapshot flow
-- [docs/search-system.md](./docs/search-system.md): search index and query flow
-- [docs/analytics-system.md](./docs/analytics-system.md): analytics ownership and event dispatch
-- [docs/ai-tooling.md](./docs/ai-tooling.md): editorial CLI tools
-- [docs/operations.md](./docs/operations.md): health checks and build reporting
-- [docs/phases/phase-10-deployment.md](./docs/phases/phase-10-deployment.md): deployment workflow details
-- [`docs/phases/`](./docs/phases): implementation records for phases 0 to 11
-- [PROGRESS.md](./PROGRESS.md): current implementation status
-
-## Code Zone
-
-Read these after the docs:
-
-- `app/`: App Router pages, metadata routes, image route, health endpoint, loading/error boundaries
-- `components/`: layout, article, taxonomy, and shared UI components
-- `content/`: source Markdown/MDX content and generated sidecar data
-- `lib/content/`: frontmatter parsing, Markdown processing, runtime access, taxonomy, cover resolution
-- `lib/seo/`: metadata builders, Open Graph helpers, and structured data
-- `lib/cloudflare/`: public image route helpers and variant catalog
-- `lib/search/`: client-side search index loading and query execution
-- `lib/analytics/`: event registry, provider guards, event dispatch
-- `lib/typography/`: Heti client integration and exclusion policy
-- `scripts/content/`: build-time runtime snapshot and search index generation
-- `scripts/ai/`: editorial helper CLIs
-- `scripts/ci/`: content linting and build report generation
-- `config/`: typography and operations documentation used by the implementation
-
-## Environment Requirements
-
-- Node.js `>= 20`
+- Node.js `>=20`
 - npm
-- Cloudflare Wrangler for preview and deployment
-- Optional: Anthropic API access for AI editorial tooling
+- Cloudflare Wrangler for Worker preview and deployment
+- Optional API keys for AI editorial tooling
 
-## Installation and Configuration
+`next/font` may need network access during production or Cloudflare builds to
+fetch Google font metadata.
+
+## Commands
 
 Install dependencies:
 
@@ -85,111 +74,29 @@ Install dependencies:
 npm install
 ```
 
-Review these files before local development:
+Build generated content artifacts:
 
-- `package.json`: scripts and tool entry points
-- `next.config.ts`: Next.js and image settings
-- `open-next.config.ts`: OpenNext Cloudflare adapter settings
-- `wrangler.jsonc`: Worker preview and deployment configuration
+```bash
+npm run content:build
+```
 
-### Environment Variables
-
-The project is mostly code-configured, but these variables affect runtime behavior:
-
-- `NEXT_PUBLIC_ENABLE_HETI`: enables article-scoped Chinese typography enhancement
-- `NEXT_PUBLIC_ENABLE_UMAMI`: enables Umami analytics loading
-- `NEXT_PUBLIC_UMAMI_SCRIPT_URL`: Umami script URL
-- `NEXT_PUBLIC_UMAMI_WEBSITE_ID`: Umami website identifier
-- `NEXT_PUBLIC_ENABLE_GA`: enables GA4 loading
-- `NEXT_PUBLIC_GA_ID`: GA4 measurement ID
-- `AI_PROVIDER`: `anthropic` or `openai`
-- `ANTHROPIC_API_KEY`: required when `AI_PROVIDER=anthropic`
-- `ANTHROPIC_BASE_URL`: optional Anthropic-compatible API base URL
-- `OPENAI_API_KEY`: required when `AI_PROVIDER=openai`
-- `OPENAI_BASE_URL`: optional OpenAI-compatible API base URL
-
-## Run Steps
-
-### Local development
+Start local development:
 
 ```bash
 npm run dev
 ```
 
-This command generates:
+`dev` runs `content:build` first, then starts the Next.js dev server with
+Turbopack.
 
-- `content/.generated/runtime-data.json`
-- `public/search-index.json`
-
-Then it starts the Next.js development server with Turbopack.
-
-### Production build
+Build and serve the production Next.js output:
 
 ```bash
 npm run build
 npm run start
 ```
 
-`build` regenerates content artifacts before the Next.js production build.
-
-### Cloudflare preview
-
-```bash
-npm run cf:build
-npm run cf:preview
-```
-
-Use this path to validate the Worker-compatible output locally.
-
-### Cloudflare deployment
-
-Local manual deployment:
-
-```bash
-npm run lint
-npm run test
-npm run lint:content
-npm run type-check
-npm run cf:build
-npm run cf:deploy
-```
-
-Recommended production deployment:
-
-1. Push to `main`.
-2. GitHub Actions runs `.github/workflows/ci.yml` to validate content, source, tests, build output, and the Cloudflare Worker bundle.
-3. Cloudflare Workers Git integration picks up the same commit from the connected GitHub repository.
-4. Cloudflare runs the configured OpenNext deploy command and publishes the Worker.
-5. Check `/api/health` after deployment when verifying production.
-
-Cloudflare Workers Git integration should own production deployment for this repository. Configure the Worker build settings in Cloudflare with the repository connected to `main` and use this deploy command:
-
-```bash
-npm run cf:deploy
-```
-
-Required variables:
-
-- GitHub Actions Variables, for CI build checks:
-  `NEXT_PUBLIC_*`
-- GitHub Actions Secrets, for the advisory AI content check:
-  `ANTHROPIC_API_KEY`
-- Cloudflare Worker build variables and secrets, for production deployment:
-  `NEXT_PUBLIC_*`
-  `AI_PROVIDER`
-  `ANTHROPIC_API_KEY`
-  `ANTHROPIC_BASE_URL`
-  `OPENAI_API_KEY`
-  `OPENAI_BASE_URL`
-
-Deployment references:
-
-- [docs/phases/phase-10-deployment.md](./docs/phases/phase-10-deployment.md)
-- [config/ops/runbook.md](./config/ops/runbook.md)
-
-## Validation Suite
-
-Use the repository minimum validation set before a PR:
+Run the normal validation suite:
 
 ```bash
 npm run lint
@@ -199,33 +106,118 @@ npm run type-check
 npm run build
 ```
 
-## Core Design Logic
+Run Cloudflare-compatible build and preview:
 
-### 1. Build-time validation instead of runtime trust
+```bash
+npm run cf:build
+npm run cf:preview
+```
 
-Markdown content is parsed, validated, rendered, and summarized before it is used by pages. Invalid frontmatter fails early instead of leaking into runtime rendering.
+Deploy manually to Cloudflare:
 
-### 2. Snapshot-based runtime for Workers
+```bash
+npm run cf:deploy
+```
 
-Cloudflare Workers should not depend on runtime directory traversal. The site therefore generates a runtime JSON snapshot and search index during `dev`, `build`, and preview flows.
+Upload a Worker version without immediately deploying it:
 
-### 3. Centralized SEO and image policies
+```bash
+npm run cf:versions:upload
+```
 
-Routes do not build ad hoc metadata or expose raw source images. Metadata builders and image helpers keep canonical, Open Graph, Twitter, and image-variant decisions in one place.
+## Configuration
 
-### 4. Progressive enhancement at the edges
+Review these files before changing build or deployment behavior:
 
-Typography enhancement, analytics, and search are all feature-flagged or lazy-loaded so failures do not block page rendering.
+- `package.json`: scripts and tool entry points.
+- `next.config.ts`: Next.js and image settings.
+- `open-next.config.ts`: OpenNext Cloudflare adapter settings.
+- `wrangler.jsonc`: Cloudflare Worker preview and deployment configuration.
+- `eslint.config.js`, `.prettierrc`, `tsconfig.json`: source quality settings.
 
-### 5. Docs-first maintenance
+Runtime and tooling environment variables:
 
-Every finished phase is expected to update progress tracking, phase notes, README, and API reference together so architecture and implementation stay aligned.
+- `NEXT_PUBLIC_ENABLE_HETI`: enable article-scoped Chinese typography enhancement.
+- `NEXT_PUBLIC_ENABLE_UMAMI`: enable Umami analytics loading.
+- `NEXT_PUBLIC_UMAMI_SCRIPT_URL`: Umami script URL.
+- `NEXT_PUBLIC_UMAMI_WEBSITE_ID`: Umami website identifier.
+- `NEXT_PUBLIC_ENABLE_GA`: enable GA4 loading.
+- `NEXT_PUBLIC_GA_ID`: GA4 measurement ID.
+- `AI_PROVIDER`: `anthropic` or `openai`.
+- `ANTHROPIC_API_KEY`: required when `AI_PROVIDER=anthropic`.
+- `ANTHROPIC_BASE_URL`: optional Anthropic-compatible API base URL.
+- `OPENAI_API_KEY`: required when `AI_PROVIDER=openai`.
+- `OPENAI_BASE_URL`: optional OpenAI-compatible API base URL.
+
+## Locale Routing
+
+Supported locales are defined in `lib/i18n/config.ts`:
+
+- `zh-CN`: default locale.
+- `en`: English locale.
+
+The site intentionally uses concrete route files under `app/[locale]/` for
+localized paths. Do not reintroduce regex rewrites such as
+`/:locale(en|zh-CN)` in `next.config.ts`; OpenNext Cloudflare preview has failed
+with a Worker `500` on that pattern.
+
+When changing routing, locale detection, navigation, or deployment config, verify
+these paths in Cloudflare preview:
+
+- `/`
+- `/zh-CN`
+- `/en`
+- `/zh-CN/about`
+- `/en/about`
+
+## Deployment
+
+The repository supports Cloudflare Workers deployment through OpenNext.
+
+Recommended flow:
+
+1. Push to `main`.
+2. Let CI run source checks, tests, content linting, and build checks.
+3. Let Cloudflare Workers Git integration build and deploy the same commit.
+4. Verify `/api/health` and the locale routes listed above.
+
+If deploying from a local machine, run the validation suite before
+`npm run cf:deploy`.
+
+## Design Logic
+
+### Build-time content validation
+
+Markdown content is parsed, validated, rendered, and summarized before pages read
+it. Invalid frontmatter should fail during content generation or build, not after
+deployment.
+
+### Worker-safe runtime data
+
+Cloudflare Workers should not depend on runtime filesystem traversal. The site
+generates a runtime JSON snapshot and a search index before development, builds,
+and Cloudflare preview/deploy flows.
+
+### Concrete locale routes
+
+Locale-prefixed pages are implemented as real App Router routes so the output is
+compatible with OpenNext and Cloudflare Workers.
+
+### Centralized SEO and image policy
+
+Routes should use shared helpers for canonical URLs, metadata, structured data,
+and image variants instead of duplicating ad hoc rules.
+
+### Progressive enhancement
+
+Typography, analytics, search, and development tweaks are optional layers. They
+should not block core page rendering.
 
 ## Usage Examples
 
-### Add a new post
+### Add a post
 
-Create `content/posts/my-note.mdx`:
+Create a Markdown or MDX file under `content/posts/`:
 
 ```md
 ---
@@ -240,22 +232,39 @@ draft: false
 Hello from the content pipeline.
 ```
 
+Then regenerate content:
+
+```bash
+npm run content:build
+```
+
+### Add localized page content
+
+Use a locale suffix for English page variants:
+
+```text
+content/pages/about.mdx
+content/pages/about.en.mdx
+```
+
+English content falls back to the default Chinese source when a specific English
+variant does not exist.
+
 ### Read runtime posts
 
 ```ts
 import { getRuntimePosts } from '@/lib/content/runtime';
 
-const posts = getRuntimePosts();
+const chinesePosts = getRuntimePosts('zh-CN');
+const englishPosts = getRuntimePosts('en');
 ```
 
-### Build post metadata
+### Read a runtime post by slug
 
 ```ts
-import { buildPostMetadata } from '@/lib/seo/metadata';
 import { getRuntimePostBySlug } from '@/lib/content/runtime';
 
-const post = getRuntimePostBySlug('hello-world');
-const metadata = post ? buildPostMetadata(post) : null;
+const post = getRuntimePostBySlug('blog_v4', 'zh-CN');
 ```
 
 ### Run local search
@@ -279,31 +288,23 @@ trackEvent('open_search', {
 ### Run an AI editorial tool
 
 ```bash
-npm run ai:proofread -- --file content/posts/hello-world.mdx
+npm run ai:proofread -- --file content/posts/blog_v4.md
 ```
 
 Short form:
 
 ```bash
-npm run ai -- hello-world.mdx
+npm run ai -- blog_v4.md
 ```
-
-## Recommended Reading Order
-
-1. [README.md](./README.md)
-2. [docs/phases](./docs/phases)
-3. [docs/api-reference.md](./docs/api-reference.md)
-4. `lib/content/*`, `lib/seo/*`, `lib/cloudflare/*`
-5. `app/*` and `components/*`
-6. `scripts/*` and `config/*`
 
 ## Documentation Sync Rule
 
-After every completed phase, update all of the following together:
+Keep these files aligned when project facts, commands, routing, deployment, or
+agent workflow instructions change:
 
-- `PROGRESS.md`
-- `docs/phases/phase-*.md`
 - `README.md`
 - `README.zh-CN.md`
-- `docs/api-reference.md`
-- `docs/api-reference.zh-CN.md`
+- `AGENTS.md`
+- `CLAUDE.md`
+
+Do not add links to documentation files that do not exist in the repository.

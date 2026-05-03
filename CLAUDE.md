@@ -1,83 +1,122 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file guides Claude Code when working in this repository. Keep it aligned with `AGENTS.md`; this file may include Claude-specific phrasing, but project facts and commands should match.
 
 ## Commands
 
 ```bash
-# Local development — rebuilds runtime snapshot + search index, then starts Next.js with Turbopack
+# Local development: rebuild runtime snapshot + search index, then start Next.js with Turbopack
 npm run dev
 
-# Production build — same pre-build steps, then Next.js build + post-build export check
+# Production build: rebuild content, build Next.js, then ensure exported error pages
 npm run build
 
-# Cloudflare Workers build / preview / deploy (wraps opennextjs-cloudflare)
+# Cloudflare Workers build / preview / deploy
 npm run cf:build
 npm run cf:preview
 npm run cf:deploy
 
-# Lint & format
+# Lint, type-check, tests
 npm run lint
-npx prettier --write .
-
-# Type check (also runs pre-build scripts first)
 npm run type-check
-
-# Tests — Node built-in test runner via tsx, no Jest/Vitest
 npm test
-# Run a single test file
-node --import tsx --test tests/content/cover-resolver.test.ts
 
-# Content lint (CI gate — deterministic, must pass)
+# Content lint
 npm run lint:content
 
-# AI editorial tools (advisory, not CI gates)
+# Format
+npx prettier --write .
+
+# AI editorial tools, advisory only
 npm run ai:proofread -- --file content/posts/my-post.md
 npm run ai:summarize
 npm run ai:seo-suggest
 npm run ai:typography-review
 ```
 
+Use `npm run lint && npm run type-check && npm run build` as the normal validation suite. If the change touches routing, locale behavior, OpenNext, Cloudflare config, Worker behavior, or deployment paths, also run `npm run cf:preview` and verify affected URLs through Wrangler.
+
+## Project Structure
+
+- `app/(site)/`: canonical unprefixed site routes. These default to `zh-CN`.
+- `app/[locale]/`: real locale-prefixed routes for `zh-CN` and `en`. These are required for Cloudflare/OpenNext compatibility and wrap the canonical pages.
+- `app/api/health/`: health endpoint.
+- `app/image/[variant]/[token]/route.ts`: Cloudflare-style image delivery route.
+- `app/rss.xml/route.ts`, `app/robots.ts`, `app/sitemap.ts`: metadata routes.
+- `components/`: article, site shell, search, SEO, analytics, and dev-only UI components.
+- `content/`: Markdown/MDX source content. Localized files use suffixes such as `about.en.mdx` and `post.zh-CN.md`.
+- `content/.generated/`: generated runtime data; do not hand-edit.
+- `lib/content/`: content loading, processing, runtime snapshot access, taxonomy, cover resolution, and search index logic.
+- `lib/i18n/`: locale config, messages, route helpers, and server-side locale extraction.
+- `lib/seo/`, `lib/cloudflare/`, `lib/typography/`, `lib/analytics/`: shared runtime support.
+- `scripts/content/`: content snapshot and search-index builders.
+- `scripts/ci/`: CI checks and build helpers.
+- `scripts/ai/`: advisory AI editorial tools.
+
 ## Architecture
 
-### Build-time content pipeline
+### Build-Time Content Pipeline
 
-`npm run dev` and `npm run build` both run two pre-build scripts before Next.js starts:
+`npm run dev`, `npm run build`, and Cloudflare builds all regenerate content before rendering:
 
-1. `scripts/content/build-runtime-data.ts` — reads all `content/posts/**/*.md` and `content/pages/**/*.md`, processes frontmatter + Markdown, and writes a full snapshot to `content/.generated/runtime-data.json`.
-2. `scripts/content/build-search-index.ts` — builds a Fuse.js index from the same content and writes it to `content/.generated/search-index.json`.
+1. `scripts/content/build-runtime-data.ts` reads all supported content files, validates frontmatter, renders Markdown/MDX, and writes `content/.generated/runtime-data.json`.
+2. `scripts/content/build-search-index.ts` writes `public/search-index.json`.
 
-At runtime (including Cloudflare Workers, where filesystem traversal is unavailable), **all data access goes through `lib/content/runtime.ts`**, which imports the JSON snapshot directly — no filesystem reads happen after build time.
+At runtime, including Cloudflare Workers, content access goes through `lib/content/runtime.ts`. Do not add request-time filesystem traversal.
 
-### Locale handling (no i18n routing middleware)
+### Locale Routing
 
-The app supports `zh-CN` and `en`. Locale is detected per-request in `lib/i18n/detect.ts` (Cloudflare `CF-IPCountry` header or `Accept-Language`), not via URL segments or Next.js i18n config. Each content file can have locale variants (e.g. `post.zh-CN.md`, `post.en.md`); `selectLocalizedItems()` in `runtime.ts` picks the best variant per locale, falling back to `zh-CN` then any available variant.
+The app supports `zh-CN` and `en`.
 
-### Rendering model
+Current behavior:
 
-All `app/(site)/` routes are **statically generated**. Dynamic rendering is limited to `app/api/health/` and analytics endpoints. The `app/(site)/layout.tsx` uses `detectRequestLocale()` (an async server function) to pick the locale for each rendered page.
+- `/` and other unprefixed `app/(site)/` routes default to `zh-CN`.
+- `/zh-CN/*` and `/en/*` are real routes under `app/[locale]/`.
+- Locale wrapper pages pass `__locale` internally into the canonical page components.
+- Content variants are selected by locale suffix, for example `about.en.mdx`.
+- Missing English content falls back to `zh-CN`.
 
-### Image delivery
+Do not implement locale prefixes with `next.config.ts` regex-style rewrites like `/:locale(en|zh-CN)`. OpenNext/Cloudflare preview returned 500 for that rewrite parser path. Do not reintroduce request-header locale detection docs unless the code is actually changed.
 
-All images go through `lib/cloudflare/loader.ts` (custom Next.js image loader). The cover resolution order in `lib/content/cover-resolver.ts`: explicit `cover` frontmatter → first image found in body HTML → site default. Cloudflare image variants used: `thumb-sm`, `thumb-md`, `cover-md`, `cover-lg`, `og-cover`. Never expose raw originals.
+When modifying locale behavior, verify at least:
 
-### Chinese typography
+```bash
+npm run cf:preview
+# then check:
+# /
+# /zh-CN
+# /en
+# /zh-CN/about
+# /en/about
+```
 
-`heti` CSS + `lib/typography/` applies CJK spacing rules **only inside `.heti` containers** (article bodies). It is initialized client-side only. Code blocks, tables, and navigation are excluded.
+### Rendering Model
 
-### AI editorial tooling
+The app uses App Router server components by default. Some routes are dynamic because locale is passed through search params or runtime content access. The locale-prefixed routes are statically enumerated with `generateStaticParams` where applicable.
 
-Scripts in `scripts/ai/` use `@anthropic-ai/sdk` and output structured JSON to `reports/ai/` before writing Markdown summaries. AI-generated content suggestions go to `content/.generated/` as sidecar files — never auto-applied to frontmatter. `lint:content` is a hard CI gate; all `ai:*` scripts are soft/advisory.
+### Image Delivery
 
-### Key config files
+Images go through `lib/cloudflare/loader.ts` and `app/image/[variant]/[token]/route.ts`. The cover resolution order is explicit frontmatter cover, first body image, then default cover. Avoid exposing raw originals unless intentionally changing the image pipeline.
 
-- `next.config.ts` — custom image loader, `outputFileTracingRoot`
-- `open-next.config.ts` — OpenNext Cloudflare adapter config
-- `wrangler.jsonc` — Worker bindings (R2, KV, Images) and deployment metadata
-- `lib/site.ts` — localized site config (name, nav, baseUrl)
-- `lib/i18n/config.ts` — `AppLocale` type, locale list, `normalizeLocale()`
+### Chinese Typography
 
-### Frontmatter schema
+`heti` CSS and `lib/typography/` apply CJK typography enhancement only inside `.heti` reading containers. Code blocks, tables, navigation, and non-article UI should remain excluded.
+
+### AI Editorial Tooling
+
+Scripts in `scripts/ai/` use `@anthropic-ai/sdk` and write structured reports under `reports/ai/`. AI suggestions are advisory and should not be auto-applied to content or frontmatter without explicit user intent.
+
+## Key Config Files
+
+- `next.config.ts`: custom image loader and output tracing root. Do not use locale regex rewrites here.
+- `open-next.config.ts`: OpenNext Cloudflare adapter config.
+- `wrangler.jsonc`: Worker entrypoint, assets binding, compatibility flags, and local preview port.
+- `lib/site.ts`: site metadata and nav ids.
+- `lib/i18n/config.ts`: supported locales and default locale.
+- `lib/i18n/messages.ts`: localized UI messages.
+- `lib/i18n/routes.ts`: locale prefix helpers.
+
+## Frontmatter Schema
 
 ```yaml
 title, description, date, updated, tags[], category, draft, featured,
@@ -85,4 +124,8 @@ author, canonical, summary, seoTitle, seoDescription, cover, coverAlt,
 thumbnail, thumbnailAlt, imageCredit, ogImage
 ```
 
-Author-supplied fields and build-generated fields (`content/.generated/`) must remain separate.
+Author-supplied fields and generated sidecar data under `content/.generated/` must remain separate.
+
+## Validation Expectations
+
+Run the narrowest meaningful validation for the change, but do not skip Cloudflare preview for Worker routing issues. Existing `<img>` LCP warnings in article/post card components are known and unrelated to locale routing.

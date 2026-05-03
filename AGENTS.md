@@ -1,49 +1,88 @@
 # Repository Guidelines
 
-## Project Structure & Module Organization
+This file is the shared project guide for coding agents. Keep it aligned with `CLAUDE.md`; tool-specific wording may differ, but project facts and commands should not.
 
-This repository is an early-stage Next.js 15 blog scaffold targeting Cloudflare Workers via OpenNext.
+## Project Structure
 
-- `app/`: App Router entrypoints and global styles. Current routes live in `app/page.tsx` and `app/layout.tsx`.
-- `scripts/ci/`: repository checks such as `scripts/ci/lint-content.ts`.
-- `docs/phases/`: implementation notes and phase-specific planning.
-- `reports/`: generated build or AI reports; keep placeholders tracked, generated output uncommitted unless requested.
-- Root config: `next.config.ts`, `open-next.config.ts`, `wrangler.jsonc`, `eslint.config.js`, `.prettierrc`, `tsconfig.json`.
+This repository is a Next.js 15 personal blog targeting Cloudflare Workers through OpenNext.
 
-## Build, Test, and Development Commands
+- `app/(site)/`: canonical unprefixed site routes, including home, posts, projects, and about pages.
+- `app/[locale]/`: real locale-prefixed routes for `zh-CN` and `en`. These wrap the canonical pages and are required for Cloudflare/OpenNext compatibility.
+- `app/api/health/`, `app/image/[variant]/[token]/route.ts`, `app/rss.xml/route.ts`, `app/robots.ts`, `app/sitemap.ts`: runtime and metadata routes.
+- `components/`: site shell, article, search, SEO, and dev-only UI components.
+- `content/`: source Markdown/MDX content. Locale variants use suffixes like `about.en.mdx` or `post.zh-CN.md`.
+- `content/.generated/`: build-generated runtime snapshots and sidecar data. Do not hand-edit generated output.
+- `lib/content/`: frontmatter parsing, Markdown processing, runtime snapshot access, taxonomy, cover resolution, and search index building.
+- `lib/i18n/`: locale config, route helpers, messages, and server-side locale extraction.
+- `lib/seo/`, `lib/cloudflare/`, `lib/typography/`, `lib/analytics/`: shared runtime support.
+- `scripts/content/`: content snapshot and search-index generation.
+- `scripts/ci/`: repository checks.
+- `scripts/ai/`: advisory AI editorial tools.
+- `reports/`: generated reports; keep placeholders tracked, generated output uncommitted unless requested.
 
-- `npm install`: install dependencies; Node `>=20` is required.
-- `npm run dev`: start the local Next.js dev server with Turbopack.
-- `npm run build`: run a production Next.js build.
+## Commands
+
+- `npm install`: install dependencies. Node `>=20` is required.
+- `npm run content:build`: rebuild `content/.generated/runtime-data.json` and `public/search-index.json`.
+- `npm run dev`: rebuild content, then start Next.js dev server with Turbopack.
+- `npm run build`: rebuild content, run production Next.js build, then ensure exported error pages exist.
 - `npm run start`: serve the production build locally.
-- `npm run type-check`: run TypeScript with `--noEmit`.
-- `npm run lint`: run Next.js/ESLint checks.
-- `npm run lint:content`: run the content linter stub.
-- `npm run cf:build` and `npm run cf:preview`: build and preview the Cloudflare worker bundle.
+- `npm run type-check`: rebuild content, run `next typegen`, then `tsc --noEmit`.
+- `npm run lint`: run ESLint.
+- `npm test`: run Node built-in tests through `tsx`.
+- `npm run lint:content`: run the content linter.
+- `npm run cf:build`: build the Cloudflare Worker bundle with OpenNext.
+- `npm run cf:preview`: build and run the Worker locally through Wrangler.
+- `npm run cf:deploy`: build and deploy through OpenNext Cloudflare.
 
-Use `npm run lint && npm run type-check && npm run build` before opening a PR.
+Use `npm run lint && npm run type-check && npm run build` for normal validation. For route, locale, Worker, or deployment behavior, also run `npm run cf:preview` and verify the affected paths in the preview server.
 
-## Coding Style & Naming Conventions
+## Architecture Notes
 
-Use TypeScript and 2-space indentation. Prettier enforces `singleQuote: true`, semicolons, trailing commas (`es5`), and `printWidth: 100`. ESLint extends `next/core-web-vitals` and `next/typescript`.
+`npm run dev`, `npm run build`, and Cloudflare builds all run the content pipeline first:
 
-Name React components in `PascalCase`, functions and variables in `camelCase`, and route folders with Next.js conventions such as `app/posts/[slug]/page.tsx`. Prefer server components unless client behavior is required.
+1. `scripts/content/build-runtime-data.ts` reads content files, validates frontmatter, renders Markdown, and writes `content/.generated/runtime-data.json`.
+2. `scripts/content/build-search-index.ts` writes the public search index.
+
+Runtime content access goes through `lib/content/runtime.ts`; Cloudflare Workers must not depend on filesystem traversal at request time.
+
+Locale behavior is route-based. `/zh-CN/*` and `/en/*` are implemented as real Next routes under `app/[locale]/`, not `next.config.ts` rewrites and not middleware. OpenNext/Cloudflare preview previously returned 500 for regex-style rewrites such as `/:locale(en|zh-CN)`, so do not reintroduce that approach. Locale-prefixed pages pass `__locale` internally to the canonical page components. Missing English content falls back to `zh-CN`.
+
+The unprefixed routes under `app/(site)/` remain valid and default to `zh-CN`. They are also reused by the locale wrappers to avoid duplicating page logic.
+
+Images use `lib/cloudflare/loader.ts` and `app/image/[variant]/[token]/route.ts`. Do not expose raw originals unless the image pipeline is deliberately changed.
+
+## Coding Style
+
+Use TypeScript and 2-space indentation. Prettier enforces single quotes, semicolons, trailing commas where configured, and `printWidth: 100`. ESLint extends Next.js rules.
+
+Name React components in `PascalCase`, functions and variables in `camelCase`, and route folders using Next.js conventions such as `app/[locale]/posts/[slug]/page.tsx`. Prefer server components unless client behavior is required.
+
+When adding internal links that should preserve language, use the existing localized link helpers/components instead of hard-coded locale prefixes.
 
 ## Testing Guidelines
 
-There is no dedicated unit or integration test framework yet. For now, treat `lint`, `type-check`, `build`, and Cloudflare preview checks as the minimum validation suite. If you add tests, place them beside the feature or under a clear top-level test directory and use names like `feature-name.test.ts`.
+Use the existing validation stack before shipping material changes:
+
+- `npm run lint`
+- `npm run type-check`
+- `npm run build`
+- `npm test` when touching tested logic or content utilities
+- `npm run cf:preview` when touching routing, locale behavior, Cloudflare/OpenNext config, Worker-only APIs, or deployment behavior
+
+For locale changes, verify at least `/`, `/zh-CN`, `/en`, `/zh-CN/about`, and `/en/about` in Cloudflare preview.
 
 ## Commit & Pull Request Guidelines
 
-Git history is minimal (`Initial commit`, `1阶段完成`), so keep commits short, specific, and scoped to one change. Imperative summaries such as `Add Cloudflare preview config` or concise milestone-style messages are both acceptable.
+Keep commits short, specific, and scoped to one change. Imperative summaries such as `Fix locale routes for Cloudflare` are preferred.
 
 PRs should include:
 
 - a short description of the change and why it was made
 - linked issues or phase docs when relevant
 - screenshots for UI changes
-- notes about validation run locally
+- validation commands run locally, including Cloudflare preview when relevant
 
 ## Repository Notes
 
-Some scripts referenced in `package.json` under `scripts/ai/*` are not present yet. Do not document or depend on them in new work unless you add the missing files in the same change.
+Do not rely on old docs that describe `lib/i18n/detect.ts`, request-header locale detection, or locale regex rewrites. Current locale routing is implemented by real files in `app/[locale]/`.
