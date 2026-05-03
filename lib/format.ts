@@ -1,18 +1,24 @@
-import type { AppLocale } from '@/lib/i18n/config';
+const SITE_LOCALE = 'zh-CN';
 
-export function formatDate(date: Date, locale: AppLocale = 'zh-CN'): string {
-  return new Intl.DateTimeFormat(locale, {
+export function formatDate(date: Date): string {
+  return new Intl.DateTimeFormat(SITE_LOCALE, {
     year: 'numeric',
-    month: 'short',
+    month: 'long',
     day: 'numeric',
   }).format(date);
 }
 
-export function formatMonth(date: Date, locale: AppLocale = 'zh-CN'): string {
-  return new Intl.DateTimeFormat(locale, {
+export function formatMonth(date: Date): string {
+  return new Intl.DateTimeFormat(SITE_LOCALE, {
     year: 'numeric',
     month: 'long',
   }).format(date);
+}
+
+export function formatReadTime(text: string): string {
+  const charCount = text.length;
+  const minutes = Math.max(1, Math.round(charCount / 500));
+  return `${minutes} 分钟`;
 }
 
 export function groupPostsByMonth<T extends { date: Date }>(items: T[]): Array<{

@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import { DEFAULT_LOCALE } from '@/lib/i18n/config';
-import { getLocaleMessages } from '@/lib/i18n/messages';
 
 export default function GlobalError({
   error,
@@ -11,28 +9,21 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const locale =
-    typeof document !== 'undefined' &&
-    (document.documentElement.lang === 'en' || document.documentElement.lang === 'zh-CN')
-      ? document.documentElement.lang
-      : DEFAULT_LOCALE;
-  const messages = getLocaleMessages(locale);
-
   useEffect(() => {
     console.error(error);
   }, [error]);
 
   return (
-    <html lang={locale}>
+    <html lang="zh-CN">
       <body>
-        <div className="error-panel">
-          <p className="meta-note">{messages.pages.error.eyebrow}</p>
-          <h1>{messages.pages.error.title}</h1>
+        <main className="error-panel">
+          <p className="meta-note">出错了</p>
+          <h1>页面加载失败</h1>
           <p>{error.message}</p>
           <button className="chip-link" onClick={() => reset()} type="button">
-            {messages.pages.error.retry}
+            重试
           </button>
-        </div>
+        </main>
       </body>
     </html>
   );

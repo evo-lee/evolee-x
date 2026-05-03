@@ -1,18 +1,14 @@
 import Link from 'next/link';
-import { DEFAULT_LOCALE } from '@/lib/i18n/config';
-import { getLocaleMessages } from '@/lib/i18n/messages';
 
-export default async function NotFound() {
-  const messages = getLocaleMessages(DEFAULT_LOCALE);
-
+export default function NotFound() {
   return (
-    <div className="error-panel">
+    <main className="error-panel">
       <p className="meta-note">404</p>
-      <h1>{messages.pages.notFound.title}</h1>
-      <p>{messages.pages.notFound.description}</p>
+      <h1>页面不存在</h1>
+      <p>这个地址没有内容，可能已被移除或从未存在。</p>
       <p>
-        <Link href="/">{messages.pages.notFound.backHome}</Link>
+        <Link href="/">返回首页</Link>
       </p>
-    </div>
+    </main>
   );
 }

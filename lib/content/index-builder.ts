@@ -8,13 +8,12 @@ export async function buildSearchIndex(): Promise<SearchIndexEntry[]> {
   const posts = await getAllPostVariants();
   const entries = await Promise.all(
     posts.map(async (post) => {
-      const fullPost = await getPostBySlug(post.slug, post.locale);
+      const fullPost = await getPostBySlug(post.slug);
       if (!fullPost) {
         return null;
       }
 
       return {
-        locale: post.locale,
         slug: post.slug,
         url: post.url,
         title: post.title,

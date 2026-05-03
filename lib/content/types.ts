@@ -1,5 +1,3 @@
-import type { AppLocale } from '@/lib/i18n/config';
-
 export interface Heading {
   id: string;
   text: string;
@@ -49,7 +47,6 @@ export interface ProcessedContent {
 }
 
 export interface PostSummary extends PostFrontmatter {
-  locale: AppLocale;
   slug: string;
   url: string;
   excerpt: string;
@@ -62,7 +59,6 @@ export interface Post extends PostSummary, ProcessedContent {
 }
 
 export interface Page extends PageFrontmatter, ProcessedContent {
-  locale: AppLocale;
   slug: string;
   url: string;
   sourcePath: string;
@@ -70,7 +66,6 @@ export interface Page extends PageFrontmatter, ProcessedContent {
 }
 
 export interface SearchIndexEntry {
-  locale: AppLocale;
   slug: string;
   url: string;
   title: string;

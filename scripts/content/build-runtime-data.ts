@@ -7,14 +7,6 @@ import { getAllPostVariants } from '@/lib/content/posts';
 
 const OUTPUT_PATH = path.join(process.cwd(), 'content', '.generated', 'runtime-data.json');
 
-/**
- * Build the content snapshot consumed by Cloudflare-compatible runtime loaders.
- *
- * The snapshot removes any need for runtime filesystem directory traversal in Worker mode.
- *
- * @returns Resolves when `content/.generated/runtime-data.json` has been written.
- * @throws Propagates content loading or filesystem write errors and exits the process with code 1.
- */
 async function main() {
   const fullPosts = await getAllPostVariants();
   const pages = await getAllPageVariants();
@@ -38,7 +30,6 @@ async function main() {
     thumbnailAlt: post.thumbnailAlt,
     imageCredit: post.imageCredit,
     ogImage: post.ogImage,
-    locale: post.locale,
     slug: post.slug,
     url: post.url,
     excerpt: post.excerpt,
@@ -48,12 +39,7 @@ async function main() {
   const payload = {
     generatedAt: new Date().toISOString(),
     posts,
-    postMap: Object.fromEntries(
-      fullPosts.map((post) => [
-        `${post.slug}:${post.locale}`,
-        post,
-      ])
-    ),
+    postMap: Object.fromEntries(fullPosts.map((post) => [post.slug, post])),
     pages,
   };
 

@@ -1,5 +1,4 @@
 import Fuse from 'fuse.js';
-import type { AppLocale } from '@/lib/i18n/config';
 import type { SearchDocument, SearchResult } from '@/lib/search/types';
 
 let searchDocumentsPromise: Promise<SearchDocument[]> | null = null;
@@ -12,7 +11,6 @@ async function loadDocuments() {
         if (!response.ok) {
           throw new Error(`Failed to load search index: ${response.status}`);
         }
-
         return (await response.json()) as SearchDocument[];
       })
       .catch((error) => {
@@ -20,7 +18,6 @@ async function loadDocuments() {
         throw error;
       });
   }
-
   return searchDocumentsPromise;
 }
 
@@ -48,7 +45,6 @@ async function loadFuse() {
         throw error;
       });
   }
-
   return fusePromise;
 }
 
@@ -56,21 +52,15 @@ export async function primeSearchIndex() {
   await loadFuse();
 }
 
-export async function searchDocuments(query: string, locale: AppLocale): Promise<SearchResult[]> {
+export async function searchDocuments(query: string): Promise<SearchResult[]> {
   const normalized = query.trim();
-
   if (!normalized) {
     return [];
   }
 
   const fuse = await loadFuse();
-
-  const results = fuse.search(normalized).map((entry) => ({
-    ...entry.item,
-    score: entry.score,
-  }));
-
-  return results
-    .filter((result) => result.locale === locale)
+  return fuse
+    .search(normalized)
+    .map((entry) => ({ ...entry.item, score: entry.score }))
     .sort((left, right) => (left.score || 0) - (right.score || 0));
 }

@@ -1,10 +1,7 @@
 import type { OpenGraph } from 'next/dist/lib/metadata/types/opengraph-types';
-import type { AppLocale } from '@/lib/i18n/config';
-import { getSeoConfig } from './constants';
+import { seoConfig } from './constants';
 
-function resolveImageUrl(locale: AppLocale, image?: string): string {
-  const seoConfig = getSeoConfig(locale);
-
+function resolveImageUrl(image?: string): string {
   if (!image || image.startsWith('data:')) {
     return seoConfig.defaultOgImage;
   }
@@ -21,7 +18,6 @@ function resolveImageUrl(locale: AppLocale, image?: string): string {
 }
 
 export function buildOpenGraph({
-  locale,
   title,
   description,
   url,
@@ -31,7 +27,6 @@ export function buildOpenGraph({
   modifiedTime,
   tags,
 }: {
-  locale: AppLocale;
   title: string;
   description: string;
   url: string;
@@ -41,8 +36,6 @@ export function buildOpenGraph({
   modifiedTime?: string;
   tags?: string[];
 }): OpenGraph {
-  const seoConfig = getSeoConfig(locale);
-
   return {
     title,
     description,
@@ -52,7 +45,7 @@ export function buildOpenGraph({
     type,
     images: [
       {
-        url: resolveImageUrl(locale, image),
+        url: resolveImageUrl(image),
         width: 1200,
         height: 630,
         alt: title,

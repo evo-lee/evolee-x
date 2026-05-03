@@ -1,30 +1,18 @@
 import type { Metadata } from 'next';
 import type { Page, Post, PostSummary } from '@/lib/content/types';
 import { getImageUrl } from '@/lib/cloudflare/images';
-import { APP_LOCALES, DEFAULT_LOCALE, type AppLocale } from '@/lib/i18n/config';
-import { localeHref } from '@/lib/i18n/route';
-import { getSeoConfig } from './constants';
+import { seoConfig } from './constants';
 import { buildOpenGraph } from './og';
 
 type MetadataOptions = {
-  locale: AppLocale;
   path: string;
   title: string;
   description: string;
   image?: string;
   noIndex?: boolean;
-  alternates?: Partial<Record<AppLocale, string>>;
 };
 
-/**
- * Build site-wide metadata used by the root layout.
- *
- * @returns The default title template, description, authors, and share image metadata.
- */
-export function buildSiteMetadata(locale: AppLocale): Metadata {
-  const seoConfig = getSeoConfig(locale);
-  const canonical = localeHref(DEFAULT_LOCALE, '/');
-
+export function buildSiteMetadata(): Metadata {
   return {
     applicationName: seoConfig.siteName,
     title: {
@@ -34,16 +22,12 @@ export function buildSiteMetadata(locale: AppLocale): Metadata {
     description: seoConfig.siteDescription,
     metadataBase: new URL(seoConfig.baseUrl),
     alternates: {
-      canonical,
-      languages: Object.fromEntries(
-        APP_LOCALES.map((item) => [item, localeHref(item, '/')])
-      ),
+      canonical: '/',
     },
     openGraph: buildOpenGraph({
-      locale,
       title: seoConfig.siteTitle,
       description: seoConfig.siteDescription,
-      url: `${seoConfig.baseUrl}${canonical}`,
+      url: seoConfig.baseUrl,
       image: getImageUrl(seoConfig.defaultOgImage, 'og-cover', { absolute: true }),
     }),
     twitter: {
@@ -56,38 +40,22 @@ export function buildSiteMetadata(locale: AppLocale): Metadata {
   };
 }
 
-/**
- * Build metadata for generic collection pages and static routes.
- *
- * @param options Route path, title, description, optional share image, and noindex flag.
- * @returns Next.js metadata object with canonical, OG, Twitter, and robots fields.
- */
 export function buildPageMetadata({
-  locale,
   path,
   title,
   description,
   image,
   noIndex,
-  alternates,
 }: MetadataOptions): Metadata {
-  const seoConfig = getSeoConfig(locale);
-  const localizedPath = path.startsWith(`/${locale}`) ? path : localeHref(locale, path);
-  const url = `${seoConfig.baseUrl}${localizedPath}`;
+  const url = `${seoConfig.baseUrl}${path}`;
 
   return {
     title,
     description,
     alternates: {
       canonical: url,
-      languages: alternates
-        ? Object.fromEntries(
-            Object.entries(alternates).map(([key, value]) => [key, `${seoConfig.baseUrl}${value}`])
-          )
-        : undefined,
     },
     openGraph: buildOpenGraph({
-      locale,
       title,
       description,
       url,
@@ -99,26 +67,11 @@ export function buildPageMetadata({
       description,
       images: [getImageUrl(image || seoConfig.defaultOgImage, 'og-cover', { absolute: true })],
     },
-    robots: noIndex
-      ? {
-          index: false,
-          follow: false,
-        }
-      : undefined,
+    robots: noIndex ? { index: false, follow: false } : undefined,
   };
 }
 
-/**
- * Build metadata for an individual blog post.
- *
- * @param post Post summary or full post entity.
- * @returns Article-specific metadata with canonical, OG, Twitter, authors, keywords, and draft robots policy.
- */
-export function buildPostMetadata(
-  post: Post | PostSummary,
-  alternates?: Partial<Record<AppLocale, string>>
-): Metadata {
-  const seoConfig = getSeoConfig(post.locale);
+export function buildPostMetadata(post: Post | PostSummary): Metadata {
   const title = post.seoTitle || post.title;
   const description = post.seoDescription || post.description;
   const url = `${seoConfig.baseUrl}${post.url}`;
@@ -128,14 +81,8 @@ export function buildPostMetadata(
     description,
     alternates: {
       canonical: post.canonical || url,
-      languages: alternates
-        ? Object.fromEntries(
-            Object.entries(alternates).map(([key, value]) => [key, `${seoConfig.baseUrl}${value}`])
-          )
-        : undefined,
     },
     openGraph: buildOpenGraph({
-      locale: post.locale,
       title,
       description,
       url,
@@ -160,24 +107,12 @@ export function buildPostMetadata(
     authors: post.author ? [{ name: post.author }] : [{ name: seoConfig.author.name }],
     category: post.category,
     keywords: post.tags,
-    robots: post.draft
-      ? {
-          index: false,
-          follow: false,
-        }
-      : undefined,
+    robots: post.draft ? { index: false, follow: false } : undefined,
   };
 }
 
-/**
- * Build metadata for a Markdown-backed content page such as About.
- *
- * @param page Runtime page entity.
- * @returns Generic page metadata derived from the page model.
- */
 export function buildPageContentMetadata(page: Page): Metadata {
   return buildPageMetadata({
-    locale: page.locale,
     path: page.url,
     title: page.title,
     description: page.description,

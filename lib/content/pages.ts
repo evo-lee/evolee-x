@@ -1,10 +1,7 @@
 import * as path from 'path';
-import type { AppLocale } from '@/lib/i18n/config';
-import { localeHref } from '@/lib/i18n/route';
 import {
   listMarkdownFiles,
   PAGES_DIR,
-  pathToLocale,
   pathToSlug,
   readUtf8,
   slugToFileCandidates,
@@ -21,18 +18,16 @@ async function loadPageFromFile(filePath: string): Promise<Page> {
   const source = await readUtf8(filePath);
   const { body, frontmatter } = parsePageSource(source, filePath);
   const slug = pathToSlug(PAGES_DIR, filePath);
-  const locale = pathToLocale(PAGES_DIR, filePath);
   const processed = await processMarkdown(body);
 
   return {
     ...frontmatter,
-    locale,
     html: processed.html,
     excerpt: processed.excerpt,
     text: processed.text,
     headings: processed.headings,
     slug,
-    url: localeHref(locale, `/${slug}`),
+    url: `/${slug}`,
     sourcePath: path.relative(process.cwd(), filePath),
     content: body,
   };
@@ -48,12 +43,12 @@ export async function getAllPageVariants(): Promise<Page[]> {
   return getAllPages();
 }
 
-export async function getPageBySlug(slug: string, locale: AppLocale = 'zh-CN'): Promise<Page | null> {
-  const candidates = slugToFileCandidates(PAGES_DIR, slug, locale);
+export async function getPageBySlug(slug: string): Promise<Page | null> {
+  const candidates = slugToFileCandidates(PAGES_DIR, slug);
   for (const filePath of candidates) {
     try {
       const page = await loadPageFromFile(filePath);
-      return isVisible(page.draft) && page.locale === locale ? page : null;
+      return isVisible(page.draft) ? page : null;
     } catch (error) {
       const maybeMissingFile = error as NodeJS.ErrnoException;
       if (maybeMissingFile.code !== 'ENOENT') {

@@ -1,7 +1,7 @@
 [data-article-content].heti,
 .heti[data-article-content] {
   line-height: 1.95;
-  color: var(--text);
+  color: var(--fg);
 }
 
 [data-article-content].heti :where(p, li, blockquote) {
@@ -9,7 +9,7 @@
 }
 
 [data-article-content].heti :where(h1, h2, h3) {
-  color: var(--text);
+  color: var(--fg);
 }
 
 [data-article-content].heti :where(a) {
@@ -18,7 +18,7 @@
 }
 
 [data-article-content].heti :where(blockquote) {
-  color: color-mix(in srgb, var(--text-soft) 88%, var(--text));
+  color: var(--fg-muted);
 }
 
 [data-article-content].heti :where(pre, code, table, kbd, samp, math, .heti-skip) {
@@ -32,9 +32,4 @@
 
 [data-article-content].heti heti-adjacent {
   display: inline;
-}
-
-html[data-theme='dark'] [data-article-content].heti,
-html[data-theme='dark'] .heti[data-article-content] {
-  color: color-mix(in srgb, var(--text) 96%, white);
 }

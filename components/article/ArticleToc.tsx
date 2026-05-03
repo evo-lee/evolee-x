@@ -1,73 +1,54 @@
 'use client';
 
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Heading } from '@/lib/content/types';
-import { trackEvent } from '@/lib/analytics/track';
 
-export function ArticleToc({
-  headings,
-  ariaLabel,
-  title,
-}: {
-  headings: Heading[];
-  ariaLabel: string;
-  title: string;
-}) {
-  const tocHeadings = headings.filter((heading) => heading.level <= 3);
-  const [activeId, setActiveId] = useState<string | null>(tocHeadings[0]?.id ?? null);
+export function ArticleToc({ headings, meta }: { headings: Heading[]; meta?: string }) {
+  const [active, setActive] = useState<string>(headings[0]?.id ?? '');
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
-    if (tocHeadings.length === 0) {
-      return;
-    }
+    if (headings.length === 0) return;
+    const elements = headings
+      .map((heading) => document.getElementById(heading.id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (elements.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((left, right) => right.intersectionRatio - left.intersectionRatio)[0];
-
-        if (visible?.target.id) {
-          setActiveId(visible.target.id);
+        const visible = entries.filter((entry) => entry.isIntersecting);
+        if (visible.length > 0) {
+          setActive(visible[0].target.id);
         }
       },
-      {
-        rootMargin: '-20% 0px -60% 0px',
-        threshold: [0.1, 0.5, 1],
-      }
+      { rootMargin: '-90px 0px -55% 0px', threshold: [0, 1] }
     );
 
-    tocHeadings.forEach((heading) => {
-      const element = document.getElementById(heading.id);
-      if (element) {
-        observer.observe(element);
-      }
-    });
-
+    elements.forEach((el) => observer.observe(el));
+    observerRef.current = observer;
     return () => observer.disconnect();
-  }, [tocHeadings]);
+  }, [headings]);
 
-  if (tocHeadings.length <= 1) {
-    return null;
-  }
+  if (headings.length === 0) return null;
 
   return (
-    <aside className="toc" aria-label={ariaLabel} data-no-typography="true">
-      <p className="toc__title">{title}</p>
-      <ol className="toc__list">
-        {tocHeadings.map((heading) => (
-          <li key={heading.id} data-level={heading.level}>
-            <Link
-              href={`#${heading.id}`}
-              aria-current={activeId === heading.id ? 'location' : undefined}
-              onClick={() => trackEvent('toc_click', { headingId: heading.id, heading: heading.text })}
-            >
-              {heading.text}
-            </Link>
-          </li>
+    <aside className="article-toc">
+      <p className="article-toc__title">目录</p>
+      <nav className="article-toc__nav">
+        {headings.map((heading) => (
+          <a
+            key={heading.id}
+            href={`#${heading.id}`}
+            className="article-toc__link"
+            data-active={active === heading.id || undefined}
+            data-level={heading.level}
+          >
+            {heading.text}
+          </a>
         ))}
-      </ol>
+      </nav>
+      {meta ? <div className="article-toc__meta">{meta}</div> : null}
     </aside>
   );
 }
